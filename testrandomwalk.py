@@ -39,7 +39,7 @@ FPS = 60
 fpsClock = pygame.time.Clock()
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 800
-DEVICES = 1000
+DEVICES = 200
 
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('DNA Spaces - Analysis')
@@ -62,7 +62,7 @@ def main(d):
 
         # Render elements
         for i in range(len(d)):
-            d[i].Setdevicevelocity(random.randrange(0, 3, 1) -1 ,random.randrange(0, 3, 1) -1, 0) # do a random walk
+            d[i].Setdevicevelocity(random.randrange(0, 10, 1) -1 ,random.randrange(0, 10, 1) -1, 0) # do a random walk
             ident, x, y, z = d[i].returnDeviceInfo()
             d[i].Moveobjectbasedonvelocity()
             pygame.draw.circle(WINDOW, (0,0,0), (x, y), 1)
