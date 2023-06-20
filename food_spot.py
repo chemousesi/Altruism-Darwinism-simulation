@@ -43,11 +43,12 @@ class Food:
             pygame.draw.rect(screen,GREEN, self.rect)
     
     def update(self):
-        if (self.state == True):
+        if (self.state == False):
             self.regenerate += 1
             if (self.regenerate == 100):
                 self.regenerate = 0
                 self.ressource = 50
+                self.state = True
                 self.draw()
 
         
