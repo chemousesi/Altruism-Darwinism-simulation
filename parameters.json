@@ -7,11 +7,12 @@
     "required_energy_to_reproduce": 501,
     "cost_of_pheromone":10,
     "agent_radius":10,
-    "initial_energy":50,
+    "initial_energy":500,
     "button_width":200,
     "button_height":75,
     "initial_ressource":50,
     "prob_of_mutation":0.15,
-    "agent_initial_energy":500
+    "agent_initial_energy":500, 
+    "agent_speed_norm":3
 
 }

@@ -51,7 +51,7 @@ class Agent(CircleEntity):
 
             self.energy = json_data["agent_initial_energy"]
         ##
-        self.speed_norm = 5
+        self.speed_norm = json_data["agent_speed_norm"]
 
         self.delta_t = random.random()
 
@@ -146,6 +146,7 @@ class Agent(CircleEntity):
         return list_of_pheromones, list_of_foods
 
     def update(self, list_of_pheromones, list_of_foods, list_of_agents, draw=True ):
+       
         if self.new_born == False :
             self.age += 1
 
