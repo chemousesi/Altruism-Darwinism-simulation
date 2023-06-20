@@ -11,6 +11,3 @@ class TypeAgent(Enum):
     BASIC = 0
     ALTRUIST = 1
     PROFITEER = 2
-
-    def get_color(self):
-        

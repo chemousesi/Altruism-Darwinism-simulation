@@ -6,8 +6,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-def reproduct_alone(agent, prob_of_mutation, required_energy_to_reproduce, cost_of_reproduction): #returns the list of the agents after the reproduction cycle
-    if agent.energy >= required_energy_to_reproduce: #checks if the agent is able to reproduce
+def reproduce_alone(agent, prob_of_mutation): #returns the list of the agents after the reproduction cycle
+    if agent.energy >= Agent.required_energy_to_reproduce: #checks if the agent is able to reproduce
         mutation = random.random()
         child = Agent()
         if mutation < prob_of_mutation: #checks weither the child will be the type of its parent or not
@@ -21,42 +21,43 @@ def reproduct_alone(agent, prob_of_mutation, required_energy_to_reproduce, cost_
             child.type_agent_int = agent.type_agent_int
         child.x = agent.x
         child.y = agent.y
-        agent.energy = agent.energy - cost_of_reproduction
-    return child
+        agent.update_energy(Agent.cost_of_reproduction)
+        return child
+    return
 
 
 def lose_energy(agent, loss_function): #changes the value of the energy of each agent based on its age (lost_energy = loss_function(age)) and returns the list of agents after energy update
-    agent.energy = agent.energy - loss_function(agent.age)
+    agent.reduce_energy(agent,loss_function(agent.age))
     if agent.energy <= 0:
         return "dead"
     return
 
 
-def eat(agent, list_of_spots, food_value, list_of_pheromones ,cost_of_pheromone): #food_value = energy given by eating one piece of food
+def eat(agent, list_of_foods, list_of_pheromones):
     agent_has_eaten = False
-    for spot in list_of_spots: #checks if the agent is on a food spot
-        if spot.ressource > 0:
-            for food_box in spot.table: #we could check if the agent is in the spot before checking every single food_box in the spot
+    for food in list_of_food: #checks if the agent is on a food spot
+        if food.ressource > 0:
+            for food_box in food.table: #we could check if the agent is in the food before checking every single food_box in the food
                 if food_box == agent.pos:
-                    agent.on_spot = True #the agent is on a spot
+                    agent.on_food = True #the agent is on a food
                     agent.is_eating = True #the agent is no longer moving
-                    spot.ressource = spot.ressource - 1 #update the amount of food remaining in the box
-                    if agent.can_make_pheromone == True and agent.type_agent_int == 1: #If the agent just arrived on the spot and is altruist, then he spreads pheromones around his location
+                    food.getting_eaten() #update the amount of food remaining in the box
+                    if agent.can_make_pheromone == True and agent.type_agent_int == 1: #If the agent just arrived on the food and is altruist, then he spreads pheromones around his location
                         agent.can_make_pheromone == False
-                        agent.energy = agent.energy - cost_of_pheromone
+                        agent.reduce_energy(Agent.cost_of_pheromone)
                         new_pheromone = Pheromone()
                         new_pheromone.x = agent.x
                         new_pheromone.y = agent.y
                         list_of_pheromones.append(new_pheromone)
-                    if spot.ressource == 0: #if the agent eats the last bit of food of the spot, it can move again
+                    if food.ressource == 0: #if the agent eats the last bit of food of the food, it can move again
                         agent.is_eating = False
                         agent.can_make_pheromone = True
-                    agent.energy = agent.energy + food_value #update the energy of the agent
+                    agent.reduce_energy(Food.food_value) #update the energy of the agent
                     agent_has_eaten =True
-    if agent_has_eaten == False and agent.on_spot == True: #if another agent has eaten the last bit of food of the spot before this agent, it still needs to be able to move again or it will be stuck on the spot
+    if agent_has_eaten == False and agent.on_food == True: #if another agent has eaten the last bit of food of the food before this agent, it still needs to be able to move again or it will be stuck on the food
         agent.is_eating = False
         agent.can_make_pheromone = True
-    return list_of_agents, list_of_pheromones, list_of_spots
+    return list_of_pheromones, list_of_foods
 
 
 class Pheromone:
@@ -64,16 +65,16 @@ class Pheromone:
     radius = 60
 
     def __init__(self,x,y):
-
+        self.life_span = 40
         self.age = 0
         sel.pos = (self.x,self.y)
         self.x = x
         self.y = y
 
 
-def update_pheromone(pheromone, pheromone_life_span): #increments the age of every pheromones and removes the ones that have been there for too long, returns the updated list of pheromones
+def update_pheromone(pheromone): #increments the age of every pheromones and removes the ones that have been there for too long, returns the updated list of pheromones
     pheromone.age = pheromone.age + 1
-    if pheromone.age > pheromone_life_span:
+    if pheromone.age > Pheromone.life_span:
         return "dead"
     return
 
@@ -135,8 +136,8 @@ def reproduct_with_a_partner(agent,list_of_agents,prob_of_mutation, required_ene
                             child.type_agent_int = 2
                 child.x = agent.x
                 child.y = agent.y
-                agent.energy = agent.energy - cost_of_reproduction
-                partner.energy = partner.energy - cost_of_reproduction
+                agent.reduce_energy(cost_of_reproduction)
+                partner.reduce_energy(cost_of_reproduction)
                 agent.has_reproduced_this_cycle = True #the two agents can no longer reproduce this cycle
                 partner.has_reproduced_this_cycle = True
     return child
