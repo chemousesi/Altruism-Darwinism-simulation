@@ -2,6 +2,9 @@ import random
 import math
 from altruisme import Agent
 from pig_tv import *
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
 
 def reproduct_alone(list_of_agents, prob_of_mutation, required_energy_to_reproduce, cost_of_reproduction): #returns the list of the agents after the reproduction cycle
     new_list_of_agents = []
@@ -35,7 +38,7 @@ def lose_energy(list_of_agents, loss_function): #changes the value of the energy
     return list_of_agents
 
 
-def eat(list_of_agents, list_of_spots, food_value, list_of_pheromones,cost_of_pheromone): #food_value = energy given by eating one piece of food
+def eat(list_of_agents, list_of_spots, food_value, list_of_pheromones ,cost_of_pheromone): #food_value = energy given by eating one piece of food
     for agent in list_of_agents:
         agent_has_eaten = False
         for spot in list_of_spots: #checks if the agent is on a food spot
@@ -47,7 +50,7 @@ def eat(list_of_agents, list_of_spots, food_value, list_of_pheromones,cost_of_ph
                         spot.ressource = spot.ressource - 1 #update the amount of food remaining in the box
                         if agent.can_make_pheromone == True and agent.type_agent_int == 1: #If the agent just arrived on the spot and is altruist, then he spreads pheromones around his location
                             agent.can_make_pheromone == False
-                            agent.energy = agent.energy - cost_of_pheromon
+                            agent.energy = agent.energy - cost_of_pheromone
                             new_pheromone = Pheromone()
                             new_pheromone.x = agent.x
                             new_pheromone.y = agent.y
@@ -155,6 +158,28 @@ def reproduct_with_a_partner(list_of_agents,prob_of_mutation, required_energy_to
 
 def distance_between_two_agents(agent1, agent2): #calculate the absolute distance between two agents
     return math.sqrt((agent1.x - agent2.x)**2 + (agent1.y - agent2.y)**2)
+
+def update_list_of_each_type(list_of_agents, is_last_cycle, list_of_altruists, list_of_basics, list_of_cheaters, number_of_cycles):
+    list_of_altruists.append(0)
+    list_of_basics.append(0)
+    list_of_cheaters.append(0)
+    for agent in list_of_agents:
+        if agent.type_agent_int == 0:
+            list_of_basics[-1] = list_of_basics[-1] + 1
+        elif agent.type_agent_int == 1:
+            list_of_altruists[-1] = list_of_altruists[-1] + 1
+        elif agent.type_agent_int == 2:
+            list_of_cheaters[-1] = list_of_cheaters[-1] + 1
+    if is_last_cycle :
+        X = [i for i in range(number_of_cycles)]
+        Ya = list_of_basics
+        Yb = list_of_altruists
+        Yc = list_of_cheaters
+        plt.plot(X, Ya)
+        plt.plot(X, Yb)
+        plt.plot(X, Yc)
+        plt.show()
+
 
 # agent1 = Agent()
 # agent2 = Agent()
