@@ -21,9 +21,9 @@ class Button:
 
         self.screen = screen
 
-        self.width = 200
+        self.width = json_data["button_width"]
 
-        self.height = 75
+        self.height = json_data["button_height"]
 
         self.string = string
 

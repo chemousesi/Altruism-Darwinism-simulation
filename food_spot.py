@@ -1,9 +1,6 @@
 from pig_tv_csts import *
 from utils import *
 
-import json
-with open('parameters.json') as file:
-    json_data = json.load(file)
 
 
 class Food:
@@ -14,7 +11,7 @@ class Food:
     def __init__(self,x,y,screen) -> None:
         self.x = x                              # coordinate of the food spot
         self.y = y
-        self.ressource = 50
+        self.ressource = json_data["initial_energy"]
         self.screen = screen                         # quantity of available food
         self.state = True                           # State of the food spot, False if it is exhausted
         self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
@@ -45,8 +42,8 @@ class Food:
     def update(self):
         if (self.state == False):
             self.regenerate += 1
-            if (self.regenerate == 100):
+            if (self.regenerate == json_data["food_regeneration_time"]):
                 self.regenerate = 0
-                self.ressource = 50
+                self.ressource = json_data["initial_energy"]
                 self.state = True
                 self.draw()
