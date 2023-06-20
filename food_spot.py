@@ -33,6 +33,9 @@ class food:
     
     def get_table(self):
         return self.table
+    
+    def update(self):
+        return 0
 
     
     def draw(self):
