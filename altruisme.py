@@ -5,16 +5,19 @@ from utils import *
 from universe import Universe
 from button import Button
 from agent import Agent
+from food_spot import Food
 
 
 
 def main():
 
-    universe = Universe()
+    universe = Universe(screen)
 
     universe.add_agent(Agent(screen))
 
     universe.add_button(Button, screen, "proba mutation")
+
+    universe.add_food_source(Food, screen, 10)
 
     temps = 0
 
