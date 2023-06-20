@@ -1,9 +1,11 @@
 from pig_tv import *
+from utils import *
+
 class Agent:
 
-    dico_color = {"altruiste":GREEN, "profiteur":RED, "basique":BLUE}
+    dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
-    dico_type_agent = {"altruiste":1, "profiteur":2, "basique":0}
+
 
     cost_of_reproduction = 40
 
@@ -11,7 +13,9 @@ class Agent:
 
     cost_of_pheromone = 10
 
-    def __init__(self, pos=None, type_agent=None, radius=None, energy=None):
+
+    def __init__(self, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
+
 
         if pos != None:
 
@@ -34,9 +38,9 @@ class Agent:
 
         else:
 
-            self.type_agent = "basique"
+            self.type_agent = TypeAgent.BASIC
 
-        self.type_agent_int = Agent.dico_type_agent[self.type_agent]
+
         ##
 
         # radius
@@ -149,8 +153,6 @@ class Agent:
 
         if self.energy > 0:
 
-            Agent.update_vect(self)
-
             Agent.move(self)
 
             if draw:
@@ -171,53 +173,72 @@ class Agent:
 
             return -1  # dead
 
+    def find_closest_pheromone(self, list_of_pheromones):
+        # finds the closest phéromone
+        if self.type_agent == TypeAgent.BASIC:
+            return None
+        elif len(list_of_pheromones) > 0:
+            # chercher le phéromone le plus proche
+            closest_pheromone = None
+            min_ph = list_of_pheromones[0]
+            min_dist = distance(min_ph, self)
+            for ph in list_of_pheromones:
+                dist = distance(ph,self)
+                if dist <= ph.radius and dist <= min_dist:
+                    min_dist = dist
+                    min_ph = ph
+            return ph
+        else :
+            return None
 
     def draw(self):
 
         pygame.draw.circle(screen, self.color, self.pos, self.radius)
 
     def move(self):
+        # if he s eating we don't change position
+        if not self.is_eating :
+            self.pos += self.vector
 
         self.pos += self.vector
 
         self.x = self.pos[0]
-
         self.y = self.pos[1]
 
-    def update_vect(self) :
-      b = random.randint(0,4)
-      vect = self.get_vector()
-      module = sqrt((vect[0]**2 + vect[1]**2))
-      if (self.get_y() <= 0) :
-        for i in range(5):
-          j=i+1
-          if (b == i) :
-            vect2 =Arr([cos(pi*j*1/6),sin(pi*j*1/6)])
-            vect2 = vect2 * module
-      elif(self.get_y() >= screen_height) :
-        for i in range(5):
-          j=i+1
-          if (b == i) :
-            vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
-            vect2 = vect2 * module
-      elif(self.get_x() <= 0) :
-        for i in range(5):
-          j=i+1
-          if (b == i) :
-            vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
-            vect2 = vect2 * module
-      elif(self.get_x() >= screen_width):
-         print("hi")
-         for i in range(5):
-          j=i+1
-          if (b == i) :
-            vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-            vect2 = vect2 * module
-      else:
-        vect2 = vect
+    def random_walk(self) :
+        b = random.randint(0,4)
+        vect = self.get_vector()
+        module = sqrt((vect[0]**2 + vect[1]**2))
+        if (self.get_y() <= 0) :
+            for i in range(5):
+                j=i+1
+                if (b == i) :
+                    vect2 =Arr([cos(pi*j*1/6),sin(pi*j*1/6)])
+                    vect2 = vect2 * module
+        elif(self.get_y() >= screen_height) :
+            for i in range(5):
+                j=i+1
+            if (b == i) :
+                vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
+                vect2 = vect2 * module
+        elif(self.get_x() <= 0) :
+            for i in range(5):
+                j=i+1
+            if (b == i) :
+                vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
+                vect2 = vect2 * module
+        elif(self.get_x() >= screen_width):
+            print("hi")
+            for i in range(5):
+                j=i+1
+            if (b == i) :
+                vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+                vect2 = vect2 * module
+        else:
+            vect2 = vect
 
-      self.vector = vect2
-      self.move() #ajouté
+        self.vector = vect2
+        self.move() #ajouté
 
 ##
 
@@ -320,6 +341,14 @@ class Button:
 
 class Univers:
 
+    '''
+    attributes
+    list_agents
+
+    '''
+
+
+
     button_height = 100
 
     def __init__(self):
@@ -398,6 +427,20 @@ class Univers:
             agent.update(draw,[],[],[])
 
 
+    def update_movements(self):
+        for agent in self.agents:
+            if agent.is_eating :
+                agent.set_vector(Arr([0, 0]))
+            else :
+                ret = agent.find_closest_pheromone(self.pheromones)
+                if ret != None:
+                    # goes to pheromone
+                    agent.vector = Arr([ ret.x - agent.x  , ret.y - agent.y ])
+                else :
+                    # goto randomwalk
+                    agent.random_walk()
+
+
 
 
 def main():
@@ -426,8 +469,9 @@ def main():
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-
                 play = False
+                exit()
+
 
             elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
@@ -438,6 +482,7 @@ def main():
 
             screen.fill(GREY)
 
+        #univers.updateMovement()
         univers.update(draw, clicked)
 
         if draw:
