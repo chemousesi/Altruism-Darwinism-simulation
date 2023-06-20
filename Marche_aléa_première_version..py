@@ -8,32 +8,37 @@ Original file is located at
 """
 
 from math import *
+ def update_vect(self) :
+      b = random.randint(0,4)
+      vect = self.get_vector()
+      module = sqrt((vect[0]**2 + vect[1]**2))
+      if (self.get_y() <= 0) :
+        for i in range(5):
+          j=i+1
+          if (b == i) :
+            vect2 =Arr([cos(pi*j*1/6),sin(pi*j*1/6)])
+            vect2 = vect2 * module
+      elif(self.get_y() >= screen_height) :
+        for i in range(5):
+          j=i+1
+          if (b == i) :
+            vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
+            vect2 = vect2 * module
+      elif(self.get_x() <= 0) :
+        for i in range(5):
+          j=i+1
+          if (b == i) :
+            vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
+            vect2 = vect2 * module
+      elif(self.get_x() >= screen_width):
+         print("hi")
+         for i in range(5):
+          j=i+1
+          if (b == i) :
+            vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+            vect2 = vect2 * module
+      else:
+        vect2 = vect
 
-def marche2(self) :
-  vect = self.get_vector()
-  module = sqrt((vect[0]**2 + vect[1])**2)
-  if (self.get_y() == 0) :
-    b = randint(0,4)
-    for i in range(5):
-      j=i+1
-      if (b == i) :
-        vect2 =(cos(pi*j*0.2),sin(pi*j*0.2))
-        vect2 = vect2 * module
-  elif(self.get_y() == Max_y) :
-    for i in range(5):
-      if (b == i) :
-        vect2 =(cos(pi*j*1/6),-sin(pi*j*1/6))
-        vect2 = vect2 * module
-  elif(self.get_x() == 0) :
-    for i in range(5):
-      if (b == i) :
-        vect2 =(sin(pi*j*1/6),-cos(pi*j*1/6))
-        vect2 = vect2 * module
-  elif(self.get_x() == Max_x):
-     for i in range(5):
-      if (b == i) :
-        vect2 =(-sin(pi*j*1/6),-cos(pi*j*1/6))
-        vect2 = vect2 * module
-  else:
-    vect2 = vect
-  return vect2
+      self.vector = vect2
+      self.move() #ajouté
