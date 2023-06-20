@@ -1,5 +1,7 @@
 import numpy
 import pygame
+from pig_tv import GREEN
+
 pygame.init()
 screen = pygame.display.set_mode((600, 480))
 
@@ -31,21 +33,12 @@ class food:
     
     def get_table(self):
         return self.table
+    
+    def update(self):
+        return 0
 
     
     def draw(self):
         pygame.draw.rect(screen,GREEN, self.rect)
 
         
-
-a = food(3,4)
-a.getting_eaten()
-print("eee")
-b = a.get_ressource()
-print(b)
-L = a.get_table()
-#print(L)
-
-while (True):
-    a.draw()
-    pygame.display.update()

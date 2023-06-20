@@ -6,7 +6,15 @@ class Agent:
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
+    cost_of_reproduction = 40
+
+    required_energy_to_reproduce = 50
+
+    cost_of_pheromone = 10
+
     def __init__(self, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
+
+
 
         if pos != None:
 
@@ -31,7 +39,7 @@ class Agent:
 
             self.type_agent = TypeAgent.BASIC
 
-      
+
         ##
 
         # radius
@@ -111,9 +119,9 @@ class Agent:
                 dist = distance(ph,self)
                 if dist <= ph.radius and dist <= min_dist:
                     min_dist = dist
-                    min_ph = ph 
+                    min_ph = ph
             return ph
-        else : 
+        else :
             return None
 
     def draw(self):
@@ -126,7 +134,7 @@ class Agent:
             self.pos += self.vector
 
         self.pos += self.vector
-        
+
         self.x = self.pos[0]
         self.y = self.pos[1]
 
@@ -244,8 +252,8 @@ class Button:
 class Univers:
 
     '''
-    attributes 
-    list_agents 
+    attributes
+    list_agents
 
     '''
 
@@ -334,7 +342,7 @@ class Univers:
 
             agent.update(draw)
 
-        
+
     def update_movements(self):
 
         for agent in self.agents:
@@ -349,7 +357,7 @@ class Univers:
                     # goes to pheromone
                     agent.vector = Arr([ phero.x - agent.x  , phero.y - agent.y ])
                 else :
-                    # goto randomwalk  
+                    # goto randomwalk
                     agent.random_walk()
 
 
@@ -374,7 +382,7 @@ def main():
         temps += 1
 
         clicked = False
-        
+
 
         # user events
 
