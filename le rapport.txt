@@ -1,0 +1,22 @@
+le rapport 
+une presentaiton 
+code 
+poster
+repo git 
+
+
+sujet simulation multi agent 
+deux choix :
+- netlogo 
+- processing, basée sur java, plus simple que java
+exemple d'implmentation libre.
+
+chaque  agent autour de sa position 
+une force d'attraction par rapport à son voisin et une force de répulsion 
+
+
+une quesiton importante  : altruism 
+voir si ce comprtement altruiste peut 
+
+de l'expérience 
+si il ya pas de signal on peut pas survivre

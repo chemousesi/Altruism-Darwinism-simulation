@@ -105,15 +105,17 @@ class Agent:
         pygame.draw.circle(screen, self.color, self.pos, self.radius)
 
     def move(self):
+        # if he s eating we don't change position
+        if not self.is_eating :
+            self.pos += self.vector
 
-        self.pos += self.vector
 
     def update_vect(self) :
 
       vect = self.get_vector()
       module = sqrt((vect[0]**2 + vect[1])**2)
       if (self.get_y() == 0) :
-        b = randint(0,4)
+        b = random.randint(0,4)
         for i in range(5):
           j=i+1
           if (b == i) :
@@ -323,8 +325,9 @@ def main():
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-
                 play = False
+                exit()
+
 
             elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
@@ -335,6 +338,7 @@ def main():
 
             screen.fill(GREY)
 
+        univers.updateMovement()
         univers.update(draw, clicked)
 
         if draw:
