@@ -8,3 +8,4 @@ button_height = 75
 food_width = 20
 food_height =20
 initial_ressource = 50
+prob_of_mutation = 0.15
