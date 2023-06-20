@@ -2,6 +2,7 @@
     "food_width":20,
     "food_height":20,
     "food_regeneration_time":100,
+    "food_storage":50,
 
     "cost_of_reproduction":100,
     "required_energy_to_reproduce": 501,

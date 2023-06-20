@@ -106,7 +106,9 @@ class Universe:
 
             food.update(draw)
 
-            Universe.add_pheromone(self, food.pos, type_pheromone=0, life_span=1)
+            if food.available_food:
+
+                Universe.add_pheromone(self, food.pos, type_pheromone=0, life_span=1)
 
     def update_pheromones(self, draw):
 

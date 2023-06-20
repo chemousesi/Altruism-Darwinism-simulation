@@ -16,13 +16,13 @@ class Food(Entity):
 
         x, y = self.pos
 
-        self.ressource = 50
+        self.ressource = json_data["food_storage"]
 
-        self.state = True                           # State of the food spot, False if it is exhausted
+        self.available_food = True                           # State of the food spot, False if it is exhausted
 
         self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
 
-        self.regenerate = 0
+        self.regenerate = 0  # when exhausted, ticks until limit then refills
 
         self.rect = pygame.Rect(x,y,self.width,self.height)
 
@@ -31,7 +31,7 @@ class Food(Entity):
         self.ressource -= 1
 
         if (self.ressource == 0):
-            self.state = False
+            self.available_food = False
 
     def get_ressource(self):
         return self.ressource
@@ -41,7 +41,7 @@ class Food(Entity):
 
     def draw(self):
 
-        if (self.state == True):
+        if (self.available_food == True):
             pygame.draw.rect(self.screen,GREEN, self.rect)
 
         else:
@@ -50,12 +50,13 @@ class Food(Entity):
 
     def update(self, draw=False):
 
-        if (self.state == False):
+        if (self.available_food == False):
+
             self.regenerate += 1
             if (self.regenerate == 100):
                 self.regenerate = 0
-                self.ressource = 50
-                self.state = True
+                self.ressource = json_data["food_storage"]
+                self.available_food = True
 
         if draw:
 
