@@ -19,19 +19,7 @@ class Agent(Entity):
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
-        self.screen = screen
-
-        if pos != None:
-
-            self.pos = pos
-
-        else:
-
-            self.pos = Arr(get_random_point_in_screen())
-
-        self.x = self.pos[0]
-
-        self.y = self.pos[1]
+        CircleEntity.__init__(self, screen, pos, Agent.dico_color[self.type_agent], radius)
 
         self.vector = Arr([10, 0])  # Arr.get_nul([2])
 
@@ -44,27 +32,13 @@ class Agent(Entity):
 
             self.type_agent = TypeAgent.BASIC
 
+
         if self.type_agent == TypeAgent.BASIC:
             self.type_agent_int =0
         elif self.type_agent == TypeAgent.ALTRUIST:
             self.type_agent_int =1
         elif self.type_agent == TypeAgent.PROFITEER:
             self.type_agent_int =2
-
-
-        ##
-
-        # radius
-        if radius != None:
-
-            self.radius = radius
-
-        else:
-
-            self.radius = 10
-        ##
-
-        self.color = Agent.dico_color[self.type_agent]
 
         #energy
         if energy != None:

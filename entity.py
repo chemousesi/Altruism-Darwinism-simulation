@@ -4,17 +4,21 @@ from utils import *
 
 class Entity:
 
-    def __init__(self, pos, color, radius, screen) :
+    def __init__(self, screen, pos=None):
 
-        self.pos = pos
-        self.x = pos[0]
-        self.y = pos[1]
-
-        # graphical information
-
-        self.color = color
-        self.radius = radius
         self.screen = screen
+
+        if pos != None:
+
+            self.pos = pos
+
+        else:
+
+            self.pos = Arr(get_random_point_in_screen())
+
+        self.x = self.pos[0]
+
+        self.y = self.pos[1]
 
     def getX(self):
         return self.x
@@ -26,6 +30,30 @@ class Entity:
 
         self.x = self.pos[0]
         self.y = self.pos[1]
+
+
+class CircleEntity(Entity):
+
+    def __init__(self, screen, pos=None, color=None, radius=None) :
+
+        Entity.__init__(self, screen, pos)
+        # graphical information
+
+        if color != None:
+
+            self.color = color
+
+        else:
+
+            self.color = YELLOW
+
+        if radius != None:
+
+            self.radius = radius
+
+        else:
+
+            self.radius = 10
 
     def draw(self):
 
