@@ -69,6 +69,9 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+    def get_color():
+        return BLUE
+
     def get_energy(self):
 
         return self.energy
@@ -128,13 +131,6 @@ class Agent(CircleEntity):
                         self.on_food = True #the agent is on a food
                         self.is_eating = True #the agent is no longer moving
                         food.getting_eaten() #update the amount of food remaining in the box
-                        if self.can_make_pheromone == True and self.type_agent_int == 1: #If the agent just arrived on the food and is altruist, then he spreads pheromones around his location
-                            self.can_make_pheromone == False
-                            Agent.reduce_energy(self,Agent.cost_of_pheromone)
-                            new_pheromone = Pheromone()
-                            new_pheromone.x = self.x
-                            new_pheromone.y = self.y
-                            list_of_pheromones.append(new_pheromone)
                         if food.ressource == 0: #if the agent eats the last bit of food of the food, it can move again
                             self.is_eating = False
                             self.can_make_pheromone = True
@@ -175,32 +171,16 @@ class Agent(CircleEntity):
             self.new_born = False
 
     def find_closest_pheromone(self, list_of_pheromones):
-        # finds the closest phéromone
-        if self.type_agent == TypeAgent.BASIC:
-            return None
-        elif len(list_of_pheromones) > 0:
-            # chercher le phéromone le plus proche
-            closest_pheromone = None
-            min_ph = list_of_pheromones[0]
-            min_dist = distance(min_ph, self)
-            for ph in list_of_pheromones:
-                dist = distance(ph,self)
-                if dist <= ph.radius and dist <= min_dist:
-                    min_dist = dist
-                    min_ph = ph
-            return ph
-        else :
-            return None
-
+        # this class is for the the basic agents that don't sens pheormones
+        return None
+    
     def move(self):
         # if he s eating we don't change position
         if not self.is_eating :
             self.pos += self.vector
+            Agent.update_vect(self)
 
-        self.pos += self.vector
-
-        self.x = self.pos[0]
-        self.y = self.pos[1]
+          
 
     def random_walk(self) :
            

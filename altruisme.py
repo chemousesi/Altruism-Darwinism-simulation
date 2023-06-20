@@ -13,6 +13,10 @@ def main():
     universe = Universe()
 
     universe.add_agent(Agent(screen))
+    universe.add_agent(Agent(screen))
+    universe.add_agent(Agent(screen))
+    universe.add_agent(Agent(screen))
+
 
     universe.add_button(Button, screen, "proba mutation")
 
