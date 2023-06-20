@@ -5,7 +5,7 @@ import universe
 import button
 
 
-class Agent:
+class Agent(Entity):
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
@@ -16,7 +16,6 @@ class Agent:
     cost_of_pheromone = 10
 
     prob_of_mutation = 0.15
-
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
