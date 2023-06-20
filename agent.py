@@ -87,11 +87,15 @@ class Agent(CircleEntity):
 
     def reduce_energy(self,loss):
         self.energy -= loss
-        return
 
     def aging(self): #changes the value of the agent based on its age
         age = self.age
-        Agent.reduce_energy(self,age)
+
+        def loss_function(x):
+
+            return log(x+1)  # so it's never negative
+
+        Agent.reduce_energy(self, loss_function(age))
         if self.energy <= 0:
             return "dead"
         return
