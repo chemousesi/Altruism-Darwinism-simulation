@@ -206,10 +206,6 @@ class Agent(Entity):
         else :
             return None
 
-    def draw(self):
-
-        pygame.draw.circle(self.screen, self.color, self.pos.with_fun_applied(int), self.radius)
-
     def move(self):
         # if he s eating we don't change position
         if not self.is_eating :
