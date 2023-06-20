@@ -65,6 +65,8 @@ class Agent:
 
         self.can_make_pheromone = True
 
+        self.has_reproduced_this_cycle = False
+
     def get_energy(self):
 
         return self.energy
