@@ -85,8 +85,8 @@ class Agent(CircleEntity):
 
         return self.x
 
-    def reduce_energy(self,loss):
-        self.energy -= loss
+    def add_to_energy(self,loss):
+        self.energy += loss
 
     def aging(self): #changes the value of the agent based on its age
         age = self.age
@@ -95,10 +95,7 @@ class Agent(CircleEntity):
 
             return log(x+1)  # so it's never negative
 
-        Agent.reduce_energy(self, loss_function(age))
-        if self.energy <= 0:
-            return "dead"
-        return
+        Agent.add_to_energy(self, -loss_function(age))
 
     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
          #checks if the agent is able to reproduce
@@ -115,30 +112,43 @@ class Agent(CircleEntity):
             child.type_agent_int = self.type_agent_int
         child.x = self.x
         child.y = self.y
-        Agent.reduce_energy(self,Agent.cost_of_reproduction)
+        Agent.add_to_energy(self, -Agent.cost_of_reproduction)
         return child
 
 
-    def eat(self, list_of_foods, list_of_pheromones):
+    def eat(self, list_of_foods):
         agent_has_eaten = False
 
         for food in list_of_foods: #checks if the agent is on a food spot
             if food.ressource > 0:
 
-                if (self.food-food.pos).norme_eucli() < 5:
+                if (self.pos-food.pos).norme_eucli() < 5:  # close enough
 
                     self.on_food = True #the agent is on a food
                     self.is_eating = True #the agent is no longer moving
 
                     energy = food.getting_eaten() #updates the amount of food remaining in the box
-                    Agent.reduce_energy(self, -energy) #updates the energy of the agent
+                    Agent.add_to_energy(self, energy) #updates the energy of the agent
                     agent_has_eaten =True
 
         if (agent_has_eaten == False) and (self.on_food == True): #if another agent has eaten the last bit of food of the food before this agent, it still needs to be able to move again or it will be stuck on the food
             self.is_eating = False
             self.can_make_pheromone = True
 
-    def update(self, list_of_pheromones, list_of_foods, list_of_agents, draw=True ):
+    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+
+        bebe = Agent.update_energy(self, draw)
+
+        # updates vector then moves
+        Agent.random_walk(self)
+        Agent.move(self)
+
+        # eats
+        Agent.eat(self, list_of_foods)  # returns in case a pheromone has been created
+
+        return [None, bebe]
+
+    def update_energy(self, draw):
 
         if self.new_born == False:
 
@@ -146,82 +156,84 @@ class Agent(CircleEntity):
 
             if self.energy > 0:
 
-                # updates vector then moves
-                Agent.update_vector(self)
-                Agent.move(self)
-
                 if draw:
+
                     Agent.draw(self)
 
                 # if possible, reproduction
                 if self.energy >= Agent.required_energy_to_reproduce:
-                    list_of_agents.append(Agent.reproduce_alone(self))
+                    return Agent.reproduce_alone(self)
 
                 # decreases energy
-                check_alive = Agent.aging(self)
-                if check_alive == "death":
-                    return check_alive
-
-                # eats
-                return Agent.eat(self, list_of_foods, list_of_pheromones)  # returns in case a pheromone has been created
+                Agent.aging(self)
 
             else:
-
-                return -1  # dead
+                return "dead"  # dead
 
         else :
-
             self.new_born = False
-
-    def update_vector(self):
-
-        Agent.random_walk(self)
 
     def find_closest_pheromone(self, list_of_pheromones):
         # this class is for the the basic agents that don't sens pheormones
         return None
-    
+
+    def draw(self):
+
+        CircleEntity.draw(self)
+
+        aff_txt(str(self.energy), self.x, self.y, window=self.screen)
+
     def move(self):
-        # if he s eating we don't change position
-        if not self.is_eating :
-            self.pos += self.vector
-            Agent.update_pos(self)
+        
+        self.pos += self.vector
+        Agent.update_pos(self)
+
+    def normalize_vect(self):
+
+        self.vector.normalize(self.speed_norm)
 
     def random_walk(self) :
-           
-          vect = self.get_vector()
 
-          #module = sqrt((vect[0]**2 + vect[1]**2))
-         
-          if (self.get_y() <= 0) or (self.get_y() >= screen_height) or (self.get_x() <= 0) or (self.get_x() >= screen_width):
-           
-            self.mode_transitoire = 10
-           
-            vect2 = Arr(screen_center)-self.pos  # Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-           
-            vect2.normalize(self.speed_norm)
-           
-            self.delta_t = random.random()
+          # if he s eating we don't change position
+          if self.is_eating :
+
+              vect2 = Arr.get_nul([2])
 
           else:
 
-              if self.mode_transitoire > 0 :
-                   vect2 = vect
-                   self.mode_transitoire -= 1
+              vect = self.get_vector()
+
+              #module = sqrt((vect[0]**2 + vect[1]**2))
              
-              else :
-                  frequency = 10000
-                  #t=0.01
-                  amp = 5
-                 
-                  perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)])
-                 
-                  perturbation.normalize(self.speed_norm/10)
-                 
-                  vect2 = perturbation+vect
-                 
-                  vect2.normalize(self.speed_norm)
+              if (self.get_y() <= 0) or (self.get_y() >= screen_height) or (self.get_x() <= 0) or (self.get_x() >= screen_width):  # out screen
+               
+                self.mode_transitoire = 10
+               
+                vect2 = Arr(screen_center)-self.pos  # Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+               
+                self.delta_t = random.random()
+
+              else:
+
+                  # back into screen
+                  if self.mode_transitoire > 0 :
+                       vect2 = vect
+                       self.mode_transitoire -= 1
+
+                  #randomized movement                 
+                  else :
+                      frequency = 10000
+                      #t=0.01
+                      amp = 5
+                     
+                      perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)])
+                     
+                      perturbation.normalize(self.speed_norm/10)
+                     
+                      vect2 = perturbation+vect
 
           self.vector = vect2
+
+          Agent.normalize_vect(self)
 
 

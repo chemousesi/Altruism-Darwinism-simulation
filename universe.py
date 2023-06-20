@@ -108,7 +108,7 @@ class Universe:
 
             if food.available_food:
 
-                Universe.add_pheromone(self, food.pos, type_pheromone=0, life_span=1)
+                Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1)
 
     def update_pheromones(self, draw):
 
@@ -127,38 +127,25 @@ class Universe:
         Universe.update_foods(self, draw)
 
         # agent update
-
-        Universe.update_movements(self)
-
         for agent in self.agents:
             #print(len(self.agents))
+
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
-            agent_return = agent.update( pheromones, foods, agents, draw)
-            if agent_return == "death" : # when the agent has no more energy we kill him
+
+            pheromone_return, agent_return = agent.update(foods, pheromones, draw)
+
+            if agent_return == "dead" : # when the agent has no more energy we kill him
                 agents.remove(agent)
                 print("Agent killed")
 
-            elif (agent_return != None) and (agent_return[0] == "pheromone"):
+            # baby
+            elif agent_return != None:
+                self.agents.append(agent_return)
 
+            if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
                 Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
 
-    def update_movements(self):
-
-        for agent in self.agents:
-
-            if agent.is_eating:
-                agent.set_vector(Arr([0, 0]))
-
-            else :
-
-                phero = agent.find_closest_pheromone(self.pheromones)
-                if phero != None:
-                    # goes to pheromone
-                    agent.vector = Arr([ phero.x - agent.x  , phero.y - agent.y ])
-                else :
-                    # goto randomwalk
-                    agent.random_walk()
 
 

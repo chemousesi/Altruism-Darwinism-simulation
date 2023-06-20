@@ -12,26 +12,60 @@ class PheromoneSmellerAgent(Agent):
         self.recognised_pheromones = recognised_pheromones
 
     def find_closest_pheromone(self, list_of_pheromones):
+        """ returns the closest pheromone that is close enough to the agent so that he can smell it """
 
         if len(list_of_pheromones) > 0:
             # chercher le phéromone le plus proche
-            min_ph = list_of_pheromones[0]
-            min_dist = distance(min_ph, self)
+            min_ph = None
+            min_dist = screen_width+screen_height
 
             for ph in list_of_pheromones:
-                dist = distance(ph,self)
-                if dist <= ph.radius and dist <= min_dist:
-                    min_dist = dist
-                    min_ph = ph
 
-            return ph
+                if ph.type_pheromone in self.recognised_pheromones:  # PheromoneSmellerAgent only sensible to some pheromones
 
-    def move(self):
-        if not self.is_eating :
+                    dist = distance(ph,self)
+                    if dist <= ph.radius and dist <= min_dist:
+                        min_dist = dist
+                        min_ph = ph
+
+            if min_ph != None and min_ph.radius > min_dist:
+
+                return min_ph
+
+    def update(self, list_of_foods, list_of_pheromones, draw=True):
+
+        bebe = Agent.update_energy(self, draw)
+
+        # updates vector then moves
+        PheromoneSmellerAgent.update_vect(self, list_of_pheromones)
+        Agent.move(self)
+
+        # eats
+        Agent.eat(self, list_of_foods)
+
+        return [None, bebe]
+
+
+    def update_vect(self, list_of_pheromones):
+
+        if self.is_eating :
+
+            self.vector = Arr.get_nul([2])
+
+        else:
+
             #smelling pheromones 
-            pheromone = self.find_closest_pheromone()
+
+            pheromone = self.find_closest_pheromone(list_of_pheromones)
+
             if pheromone != None:
-                self.vect = pheromone.pos - self.pos
+
+                self.vector = pheromone.pos - self.pos
+
+                Agent.normalize_vect(self)
+
+                print(self.vector , pheromone.pos , self.pos)
+
             else :
-                super.move()
+                Agent.random_walk(self)
         

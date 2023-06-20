@@ -30,12 +30,14 @@ class Food(Entity):
 
     def getting_eaten(self):
 
-        self.ressource -= self.food_value
+        gotten_food = min(self.food_value, self.ressource)
+
+        self.ressource -= gotten_food
 
         if (self.ressource == 0):
             self.available_food = False
 
-        return self.ressource
+        return gotten_food
 
     def get_ressource(self):
         return self.ressource

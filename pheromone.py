@@ -10,13 +10,13 @@ class Pheromone(CircleEntity):
 
         self.type_pheromone = type_pheromone
 
-        if self.type_pheromone == 0:
+        if self.type_pheromone == 1:
 
             radius = json_data["type1_pheromone_radius"]
 
             color = YELLOW
 
-        elif self.type_pheromone == 1:
+        elif self.type_pheromone == 2:
 
             radius = json_data["type2_pheromone_radius"]
 

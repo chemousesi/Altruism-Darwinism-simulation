@@ -16,6 +16,7 @@
     "prob_of_mutation":0.15,
     "agent_initial_energy":500,
     "agent_speed_norm":3,
+
     "type1_pheromone_radius":50,
     "type2_pheromone_radius":100,
     "pheromone_energy_cost":20,

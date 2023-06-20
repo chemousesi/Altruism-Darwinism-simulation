@@ -14,13 +14,13 @@ def main():
 
     universe = Universe(screen)
 
-    for x in range(4):
+    for x in range(1):
 
         universe.add_agent(Basic(screen))
 
     universe.add_button(Button, screen, "proba mutation")
 
-    universe.add_food_source(Food, screen, 10)
+    universe.add_food_source(Food, screen, 20)
 
     temps = 0
 
