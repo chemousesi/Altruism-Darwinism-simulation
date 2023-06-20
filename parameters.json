@@ -2,17 +2,20 @@
     "food_width":20,
     "food_height":20,
     "food_regeneration_time":100,
+    "food_storage":50,
 
     "cost_of_reproduction":100,
     "required_energy_to_reproduce": 501,
     "cost_of_pheromone":10,
     "agent_radius":10,
-    "initial_energy":500,
+    "initial_energy":50,
     "button_width":200,
     "button_height":75,
     "initial_ressource":50,
     "prob_of_mutation":0.15,
-    "agent_initial_energy":500, 
-    "agent_speed_norm":3
+    "agent_initial_energy":500,
+    "agent_speed_norm":3,
+    "type1_pheromone_radius":50,
+    "type2_pheromone_radius":100
 
 }

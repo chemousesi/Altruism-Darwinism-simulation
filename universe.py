@@ -3,6 +3,7 @@ from utils import *
 
 import button
 import agent
+import pheromone
 
 
 class Universe:
@@ -15,7 +16,7 @@ class Universe:
 
     button_height = 100
 
-    def __init__(self):
+    def __init__(self, screen):
 
         # universe objects
 
@@ -26,6 +27,8 @@ class Universe:
         self.foods = []
 
         # graphic interface
+
+        self.screen = screen
 
         # buttons
 
@@ -42,6 +45,20 @@ class Universe:
         n_button = object_(screen, 0, Universe.button_height*len(self.buttons), string, "0")
 
         self.buttons.append(n_button)
+
+    def add_food_source(self, object_, screen, nb=1):
+
+        for i in range(nb):
+
+            n_food = object_(Arr(get_random_point_in_screen()), screen)
+
+            self.foods.append(n_food)
+
+    def add_pheromone(self, pos, type_pheromone, life_span):
+
+        n_pheromone = pheromone.Pheromone(pos, self.screen, type_pheromone, life_span)
+
+        self.pheromones.append(n_pheromone)
 
     def update_buttons(self, draw, mouse_clicked, user_input):
 
@@ -83,10 +100,31 @@ class Universe:
 
             self.selected_button = None
 
+    def update_foods(self, draw):
+
+        for food in self.foods:
+
+            food.update(draw)
+
+            if food.available_food:
+
+                Universe.add_pheromone(self, food.pos, type_pheromone=0, life_span=1)
+
+    def update_pheromones(self, draw):
+
+        for pheromone in self.pheromones:
+
+            if pheromone.update(draw) == -1:
+
+                self.pheromones.remove(pheromone)
 
     def update(self, draw, mouse_clicked, user_input):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
+
+        Universe.update_pheromones(self, draw)
+
+        Universe.update_foods(self, draw)
 
         # agent update
 
@@ -97,8 +135,8 @@ class Universe:
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
-            ret = agent.update( pheromones, foods, agents, draw)
-            if ret == -1 : # when the agent has no more energy we kill him
+            agent_state = agent.update( pheromones, foods, agents, draw)
+            if agent_state == -1 : # when the agent has no more energy we kill him
                 agents.remove(agent)
                 print("Agent killed")
 
