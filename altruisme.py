@@ -1,6 +1,7 @@
 from pig_tv import *
 from utils import *
 
+
 from universe import Universe
 from button import Button
 from agent import Agent
@@ -50,7 +51,7 @@ def main():
 
                     user_input = string
 
-                    
+
         # drawing and updating universe
         if draw:
 
@@ -72,6 +73,13 @@ if __name__ == "__main__":
 
     main()
 
+def initiate_food_spots(screen_width,screen_height,number_of_spots):
+    for i in range(number_of_spots):
+        colonne = int(random.random()*screen_width)
+        ligne = int(random.random()*screen_height)
+        food_spot = Food()
+        food_spot.x = colonne
+        food_spot.y = ligne
 
 
 
