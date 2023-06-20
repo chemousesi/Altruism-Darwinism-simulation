@@ -1,0 +1,10 @@
+cost_of_reproduction = 40
+required_energy_to_reproduce = 50
+cost_of_pheromone = 10
+agent_radius = 10
+initial_energy = 50
+button_width = 200
+button_height = 75
+food_width = 20
+food_height =20
+initial_ressource = 50
