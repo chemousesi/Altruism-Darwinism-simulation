@@ -1,5 +1,7 @@
 from pig_tv import *
 from utils import *
+
+
 class Agent:
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
@@ -142,22 +144,21 @@ class Agent:
         elif(self.get_y() >= screen_height) :
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
+                    vect2 = vect2 * module
         elif(self.get_x() <= 0) :
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
+                    vect2 = vect2 * module
         elif(self.get_x() >= screen_width):
-            print("hi")
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+                    vect2 = vect2 * module
         else:
             vect2 = vect
 
