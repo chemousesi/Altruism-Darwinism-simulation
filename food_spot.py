@@ -5,7 +5,7 @@ from pig_tv import GREEN
 pygame.init()
 screen = pygame.display.set_mode((600, 480))
 
-class food:
+class Food:
     width = 20
     height =20
 
@@ -39,6 +39,15 @@ class food:
 
     
     def draw(self):
-        pygame.draw.rect(screen,GREEN, self.rect)
+        if (self.state == True):
+            pygame.draw.rect(screen,GREEN, self.rect)
+    
+    def update(self):
+        if (self.state == True):
+            self.regenerate += 1
+            if (self.regenerate == 100):
+                self.regenerate = 0
+                self.ressource = 50
+                self.draw()
 
         
