@@ -1,6 +1,7 @@
 import numpy
 import pygame
 from pig_tv import GREEN
+from pig_tv import BLACK
 
 pygame.init()
 screen = pygame.display.set_mode((600, 480))
@@ -41,6 +42,8 @@ class Food:
     def draw(self):
         if (self.state == True):
             pygame.draw.rect(screen,GREEN, self.rect)
+        else:
+            pygame.draw.rect(screen,BLACK, self.rect)
     
     def update(self):
         if (self.state == False):

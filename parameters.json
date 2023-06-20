@@ -1,0 +1,7 @@
+{
+    "food_width":20,
+    "food_height":20,
+    "food_ressource":50,
+    "food_regeneration_time":100
+
+}
