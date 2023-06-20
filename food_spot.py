@@ -1,10 +1,9 @@
-import numpy
-import pygame
-from pig_tv import GREEN
-from pig_tv import BLACK
+from pig_tv_csts import *
+from utils import *
 
 
 class Food:
+
     width = 20
     height =20
 
@@ -31,10 +30,6 @@ class Food:
 
     def get_table(self):
         return self.table
-
-    def update(self):
-        return 0
-
 
     def draw(self):
         if (self.state == True):
