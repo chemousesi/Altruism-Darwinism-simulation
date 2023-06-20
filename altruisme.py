@@ -1,6 +1,7 @@
 from pig_tv import *
 from utils import *
 
+
 class Agent:
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
@@ -15,6 +16,7 @@ class Agent:
 
 
     def __init__(self, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
+
 
 
         if pos != None:
@@ -69,7 +71,7 @@ class Agent:
 
         self.is_eating = False
 
-        self.on_food = False
+        self.on_spot = False
 
         self.can_make_pheromone = True
 
@@ -91,63 +93,7 @@ class Agent:
 
         return self.x
 
-    def reduce_energy(self,loss):
-        self.energy -= loss
-        return
-
-    def aging(self): #changes the value of the agent based on its age
-        age = self.age
-        Agent.reduce_energy(self,age)
-        if self.energy <= 0:
-            return "dead"
-        return
-
-    def reproduce_alone(self, prob_of_mutation): #returns the list of the agents after the reproduction cycle
-         #checks if the agent is able to reproduce
-        mutation = random.random()
-        child = Agent()
-        if mutation < prob_of_mutation: #checks weither the child will be the type of its parent or not
-            if self.type_agent_int == 1:
-                child.type_agent_int = 2
-            elif self.type_agent_int == 2:
-                child.type_agent_int = 1
-            else :
-                child.type_agent_int = 0
-        else:
-            child.type_agent_int = self.type_agent_int
-        child.x = self.x
-        child.y = self.y
-        Agent.reduce_energy(self,Agent.cost_of_reproduction)
-        return child
-
-
-    def eat(self, list_of_foods, list_of_pheromones):
-        agent_has_eaten = False
-        for food in list_of_foods: #checks if the agent is on a food spot
-            if food.ressource > 0:
-                for food_box in food.table: #we could check if the agent is in the food before checking every single food_box in the food
-                    if food_box == self.pos:
-                        self.on_food = True #the agent is on a food
-                        self.is_eating = True #the agent is no longer moving
-                        food.getting_eaten() #update the amount of food remaining in the box
-                        if self.can_make_pheromone == True and self.type_agent_int == 1: #If the agent just arrived on the food and is altruist, then he spreads pheromones around his location
-                            self.can_make_pheromone == False
-                            Agent.reduce_energy(self,Agent.cost_of_pheromone)
-                            new_pheromone = Pheromone()
-                            new_pheromone.x = self.x
-                            new_pheromone.y = self.y
-                            list_of_pheromones.append(new_pheromone)
-                        if food.ressource == 0: #if the agent eats the last bit of food of the food, it can move again
-                            self.is_eating = False
-                            self.can_make_pheromone = True
-                        Agent.reduce_energy(self,Food.food_value) #update the energy of the agent
-                        agent_has_eaten =True
-        if agent_has_eaten == False and self.on_food == True: #if another agent has eaten the last bit of food of the food before this agent, it still needs to be able to move again or it will be stuck on the food
-            self.is_eating = False
-            self.can_make_pheromone = True
-        return list_of_pheromones, list_of_foods
-
-    def update(self, prob_of_mutation, list_of_pheromones, list_of_foods, list_of_agents,draw=True ):
+    def update(self, draw=True):
 
         self.age += 1
 
@@ -158,16 +104,6 @@ class Agent:
             if draw:
 
                 Agent.draw(self)
-
-            if self.energy >= Agent.required_energy_to_reproduce:
-                list_of_agents.append(Agent.reproduce_alone(self, prob_of_mutation))
-
-            check_alive = Agent.aging(self)
-
-            if check_alive == "death":
-                return -1
-
-            list_of_pheromones, list_of_foods = Agent.eat(self,list_of_foods, list_of_pheromones)
 
         else:
 
@@ -218,50 +154,27 @@ class Agent:
         elif(self.get_y() >= screen_height) :
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
+                    vect2 = vect2 * module
         elif(self.get_x() <= 0) :
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
+                    vect2 = vect2 * module
         elif(self.get_x() >= screen_width):
-            print("hi")
             for i in range(5):
                 j=i+1
-            if (b == i) :
-                vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-                vect2 = vect2 * module
+                if (b == i) :
+                    vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+                    vect2 = vect2 * module
         else:
             vect2 = vect
 
         self.vector = vect2
         self.move() #ajouté
 
-##
-
-class Pheromone:
-
-    radius = 60
-
-    life_span = 40
-
-    def __init__(self,x,y):
-
-        self.age = 0
-        sel.pos = (self.x,self.y)
-        self.x = x
-        self.y = y
-
-    def update_pheromone(self):
-        self.age += 1
-        if self.age > Pheromone.life_span:
-            return "dead"
-        return
-
-##
 
 class Button:
 
@@ -424,7 +337,7 @@ class Univers:
 
         for agent in self.agents:
 
-            agent.update(draw,[],[],[])
+            agent.update(draw)
 
 
     def update_movements(self):
