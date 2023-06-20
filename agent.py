@@ -45,6 +45,13 @@ class Agent:
 
             self.type_agent = TypeAgent.BASIC
 
+        if self.type_agent == TypeAgent.BASIC:
+            self.type_agent_int =0
+        elif self.type_agent == TypeAgent.ALTRUIST:
+            self.type_agent_int =1
+        elif self.type_agent == TypeAgent.PROFITEER:
+            self.type_agent_int =2
+
 
         ##
 
@@ -67,18 +74,20 @@ class Agent:
 
         else:
 
-            self.energy = 1
+            self.energy = 100
         ##
 
         self.age = 0
 
         self.is_eating = False
 
-        self.on_spot = False
+        self.on_food = False
 
         self.can_make_pheromone = True
 
         self.has_reproduced_this_cycle = False
+
+        self.new_born = True
 
     def get_energy(self):
 
@@ -110,7 +119,7 @@ class Agent:
     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
          #checks if the agent is able to reproduce
         mutation = random.random()
-        child = Agent()
+        child = Agent(self.screen)
         if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
             if self.type_agent_int == 1:
                 child.type_agent_int = 2
@@ -152,31 +161,33 @@ class Agent:
             self.can_make_pheromone = True
         return list_of_pheromones, list_of_foods
 
-    def update(self, list_of_pheromones, list_of_foods, list_of_agents,draw=True ):
+    def update(self, list_of_pheromones, list_of_foods, list_of_agents, draw=True ):
+        if self.new_born == False :
+            self.age += 1
 
-        self.age += 1
+            if self.energy > 0:
 
-        if self.energy > 0:
+                Agent.move(self)
 
-            Agent.move(self)
+                if draw:
 
-            if draw:
+                    Agent.draw(self)
 
-                Agent.draw(self)
+                if self.energy >= Agent.required_energy_to_reproduce:
+                    list_of_agents.append(Agent.reproduce_alone(self))
 
-            if self.energy >= Agent.required_energy_to_reproduce:
-                list_of_agents.append(Agent.reproduce_alone(self))
+                check_alive = Agent.aging(self)
 
-            check_alive = Agent.aging(self)
+                if check_alive == "death":
+                    return -1
 
-            if check_alive == "death":
-                return -1
+                list_of_pheromones, list_of_foods = Agent.eat(self,list_of_foods, list_of_pheromones)
 
-            list_of_pheromones, list_of_foods = Agent.eat(self,list_of_foods, list_of_pheromones)
+            else:
 
-        else:
-
-            return -1  # dead
+                return -1  # dead
+        else :
+            self.new_born = False
 
     def find_closest_pheromone(self, list_of_pheromones):
         # finds the closest phéromone
