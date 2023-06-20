@@ -51,6 +51,11 @@ class Agent(CircleEntity):
 
             self.energy = json_data["agent_initial_energy"]
         ##
+        self.speed_norm = 5
+
+        self.delta_t = random.random()
+
+        self.mode_transitoire = 0
 
         self.age = 0
 
@@ -193,35 +198,39 @@ class Agent(CircleEntity):
         self.y = self.pos[1]
 
     def random_walk(self) :
-        b = random.randint(0,4)
-        vect = self.get_vector()
-        module = sqrt((vect[0]**2 + vect[1]**2))
-        if (self.get_y() <= 0) :
-            for i in range(5):
-                j=i+1
-                if (b == i) :
-                    vect2 =Arr([cos(pi*j*1/6),sin(pi*j*1/6)])
-                    vect2 = vect2 * module
-        elif(self.get_y() >= screen_height) :
-            for i in range(5):
-                j=i+1
-                if (b == i) :
-                    vect2 =Arr([cos(pi*j*1/6),-sin(pi*j*1/6)])
-                    vect2 = vect2 * module
-        elif(self.get_x() <= 0) :
-            for i in range(5):
-                j=i+1
-                if (b == i) :
-                    vect2 =Arr([sin(pi*j*1/6),-cos(pi*j*1/6)])
-                    vect2 = vect2 * module
-        elif(self.get_x() >= screen_width):
-            for i in range(5):
-                j=i+1
-                if (b == i) :
-                    vect2 =Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-                    vect2 = vect2 * module
-        else:
-            vect2 = vect
+           
+          vect = self.get_vector()
 
-        self.vector = vect2
-        self.move() #ajouté
+          #module = sqrt((vect[0]**2 + vect[1]**2))
+         
+          if (self.get_y() <= 0) or (self.get_y() >= screen_height) or (self.get_x() <= 0) or (self.get_x() >= screen_width):
+           
+            self.mode_transitoire = 10
+           
+            vect2 = Arr(screen_center)-self.pos  # Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
+           
+            vect2.normalize(self.speed_norm)
+           
+            self.delta_t = random.random()
+
+          else:
+
+              if self.mode_transitoire > 0 :
+                   vect2 = vect
+                   self.mode_transitoire -= 1
+             
+              else :
+                  frequency = 10000
+                  #t=0.01
+                  amp = 5
+                 
+                  perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)])
+                 
+                  perturbation.normalize(self.speed_norm/10)
+                 
+                  vect2 = perturbation+vect
+                 
+                  vect2.normalize(self.speed_norm)
+                 
+          self.vector = vect2
+          self.move() #ajouté
