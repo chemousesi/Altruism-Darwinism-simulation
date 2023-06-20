@@ -105,7 +105,7 @@ class Agent:
             return None
         elif len(list_of_pheromones) > 0:
             # chercher le phéromone le plus proche
-            closest_pheromone = None
+       
             min_ph = list_of_pheromones[0]
             min_dist = distance(min_ph, self)
             for ph in list_of_pheromones:
@@ -161,7 +161,7 @@ class Agent:
                     vect2 = vect2 * module
         else:
             vect2 = vect
-
+  
         self.vector = vect2
         self.move() #ajouté
 
