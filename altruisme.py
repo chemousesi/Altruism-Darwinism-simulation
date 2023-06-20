@@ -6,7 +6,6 @@ class Agent:
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
-
     def __init__(self, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
         if pos != None:
@@ -119,7 +118,7 @@ class Agent:
 
     def draw(self):
 
-        pygame.draw.circle(screen, self.color, self.pos, self.radius)
+        pygame.draw.circle(screen, self.color, self.pos.with_fun_applied(int), self.radius)
 
     def move(self):
         # if he s eating we don't change position
@@ -256,7 +255,11 @@ class Univers:
 
     def __init__(self):
 
+        # universe objects
+
         self.agents = []
+
+        self.pheromones = []
 
         # graphic interface
 
@@ -325,20 +328,26 @@ class Univers:
 
         # agent update
 
+        Univers.update_movements(self)
+
         for agent in self.agents:
 
             agent.update(draw)
 
         
     def update_movements(self):
+
         for agent in self.agents:
-            if agent.is_eating :
+
+            if agent.is_eating:
                 agent.set_vector(Arr([0, 0]))
+
             else :
-                ret = agent.find_closest_pheromone(self.pheromones)
-                if ret != None:
+
+                phero = agent.find_closest_pheromone(self.pheromones)
+                if phero != None:
                     # goes to pheromone
-                    agent.vector = Arr([ ret.x - agent.x  , ret.y - agent.y ])
+                    agent.vector = Arr([ phero.x - agent.x  , phero.y - agent.y ])
                 else :
                     # goto randomwalk  
                     agent.random_walk()
