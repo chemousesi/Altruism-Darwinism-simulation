@@ -20,9 +20,6 @@ class Agent(CircleEntity):
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
-
-        self.vector = Arr([10, 0])  # Arr.get_nul([2])
-
         # type_agent
         if type_agent != None:
 
@@ -44,13 +41,13 @@ class Agent(CircleEntity):
 
         #energy
         if energy != None:
-
             self.energy = energy
-
         else:
-
             self.energy = json_data["agent_initial_energy"]
         ##
+
+        self.vector = Arr([10, 0])  # Arr.get_nul([2])
+
         self.speed_norm = json_data["agent_speed_norm"]
 
         self.delta_t = random.random()
@@ -70,7 +67,7 @@ class Agent(CircleEntity):
         self.new_born = True
 
     def get_color():
-        return BLUE
+        return self.color
 
     def get_energy(self):
 
@@ -124,51 +121,61 @@ class Agent(CircleEntity):
 
     def eat(self, list_of_foods, list_of_pheromones):
         agent_has_eaten = False
+
         for food in list_of_foods: #checks if the agent is on a food spot
             if food.ressource > 0:
-                for food_box in food.table: #we could check if the agent is in the food before checking every single food_box in the food
-                    if food_box == self.pos:
-                        self.on_food = True #the agent is on a food
-                        self.is_eating = True #the agent is no longer moving
-                        food.getting_eaten() #update the amount of food remaining in the box
-                        if food.ressource == 0: #if the agent eats the last bit of food of the food, it can move again
-                            self.is_eating = False
-                            self.can_make_pheromone = True
-                        Agent.reduce_energy(self,Food.food_value) #update the energy of the agent
-                        agent_has_eaten =True
-        if agent_has_eaten == False and self.on_food == True: #if another agent has eaten the last bit of food of the food before this agent, it still needs to be able to move again or it will be stuck on the food
+
+                if (self.food-food.pos).norme_eucli() < 5:
+
+                    self.on_food = True #the agent is on a food
+                    self.is_eating = True #the agent is no longer moving
+
+                    energy = food.getting_eaten() #updates the amount of food remaining in the box
+                    Agent.reduce_energy(self, -energy) #updates the energy of the agent
+                    agent_has_eaten =True
+
+        if (agent_has_eaten == False) and (self.on_food == True): #if another agent has eaten the last bit of food of the food before this agent, it still needs to be able to move again or it will be stuck on the food
             self.is_eating = False
             self.can_make_pheromone = True
-        return list_of_pheromones, list_of_foods
 
     def update(self, list_of_pheromones, list_of_foods, list_of_agents, draw=True ):
-       
-        if self.new_born == False :
+
+        if self.new_born == False:
+
             self.age += 1
 
             if self.energy > 0:
 
+                # updates vector then moves
+                Agent.update_vector(self)
                 Agent.move(self)
 
                 if draw:
-
                     Agent.draw(self)
 
+                # if possible, reproduction
                 if self.energy >= Agent.required_energy_to_reproduce:
                     list_of_agents.append(Agent.reproduce_alone(self))
 
+                # decreases energy
                 check_alive = Agent.aging(self)
-
                 if check_alive == "death":
-                    return -1
+                    return check_alive
 
-                list_of_pheromones, list_of_foods = Agent.eat(self,list_of_foods, list_of_pheromones)
+                # eats
+                return Agent.eat(self, list_of_foods, list_of_pheromones)  # returns in case a pheromone has been created
 
             else:
 
                 return -1  # dead
+
         else :
+
             self.new_born = False
+
+    def update_vector(self):
+
+        Agent.random_walk(self)
 
     def find_closest_pheromone(self, list_of_pheromones):
         # this class is for the the basic agents that don't sens pheormones
@@ -178,9 +185,7 @@ class Agent(CircleEntity):
         # if he s eating we don't change position
         if not self.is_eating :
             self.pos += self.vector
-            Agent.update_vect(self)
-
-          
+            Agent.update_pos(self)
 
     def random_walk(self) :
            
@@ -216,6 +221,7 @@ class Agent(CircleEntity):
                   vect2 = perturbation+vect
                  
                   vect2.normalize(self.speed_norm)
-                 
+
           self.vector = vect2
-          self.move() #ajouté
+
+

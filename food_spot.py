@@ -16,7 +16,9 @@ class Food(Entity):
 
         x, y = self.pos
 
-        self.ressource = json_data["food_storage"]
+        self.food_value = json_data["food_value"]
+
+        self.ressource = json_data["food_number_in_storage"]*self.food_value
 
         self.available_food = True                           # State of the food spot, False if it is exhausted
 
@@ -28,10 +30,12 @@ class Food(Entity):
 
     def getting_eaten(self):
 
-        self.ressource -= 1
+        self.ressource -= self.food_value
 
         if (self.ressource == 0):
             self.available_food = False
+
+        return self.ressource
 
     def get_ressource(self):
         return self.ressource

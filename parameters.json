@@ -2,7 +2,8 @@
     "food_width":20,
     "food_height":20,
     "food_regeneration_time":100,
-    "food_storage":50,
+    "food_value":50,
+    "food_number_in_storage":50,
 
     "cost_of_reproduction":100,
     "required_energy_to_reproduce": 501,
@@ -16,6 +17,9 @@
     "agent_initial_energy":500,
     "agent_speed_norm":3,
     "type1_pheromone_radius":50,
-    "type2_pheromone_radius":100
+    "type2_pheromone_radius":100,
+    "pheromone_energy_cost":20,
+    "pheromone_life_span":10
+    
 
 }

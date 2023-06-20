@@ -135,10 +135,14 @@ class Universe:
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
-            agent_state = agent.update( pheromones, foods, agents, draw)
-            if agent_state == -1 : # when the agent has no more energy we kill him
+            agent_return = agent.update( pheromones, foods, agents, draw)
+            if agent_return == "death" : # when the agent has no more energy we kill him
                 agents.remove(agent)
                 print("Agent killed")
+
+            elif (agent_return != None) and (agent_return[0] == "pheromone"):
+
+                Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
 
     def update_movements(self):
 
