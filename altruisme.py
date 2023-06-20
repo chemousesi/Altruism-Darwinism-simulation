@@ -12,6 +12,8 @@ class Agent:
 
     cost_of_pheromone = 10
 
+    prob_of_mutation = 0.15
+
     def __init__(self, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
 
@@ -101,11 +103,11 @@ class Agent:
             return "dead"
         return
 
-    def reproduce_alone(self, prob_of_mutation): #returns the list of the agents after the reproduction cycle
+    def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
          #checks if the agent is able to reproduce
         mutation = random.random()
         child = Agent()
-        if mutation < prob_of_mutation: #checks weither the child will be the type of its parent or not
+        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
             if self.type_agent_int == 1:
                 child.type_agent_int = 2
             elif self.type_agent_int == 2:
@@ -146,7 +148,7 @@ class Agent:
             self.can_make_pheromone = True
         return list_of_pheromones, list_of_foods
 
-    def update(self, prob_of_mutation, list_of_pheromones, list_of_foods, list_of_agents,draw=True ):
+    def update(self, list_of_pheromones, list_of_foods, list_of_agents,draw=True ):
 
         self.age += 1
 
@@ -159,7 +161,7 @@ class Agent:
                 Agent.draw(self)
 
             if self.energy >= Agent.required_energy_to_reproduce:
-                list_of_agents.append(Agent.reproduce_alone(self, prob_of_mutation))
+                list_of_agents.append(Agent.reproduce_alone(self))
 
             check_alive = Agent.aging(self)
 
@@ -335,6 +337,8 @@ class Univers:
 
         self.pheromones = []
 
+        self.foods = []
+
         # graphic interface
 
         # buttons
@@ -404,7 +408,7 @@ class Univers:
 
         for agent in self.agents:
 
-            agent.update(draw)
+            agent.update(agent, self.pheromones, self.foods, self.agents, draw)
 
 
     def update_movements(self):
@@ -470,7 +474,7 @@ def main():
 
                     user_input = string
 
-                    
+
         # drawing and updating universe
         if draw:
 
@@ -492,6 +496,13 @@ if __name__ == "__main__":
 
     main()
 
+def initiate_food_spots(screen_width,screen_height,number_of_spots):
+    for i in range(number_of_spots):
+        colonne = int(random.random()*screen_width)
+        ligne = int(random.random()*screen_height)
+        food_spot = Food()
+        food_spot.x = colonne
+        food_spot.y = ligne
 
 
 
