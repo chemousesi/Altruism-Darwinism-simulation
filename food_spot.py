@@ -1,11 +1,15 @@
 from pig_tv_csts import *
 from utils import *
 
+import json
+with open('parameters.json') as file:
+    json_data = json.load(file)
+
 
 class Food:
 
-    width = 20
-    height =20
+    width = json_data["food_width"]
+    height =json_data["food_height"]
 
     def __init__(self,x,y,screen) -> None:
         self.x = x                              # coordinate of the food spot
