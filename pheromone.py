@@ -1,6 +1,8 @@
 from pig_tv_csts import *
 from utils import *
 
+from entity import Entity, CircleEntity
+
 
 class Pheromone(Entity):
 

@@ -3,9 +3,10 @@ from utils import *
 
 import universe
 import button
+from entity import Entity, CircleEntity
 
 
-class Agent(Entity):
+class Agent(CircleEntity):
 
     dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
@@ -19,7 +20,6 @@ class Agent(Entity):
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
 
-        CircleEntity.__init__(self, screen, pos, Agent.dico_color[self.type_agent], radius)
 
         self.vector = Arr([10, 0])  # Arr.get_nul([2])
 
@@ -32,13 +32,15 @@ class Agent(Entity):
 
             self.type_agent = TypeAgent.BASIC
 
-
         if self.type_agent == TypeAgent.BASIC:
             self.type_agent_int =0
         elif self.type_agent == TypeAgent.ALTRUIST:
             self.type_agent_int =1
         elif self.type_agent == TypeAgent.PROFITEER:
             self.type_agent_int =2
+
+        #
+        CircleEntity.__init__(self, screen, pos, Agent.dico_color[self.type_agent], radius)
 
         #energy
         if energy != None:

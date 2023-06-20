@@ -1,9 +1,8 @@
 from pig_tv_csts import *
 from utils import *
 
-import json
-with open('parameters.json') as file:
-    json_data = json.load(file)
+from entity import Entity, CircleEntity
+
 
 
 class Food(Entity):
