@@ -23,6 +23,8 @@ class Universe:
 
         self.pheromones = []
 
+        self.foods = []
+
         # graphic interface
 
         # buttons
@@ -91,8 +93,11 @@ class Universe:
         Universe.update_movements(self)
 
         for agent in self.agents:
-
-            agent.update(draw)
+            #print(len(self.agents))
+            pheromones = self.pheromones
+            foods  = self.foods
+            agents = self.agents
+            agent.update( pheromones, foods, agents, draw)
 
 
     def update_movements(self):

@@ -25,6 +25,7 @@ def main():
     while run:
 
         temps += 1
+        print(temps)
 
         clicked = False
 
@@ -65,6 +66,9 @@ def main():
             pygame.display.update()
 
             clock.tick(60)
+
+        if temps == 50:
+            run = False
 
     return
 
