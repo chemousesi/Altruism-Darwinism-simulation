@@ -1,18 +1,18 @@
 import numpy
 import pygame
 from pig_tv import GREEN
+from pig_tv import BLACK
 
-pygame.init()
-screen = pygame.display.set_mode((600, 480))
 
 class Food:
     width = 20
     height =20
 
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,screen) -> None:
         self.x = x                              # coordinate of the food spot
         self.y = y
-        self.ressource = 50                         # quantity of available food
+        self.ressource = 50
+        self.screen = screen                         # quantity of available food
         self.state = True                           # State of the food spot, False if it is exhausted
         self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
         self.regenerate = 0
@@ -38,7 +38,10 @@ class Food:
 
     def draw(self):
         if (self.state == True):
-            pygame.draw.rect(screen,GREEN, self.rect)
+            pygame.draw.rect(self.screen,GREEN, self.rect)
+        else:
+            pygame.draw.rect(self.screen,BLACK, self.rect)
+    
 
     def update(self):
         if (self.state == False):
@@ -48,4 +51,3 @@ class Food:
                 self.ressource = 50
                 self.state = True
                 self.draw()
-

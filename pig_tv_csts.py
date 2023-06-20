@@ -4,6 +4,690 @@ import pygame
 
 
 
+## colisions
+
+
+def collide_circle_to_circle(pos1, rad1, pos2, rad2):
+
+    dist = get_distance(pos1, pos2)
+
+    max_dist_to_touch = (rad1 + rad2)
+
+    if dist < max_dist_to_touch:  # distance between the two circles lesser than their combined radius
+
+        return 1
+
+
+def collide_line_to_circle(circle_pos, circ_rad, droite):
+    """ checking if circle colliding line have solutions
+
+    returns intersection pts or empty array
+
+    circle_equation : (x-a)**2 + (y-b)**2 = r**2
+
+    line_equation : ax + by + c = 0  """
+
+    m, p = droite
+
+    if m == []:  # ligne verticale
+
+        if p == circle_pos[0]-circ_rad:
+
+            return [p, circle_pos[1]]
+
+        elif p == circle_pos[0]+circ_rad:
+
+            return [p, circle_pos[1]]
+
+        elif val_in_array(p, [circle_pos[0]-circ_rad, circle_pos[0]+circ_rad]):
+
+            diff = (circ_rad)**2-((p-circle_pos[0])**2)
+
+            return [[p, sqrt(diff)+circle_pos[0]], [p, -(sqrt(diff)+circle_pos[0])]]
+
+        return []
+
+    ca, cb = circle_pos
+
+    a = 1+m**2
+
+    b = -2*ca + 2*m*p - 2*cb*m
+
+    c = -2*cb*p + cb**2 + ca**2 + p**2 - circ_rad**2
+
+    delta = (b**2) - (4*a*c)
+
+    if delta > 0:
+
+        x1 = (-b-sqrt(delta))/(2*a)
+
+        x2 = (-b+sqrt(delta))/(2*a)
+
+        return [[x1, m*x1+p], [x2, m*x2+p]]
+
+    elif delta == 0:
+
+        x = -b/(2*a)
+
+        return [[x, m*x+p]]
+
+    return []
+
+
+def collide_segment_to_circle(circ_pos, circ_rad, segment):
+    """
+    segment is two points
+
+    first checking if circle colliding line have solutions, if yes, checks that point of line is on segment 
+
+    circle_equation : (x-a)**2 + (y-b)**2 = r**2
+
+    line_equation : ax + by + c = 0  """
+
+    line = get_droite_from_pt(segment[0], segment[1])  # equation de droite du segment en question
+
+    points = collide_line_to_circle(circ_pos, circ_rad, line)
+
+    if points == []:
+
+        return  # returns false
+
+    for x in range(len(points)-1, -1, -1):
+
+        point = points[x]
+
+        if not collide_point_on_line_to_segment(point, segment):
+
+            points.remove(point)
+
+    return points
+
+def collide_point_to_rect(point, rect):
+
+    return val_in_array(point[0], [rect[0], rect[0]+rect[2]]) and val_in_array(point[1], [rect[1], rect[1]+rect[3]])
+
+
+def collide_point_on_line_to_segment(point, segment):
+    """ returns True if a given point (which is on the segment line) is on that segment """
+
+    return val_in_array(point[0], [segment[0][0], segment[1][0]]) and val_in_array(point[1], [segment[0][1], segment[1][1]])
+
+
+def segment_in_rect(segment, rect):
+
+    if (collide_point_to_rect(segment[0], rect) and collide_point_to_rect(segment[1], rect)):
+
+        return True
+
+    for colliding_pt in collide_rect_to_line(segment[0], get_droite_from_pt(segment[0], segment[1]), rect):
+
+        if collide_point_on_line_to_segment(colliding_pt, segment):
+
+            return True
+
+
+def collide_rect_to_demi_droite(rect, start_pos, line):
+
+    inter_points = collide_rect_to_line(start_pos, line, rect)
+
+    for pt in inter_points:
+
+        if pt[0] >= start_pos[0]*line[0]:
+
+            return pt
+
+def collide_rect_to_line(start_pos, line, rect):
+    """ returns if line[m, p] and rect[x, y, width, height] are colliding ; """
+
+    A = [rect[0], rect[1]]
+
+    B = [rect[0]+rect[2], rect[1]]
+
+    C = [rect[0], rect[1]+rect[3]]
+
+    D = [rect[0]+rect[2], rect[1]+rect[3]]
+
+    line_1 = [A, B]
+
+    line_2 = [B, D]
+
+    line_3 = [A, C]
+
+    line_4 = [C, D]
+
+    rect_sides = [line_1, line_2, line_3, line_4]
+
+    results = []
+
+    for rect_side in rect_sides:
+
+        inter_point = get_inter_from_droite(get_droite_from_pt(rect_side[0], rect_side[1]), line)
+
+        if inter_point == True:
+
+            #print("droite et cote du rectangle confondus...")
+
+            results.append(rect_side[0])
+
+            results.append(rect_side[1])
+
+        elif inter_point:
+
+            if line[0] == []:
+
+                inter_point = [inter_point, rect_side[0][1]]  # is ordonne du rectangle si droite est une verticale
+
+            else:
+
+                inter_point = [inter_point, line[0]*inter_point+line[1]]
+
+            if val_in_array(inter_point[0], [rect_side[0][0], rect_side[1][0]]) and val_in_array(inter_point[1], [rect_side[0][1], rect_side[1][1]]) :
+
+                results.append(inter_point)
+
+    return results  # .sort(key=lambda x:x*get_sign(liste[0]))[0]
+
+
+def collide_segment_to_segment(seg1, seg2):
+
+    line1 = get_droite_from_pt(seg1[0], seg1[1])
+
+    line2 = get_droite_from_pt(seg2[0], seg2[1])
+
+    inter_point = get_inter_from_droite(line1, line2)
+
+    if inter_point == True:  # not the problem
+
+        return seg1[0]
+
+    elif inter_point:
+
+        if line1[0] == []:
+
+            if line2[0] == []:
+
+                return seg1[0]
+
+            else:
+
+                inter_point = [inter_point, line2[0]*inter_point+line2[1]]  # is ordonne du rectangle si droite est une verticale
+
+        else:
+
+            inter_point = [round(inter_point, 5), round(line1[0]*inter_point+line1[1], 5)]
+
+        if (collide_point_on_line_to_segment(inter_point, seg1)) and (collide_point_on_line_to_segment(inter_point, seg2)):
+
+            return inter_point
+
+
+def collide_segment_to_segments(segment, segments):
+
+    line = get_droite_from_pt(segment[0], segment[1])
+
+    results = []
+
+    for seg in segments:
+
+        inter_point = get_inter_from_droite(get_droite_from_pt(seg[0], seg[1]), line)
+
+        if inter_point == True:
+
+            #print("droite et cote du rectangle confondus...")
+
+            results.append(min(seg[0], seg[1]))
+
+            #results.append(seg[1])
+
+        elif inter_point:
+
+            inter_point = [inter_point, line[0]*inter_point+line[1]]
+
+            if val_in_array(inter_point[0], [seg[0][0], seg[1][0]]) and val_in_array(inter_point[1], [seg[0][1], seg[1][1]]):
+
+                if val_in_array(inter_point[0], [segment[0][0], segment[1][0]]) and val_in_array(inter_point[1], [segment[0][1], segment[1][1]]):
+
+                    results.append(inter_point)
+
+    return results
+
+
+def collide_circle_to_rect(pos, rad, rect):  # pos[x, y]
+    """ rect : [x, y, width, height] ; this function detects if a circle collides a rectangle; returns 1 if collides on xline, 2 if collides on yline, 3 if a mix of the txo (arriving in corner), None else """
+
+    # puts rectangle to normal format
+
+    print_help = 0
+
+    rect = format_rect(rect)
+
+    if pos[0] < rect[0]:  # The x coordinate of the circle is lesser than the left side of the rectangle -> closest x of rect from pos[0] (x centre of circle) is rect[0]
+        # now searching closest y
+        if pos[1] < rect[1]:  # rect[1] is closest in y to pos[1]
+
+            dist = sqrt((rect[0]-pos[0])**2 + (rect[1]-pos[1])**2)
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(1, 3)
+
+                return 2#3  # ball arriving in a corner (in that case left low corner) ; when used in some games often should not be interpreted as corner but horizontal part
+
+        elif pos[1] > rect[1]+rect[3]:  # rect[1]+rect[3] (y coor of rect + its width) is closest in y
+
+            dist = sqrt((rect[0]-pos[0])**2 + (rect[1]+rect[3]-pos[1])**2)
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(2, 3)
+
+                return 3  # left up corner
+
+        else:  # closest is pos[1] : don't have to substract in y
+
+            dist = abs(rect[0]-pos[0])
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(3, 1)
+
+                return 1  # ball ariving in the retangle from the left -> should switch (*-1) the x coor of the vector
+
+    elif pos[0] > rect[0]+rect[2]:  # x coor of circle is bigger than x coor of rect + its width
+        # now searching closest y
+        if pos[1] < rect[1]:  # rect[1] is closest in y
+
+            dist = sqrt((rect[0]+rect[2]-pos[0])**2 + (rect[1]-pos[1])**2)
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(4, 3)
+
+                return 2#3  when used in some games often should not be interpreted as corner but horizontal part
+
+        elif pos[1] > rect[1]+rect[3]:  # rect[1]+rect[3] (y coor of rect + its width) is closest in y
+
+            dist = sqrt((rect[0]+rect[2]-pos[0])**2 + (rect[1]+rect[3]-pos[1])**2)
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(5, 3)
+
+                return 3
+
+        else:  # closest is pos[1] : don't have to substract in y
+
+            dist = abs(rect[0]+rect[2]-pos[0])
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(6, 1)
+
+                return 1
+
+    else:  # pos x of circle is in rect
+
+        if pos[1] < rect[1]:  # the ball in under the rect (same x coordinates, y coors of ball < rect's one) -> rect[1] (lowest point of rect (y without the height) is closest in y
+
+            dist = abs(rect[1]-pos[1])
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(7, 2)
+
+                return 2
+
+        elif pos[1] > rect[1]+rect[3]:  # rect[1]+rect[3] (y coor of rect + its width) is closest in y
+
+            dist = abs(rect[1]+rect[3]-pos[1])
+
+            if dist < rad:
+
+                if print_help:
+
+                    print(8, 2)
+
+                return 2
+
+        else:  # the ball is in rect (left_rect<x_ball<right_rect, down_rect<y_ball<up_rect)
+
+            if min((pos[0]-rect[0])/rect[2], 1-(pos[0]-rect[0])/rect[2]) < min((pos[1]-rect[1])/rect[3], 1-(pos[1]-rect[1])/rect[3]):
+
+                if print_help:
+
+                    print(9, 1)
+
+                return 1
+
+            else:
+
+                if print_help:
+
+                    print(10, 2)
+
+                return 2
+
+
+def collide_rect_to_rect(rect1, rect2):
+    """ Functions that checks wheter to rectangles are colliding ; rect format is [left corner x, y, width, height] """
+
+    rect1 = format_rect(rect1)
+
+    rect2 = format_rect(rect2)
+
+    if ((rect1[0]<=rect2[0]<=rect1[0]+rect1[2]) and (rect1[1]<=rect2[1]<=rect1[1]+rect1[3])) or ((rect1[0]<=rect2[0]+rect2[2]<=rect1[0]+rect1[2]) and (rect1[1]<=rect2[1]<=rect1[1]+rect1[3])) or ((rect1[0]<=rect2[0]<=rect1[0]+rect1[2]) and (rect1[1]<=rect2[1]+rect2[3]<=rect1[1]+rect1[3])) or ((rect1[0]<=rect2[0]+rect2[2]<=rect1[0]+rect1[2]) and (rect1[1]<=rect2[1]+rect2[3]<=rect1[1]+rect1[3])):
+
+        return True
+
+
+def collide_pt_on_line_to_half_line(pt, half_line):
+    """ halfine is defined as half_line[seg_pt, line_pt) """
+
+    x_diff = get_sign(half_line[0][0]-half_line[1][0])
+
+    y_diff = get_sign(half_line[0][1]-half_line[1][1])
+
+    pt_to_seg_end_x_diff = half_line[0][0]-pt[0]
+
+    pt_to_seg_end_y_diff = half_line[0][1]-pt[1]
+
+    condition_x = (not pt_to_seg_end_x_diff) or (get_sign(pt_to_seg_end_x_diff) == x_diff)  # point is on the segment end (so ok) or in the good direction (sens)
+
+    condition_y = (not pt_to_seg_end_y_diff) or (get_sign(pt_to_seg_end_y_diff) == y_diff)
+
+    return condition_x and condition_y
+
+
+def collide_point_polygon(pt, polygon):
+    """ Functions that returns either a polygon (array of points) collides a pt """
+
+    # defining polygon sides
+
+    sides = []
+
+    for x in range(len(polygon)):
+
+        last_index = (x+2)%(len(polygon)+1)
+
+        if not last_index:  # have to add last and first of the array
+
+            sides.append([polygon[-1], polygon[0]])
+
+        else:
+
+            sides.append(polygon[x:last_index])
+
+    # definig the polygon center (average of points)
+    sum_x = 0
+
+    sum_y = 0
+
+    for x in polygon:
+
+        sum_x += x[0]
+
+        sum_y += x[1]
+
+    # will first check if polygon center is in the polygon
+
+    polygon_center = [sum_x//len(polygon), sum_y//len(polygon)]
+
+    #pygame.draw.circle(screen, YELLOW, polygon_center, 25)
+
+    # looks for the longest side
+
+    side_lengths = [get_distance(x[0], x[1]) for x in sides]
+
+    longest_side = sides[side_lengths.index(max(side_lengths))]
+
+    testing_pt = get_milieu_droite(longest_side[0], longest_side[1])
+
+    center_to_test_pt = get_droite_from_pt(polygon_center, testing_pt)  # line between polygon center and middle between two summits
+
+    collisions = 0
+
+    for index in range(len(sides)):
+
+        cur_side = sides[index]
+
+        #pygame.draw.line(screen, RED, cur_side[0], cur_side[1], 3)
+
+        #pygame.draw.line(screen, RED, polygon_center, testing_pt, 3)
+
+        side_line = get_droite_from_pt(cur_side[0], cur_side[1])
+
+        collision_pt = get_inter_from_droite(side_line, center_to_test_pt, full_pt=1)
+
+        collision_pt = [round(collision_pt[0], 2), round(collision_pt[1], 2)]
+
+        if collision_pt and collide_point_on_line_to_segment(collision_pt, cur_side):  # side colliding
+
+            #pygame.draw.circle(screen, YELLOW, (int(collision_pt[0]), int(collision_pt[1])), 20)
+
+            if collide_pt_on_line_to_half_line(collision_pt, [polygon_center, testing_pt]):  # now checking if point collding with half line (sommet-center]
+
+                collisions += 1
+
+        #pygame.display.update()
+
+    center_in = (collisions % 2==1)*1
+
+    #print(collisions, center_in)
+
+    # now checks how much collisions there are between the unknown point and center (that we now if it's in or out) segment and each side of the polygon, to count the number of times it goes in or out
+
+    center_unknown_pt_seg = [polygon_center, pt]
+
+    center_unknown_pt_line = get_droite_from_pt(center_unknown_pt_seg[0], center_unknown_pt_seg[1])
+
+    in_out = 0
+
+    for index in range(len(sides)):
+
+        cur_side = sides[index]
+
+        side_line = get_droite_from_pt(cur_side[0], cur_side[1])
+
+        collision_pt = get_inter_from_droite(side_line, center_unknown_pt_line, full_pt=1)
+
+        if collision_pt:
+
+            collision_pt = [round(collision_pt[0], 2), round(collision_pt[1], 2)]
+
+            if collide_point_on_line_to_segment(collision_pt, cur_side) and collide_point_on_line_to_segment(collision_pt, center_unknown_pt_seg):
+
+                in_out += 1
+
+    return (in_out%2 == 0)
+
+
+def test_polygon_collision():
+
+    test = 2
+
+    if test == 1:
+
+        screen.fill(BLACK)
+
+        polygon_pt = []
+
+        for x in range(random.randint(3, 4)):
+
+            polygon_pt.append([random.randint(0, screen_width), random.randint(0, screen_height)])
+
+        unknown_pt = DotCenter(random.randint(0, screen_width), random.randint(0, screen_height))
+
+        play = True
+
+        while play:
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+
+                    play = False
+
+            unknown_pt.update(get_vector_to_point([unknown_pt.x, unknown_pt.y], pygame.mouse.get_pos(), 1))
+
+            if collide_point_polygon([unknown_pt.x, unknown_pt.y], polygon_pt):
+
+                color = RED
+
+            else:
+
+                color = GREEN
+
+            screen.fill(BLACK)
+
+            pygame.draw.polygon(screen, GREY, polygon_pt)
+
+            pygame.draw.circle(screen, color, [int(unknown_pt.x), int(unknown_pt.y)], 5)
+
+            pygame.display.update()
+
+    elif test == 2:
+
+        polygon_pt = []
+
+        for x in range(random.randint(30, 40)):
+
+            polygon_pt.append([random.randint(0, screen_width//2), random.randint(0, screen_height)])
+
+        # draws polygon on screen left
+        screen.fill(BLACK)
+
+        pygame.draw.polygon(screen, GREY, polygon_pt)
+
+        pygame.display.update()
+
+        # draws all pixel ,on right of screen, red if collidingg polyogn, green else
+
+        a = time.time()
+
+        for y in range(screen_height):
+
+            for x in range(screen_width//2):
+
+                for event in pygame.event.get():
+
+                    if event.type == pygame.QUIT:
+
+                        return
+
+                if collide_point_polygon([x, y], polygon_pt):
+
+                    color = RED
+
+                else:
+
+                    color = GREEN
+
+                screen.set_at((x+screen_width//2, y), color)
+
+            pygame.display.update()
+
+        pygame.display.update()
+
+        print(time.time()-a)
+
+    wait()
+
+def collide_vect_to_line(vect, pos, line):
+    """ returns the new vector when an entity with a vector has collided into a line (wall..) """
+
+    #tail of the vect, pos is the intesection vector-line
+    pos2 = sum_arrays(pos, vect, 1, -1)
+
+    # creates a rectangle triangle
+    first_perp = get_perpendiculaire_from_d(line, pos2)
+
+    # is the intersection between the perpendicular to the line and the line, point that we need is symetric of this pt with pos
+    inter_perp_droite = get_inter_from_droite(line, first_perp, full_pt=1)
+
+    move_vect = sum_arrays(pos, inter_perp_droite, 1, -1)
+
+    symetrical_pt = sum_arrays(pos, move_vect)
+
+    # gets the line where the final point is lying
+    n_inter_perp_droite = get_perpendiculaire_from_d(line, symetrical_pt)
+
+    perp_to_tale_vect = sum_arrays(pos2, inter_perp_droite, 1, -1)
+
+    final_point = sum_arrays(symetrical_pt, perp_to_tale_vect)
+
+    final_vect = sum_arrays(final_point, pos, 1, -1)
+
+    return final_vect
+
+
+def collide_circle_to_triangle(pos_c, rad, pt1, pt2, pt3):
+    """ Function that detects collisions between a circle and any triangle defined by three points. First computes in which zone the circle is : zone 1 or zone2 (hard to explain without a drawing) """
+    pass
+
+
+def deal_with_collisions(x, y, rad, rectangles=[], circles=[], triangles=[]):
+    """ Deals with collisions for a ball(circle) ; returns 2 if collides some horizontal plain(floor, roof ..), or 1 if vertical (as a wall), None for nothing ofc """
+
+    collisions = []
+
+    for rect in rectangles:
+
+        collision = collide_circle_to_rect((x, y), rad, rect)
+
+        if collision:
+
+            collisions.append(collision)
+
+    return collisions
+
+
+def circle_out_rect(dot, rect):
+    """ checks if circle collides with line (therefore single value) ; returns 1 if colliding left, returns 2 if colliding right, returns 3 if colliding up, returns 4 if colliding down (line of the rect) """
+
+    circle_y_array = [dot.y-dot.radius, dot.y+dot.radius]
+
+    circle_x_array = [dot.x-dot.radius, dot.x+dot.radius]
+
+    to_return = []
+
+    if colliding_arrays(circle_x_array, [rect[0], rect[0]]):
+
+        to_return.append(1)
+
+    elif colliding_arrays(circle_x_array, [rect[0]+rect[2], rect[0]+rect[2]]):
+
+        to_return.append(2)
+
+    if colliding_arrays(circle_y_array, [rect[1], rect[1]]):
+
+        to_return.append(3)
+
+    elif colliding_arrays(circle_y_array, [rect[1]+rect[3], rect[1]+rect[3]]):
+
+        to_return.append(4)
+
+    return to_return
+
+
+
+
+
+
+## fonts
 
 
 font_30 = pygame.font.SysFont("monospace", 30, True)
@@ -47,6 +731,49 @@ def aff_txt(contenu, x, y, color=(0, 0, 0), taille=30, centre=0, font=None, wind
 
 
 ## Maths functions
+
+
+def val_in_array(val, array, is_sorted=0):
+    """ tests if a given value is "in" an array """
+
+    if not is_sorted:
+
+        array.sort()
+
+    if array[0] <= val <= array[1]:
+
+        return True
+
+
+def sum_arrays(array1, array2, facteur1=1, facteur2=1, max_val=0):
+    """ sums same size arrays """
+
+    if len(array1) != len(array2):
+
+        print("Arrays of different sizes !")
+
+        return
+
+    n_array = []
+
+    for x in range(len(array1)):
+
+        if type(array1[x]) == list:
+
+            n_array.append(sum_arrays(array1[x], array2[x], facteur1, facteur2, max_val))
+
+        else:
+
+            n_array.append(array1[x]*facteur1 + array2[x]*facteur2)
+
+            if max_val:
+
+                if n_array[-1] > max_val:
+
+                    n_array[-1] = max_val
+
+    return n_array
+
 
 
 def get_trigo_sole_angle(angle):
