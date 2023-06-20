@@ -341,7 +341,7 @@ class Univers:
 
         self.buttons = []
 
-        self.clicked_button = None
+        self.selected_button = None
 
     def add_agent(self, agent):
 
@@ -353,9 +353,7 @@ class Univers:
 
         self.buttons.append(button)
 
-    def update_buttons(self, draw, mouse_clicked):
-
-        user_input = None
+    def update_buttons(self, draw, mouse_clicked, user_input):
 
         mouse_pos = pygame.mouse.get_pos()
 
@@ -369,6 +367,12 @@ class Univers:
 
                 button.draw()
 
+            # modifying val of selected button
+
+            if self.selected_button != None:
+
+                self.selected_button.update_val(user_input)
+
             # updating clicked button
 
             if mouse_clicked:
@@ -377,28 +381,22 @@ class Univers:
 
                     button_got_clicked = True
 
-                    if not self.clicked_button == button:
+                    if not self.selected_button == button:
 
-                        self.clicked_button = button
+                        self.selected_button = button
 
                         button.set_clicked(True)
 
-                # updating value of clicked button
+        if mouse_clicked and (self.selected_button != None) and (not button_got_clicked):
 
-                if button.state_clicked:
+            self.selected_button.set_clicked(False)
 
-                    button.update_val(user_input)
-
-        if mouse_clicked and (self.clicked_button != None) and (not button_got_clicked):
-
-            self.clicked_button.set_clicked(False)
-
-            self.clicked_button = None
+            self.selected_button = None
 
 
-    def update(self, draw, mouse_clicked):
+    def update(self, draw, mouse_clicked, user_input):
 
-        Univers.update_buttons(self, draw, mouse_clicked)
+        Univers.update_buttons(self, draw, mouse_clicked, user_input)
 
         # agent update
 
@@ -449,27 +447,37 @@ def main():
 
         clicked = False
 
+        user_input = None
+
 
         # user events
 
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-                play = False
-                exit()
 
+                run = False
 
             elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
                 clicked = True
 
+            elif event.type == pygame.KEYDOWN:
+
+                string = event.unicode
+
+                if string != "":
+
+                    user_input = string
+
+                    
         # drawing and updating universe
         if draw:
 
             screen.fill(GREY)
 
         #univers.updateMovement()
-        univers.update(draw, clicked)
+        univers.update(draw, clicked, user_input)
 
         if draw:
 
