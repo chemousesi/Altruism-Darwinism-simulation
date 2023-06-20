@@ -61,6 +61,10 @@ class Agent:
 
         self.on_spot = False
 
+        self.can_make_pheromone = True
+
+        self.has_reproduced_this_cycle = False
+
     def get_energy(self):
 
         return self.energy
@@ -94,7 +98,7 @@ class Agent:
         else:
 
             return -1  # dead
-        
+
 
     def draw(self):
 
