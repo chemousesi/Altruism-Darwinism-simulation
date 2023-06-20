@@ -49,7 +49,7 @@ class Agent(CircleEntity):
 
         else:
 
-            self.energy = 100
+            self.energy = json_data["agent_initial_energy"]
         ##
 
         self.age = 0
