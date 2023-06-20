@@ -1,10 +1,15 @@
 import random
 from pigtv_constants import *
 import pygame
+from math import *
 
 import json
 with open('parameters.json') as file:               # A json file with all the parameters
     json_data = json.load(file)
+
+
+pygame.init()
+
 
 ## colisions
 
@@ -733,6 +738,11 @@ def aff_txt(contenu, x, y, color=(0, 0, 0), taille=30, centre=0, font=None, wind
 
 
 ## Maths functions
+
+def get_distance_eucli_rn(x, y):
+    """ ok : get_distance_eucli_rn([0, 0, 0], [1, 1, 1]) = sqrt(3) """
+
+    return sqrt(sum([(x[i]-y[i])**2 for i in range(len(x))]))
 
 
 def val_in_array(val, array, is_sorted=0):
@@ -1636,6 +1646,7 @@ def set_color(col):
 
     return list(col)
 
+screen_center = [screen_width//2, screen_height//2]
 
 
 WHITE = set_color((255, 255, 255))
