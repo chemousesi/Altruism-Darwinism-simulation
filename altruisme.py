@@ -335,6 +335,8 @@ class Univers:
 
         self.pheromones = []
 
+        self.foods = []
+
         # graphic interface
 
         # buttons
@@ -404,7 +406,7 @@ class Univers:
 
         for agent in self.agents:
 
-            agent.update(draw)
+            agent.update(agent, prob_of_mutation, self.pheromones, self.foods, self.agents, draw)
 
 
     def update_movements(self):
