@@ -9,8 +9,8 @@
 
     "#Reproduction parameters :" :0,
 
-    "cost_of_reproduction":100,
-    "required_energy_to_reproduce": 600,
+    "cost_of_reproduction":200,
+    "required_energy_to_reproduce": 501,
     "prob_of_mutation":0.15,
 
     "#Agent parameters :":0,
@@ -37,6 +37,6 @@
     "type1_pheromone_radius":50,
     "type2_pheromone_radius":100,
     "pheromone_energy_cost":20,
-    "pheromone_life_span":100
+    "pheromone_life_span":1
 
 }
