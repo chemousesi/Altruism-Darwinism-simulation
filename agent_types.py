@@ -111,11 +111,11 @@ class Altruist(PheromoneProducerAgent):
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
-        agent_state = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_states = super().update(list_of_foods, list_of_pheromones, draw=True )
 
-        if agent_state[1] == "dead":
+        if agent_states[1] == "dead":
 
-            return agent_state
+            return agent_states
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
@@ -125,9 +125,9 @@ class Altruist(PheromoneProducerAgent):
             else:
                 bebe = super().reproduce_alone(Altruist)
             super().add_to_energy(-super().cost_of_reproduction)
-            return [None, bebe]
+            return [agent_states[0], bebe]
 
-        return [None, None]
+        return agent_states
 
 
     def update_number(self,number_list):
