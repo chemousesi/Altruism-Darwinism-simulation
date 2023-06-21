@@ -11,6 +11,32 @@ with open('parameters.json') as file:               # A json file with all the p
 pygame.init()
 
 
+
+
+
+def wait():
+
+    click = 0
+
+    while not click:
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+
+                click = 1
+
+            elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
+
+                click = 1
+
+            elif (event.type == KEYDOWN):
+
+                click = 1
+
+
+
+
 ## colisions
 
 
