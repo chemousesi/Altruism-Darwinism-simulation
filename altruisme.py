@@ -13,10 +13,16 @@ from agent_types import Basic, Profiteer, Altruist
 def main():
 
     universe = Universe(screen)
+    i1 = universe.number_of_initial_basic_agents
+    i2 = universe.number_of_initial_altruist_agents
+    i3 = universe.number_of_initial_profiteer_agents
 
-    for x in range(1):
-
+    for x in range(i1):
         universe.add_agent(Basic(screen))
+    for x in range(i2):
+        universe.add_agent(Altruist(screen))
+    for x in range(i3):
+        universe.add_agent(Profiteer(screen))
 
     universe.add_button(Button, screen, "proba mutation")
 
