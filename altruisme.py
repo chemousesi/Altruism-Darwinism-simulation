@@ -79,7 +79,6 @@ def main():
 
             pygame.display.update()
 
-            wait()
 
             clock.tick(60)
 
