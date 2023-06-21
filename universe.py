@@ -1,6 +1,6 @@
 from pig_tv_csts import *
 from utils import *
-
+from pig_tv import wait
 import button
 import agent
 import pheromone
@@ -19,7 +19,13 @@ class Universe:
     def __init__(self, screen):
 
         # universe objects
-
+        self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
+        self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
+        self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
+        
+        # respectively basic , altruist , profiteer agents
+        self.number_of_agents_list = [0,0,0]
+        
         self.agents = []
 
         self.pheromones = []
@@ -35,10 +41,15 @@ class Universe:
         self.buttons = []
 
         self.selected_button = None
+    def get_initial_basics(self):
+        return
 
     def add_agent(self, agent):
 
         self.agents.append(agent)
+        agent.update_number(self.number_of_agents_list)
+        print(self.number_of_agents_list,"hi")
+        wait()
 
     def add_button(self, object_, screen, string):
 
@@ -142,7 +153,9 @@ class Universe:
 
             # baby
             elif agent_return != None:
-                self.agents.append(agent_return)
+                self.add_agent(agent_return)
+                
+                
 
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
                 Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
