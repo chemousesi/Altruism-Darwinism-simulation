@@ -91,7 +91,7 @@ class Agent(CircleEntity):
 
         def loss_function(x):
 
-            return log(log(x+1)+1)  # so it's never negative
+            return log(log(x+1)+1)/2  # so it's never negative
 
         Agent.add_to_energy(self, -loss_function(age))
 

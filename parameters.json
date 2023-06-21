@@ -9,21 +9,31 @@
 
     "#Reproduction parameters :" :0,
 
-    "cost_of_reproduction":200,
-    "required_energy_to_reproduce": 501,
+    "cost_of_reproduction":100,
+    "required_energy_to_reproduce": 600,
     "prob_of_mutation":0.15,
 
     "#Agent parameters :":0,
 
+<<<<<<< HEAD
+    "agent_initial_energy":300,
+=======
     "agent_initial_energy":200,
+>>>>>>> 82a5edbb9625e10494c78c9531c7d3f0f7c93469
     "agent_speed_norm":2,
     "agent_radius":10,
 
     "Initial_parameters_for_agents" :0,
 
+<<<<<<< HEAD
+    "number_of_basic_agents":20,
+    "number_of_altruist_agents":20,
+    "number_of_profiteer_agents":20,
+=======
     "number_of_basic_agents":0,
     "number_of_altruist_agents":5,
     "number_of_profiteer_agents":0,
+>>>>>>> 82a5edbb9625e10494c78c9531c7d3f0f7c93469
 
 
     "#Button parametrs : ":0,
