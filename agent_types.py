@@ -119,6 +119,10 @@ class Altruist(PheromoneProducerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 82a5edbb9625e10494c78c9531c7d3f0f7c93469
             mutation = random.random()
             if mutation < self.prob_of_mutation:
                 bebe = super().reproduce_alone(Profiteer)
