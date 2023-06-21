@@ -1,10 +1,11 @@
 from pig_tv_csts import *
 from utils import *
-
+from pig_tv import wait
 import button
 import agent
 import pheromone
-
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 class Universe:
 
@@ -19,7 +20,13 @@ class Universe:
     def __init__(self, screen):
 
         # universe objects
-
+        self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
+        self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
+        self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
+        
+        # respectively basic , altruist , profiteer agents
+        self.number_of_agents_list = [0,0,0]
+        
         self.agents = []
 
         self.pheromones = []
@@ -35,10 +42,21 @@ class Universe:
         self.buttons = []
 
         self.selected_button = None
+    def get_initial_basics(self):
+        return
+
+        self.list_of_basics = []
+
+        self.list_of_altruists = []
+
+        self.list_of_cheaters = []
 
     def add_agent(self, agent):
 
         self.agents.append(agent)
+        agent.update_number(self.number_of_agents_list)
+        print(self.number_of_agents_list,"hi")
+        wait()
 
     def add_button(self, object_, screen, string):
 
@@ -118,7 +136,7 @@ class Universe:
 
                 self.pheromones.remove(pheromone)
 
-    def update(self, draw, mouse_clicked, user_input):
+    def update(self, draw, mouse_clicked, user_input,time):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
 
@@ -142,10 +160,39 @@ class Universe:
 
             # baby
             elif agent_return != None:
-                self.agents.append(agent_return)
+                self.add_agent(agent_return)
+                
+                
 
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
                 Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
+
+        Universe.make_graph(self, time)
+
+    def make_graph(self, time):
+        self.list_of_altruists.append(0)
+        self.list_of_basics.append(0)
+        self.list_of_cheaters.append(0)
+        for agent in self.agents:
+            if agent.type_agent_int == 0:
+                self.list_of_basics[-1] += 1
+            elif agent.type_agent_int == 1:
+                self.list_of_altruists[-1] +=1
+            elif agent.type_agent_int == 2:
+                self.list_of_cheaters[-1] += 1
+
+        X = [i for i in range(time)]
+        Ya = self.list_of_basics
+        Yb = self.list_of_altruists
+        Yc = self.list_of_cheaters
+        plt.plot(X, Ya)
+        plt.plot(X, Yb)
+        plt.plot(X, Yc)
+
+    def show_graph(self):
+        plt.show()
+        wait()
+        return
 
 
 

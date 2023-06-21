@@ -13,18 +13,22 @@ from agent_types import Basic, Profiteer, Altruist
 def main():
 
     universe = Universe(screen)
+    i1 = universe.number_of_initial_basic_agents
+    i2 = universe.number_of_initial_altruist_agents
+    i3 = universe.number_of_initial_profiteer_agents
 
-    
-    for x in range(1):
-
+    for x in range(i1):
         universe.add_agent(Basic(screen))
+    for x in range(i2):
         universe.add_agent(Altruist(screen))
+    for x in range(i3):
+        universe.add_agent(Profiteer(screen))
 
     universe.add_button(Button, screen, "proba mutation")
 
     universe.add_food_source(Food, screen, 10)
 
-    temps = 0
+    time = 0
 
     draw = True
 
@@ -32,7 +36,7 @@ def main():
 
     while run:
 
-        temps += 1
+        time += 1
 
         clicked = False
 
@@ -56,6 +60,11 @@ def main():
 
                 if string != "":
 
+
+                    if string == "g":
+
+                        universe.show_graph()
+
                     user_input = string
 
 
@@ -65,7 +74,7 @@ def main():
             screen.fill(GREY)
 
         #univers.updateMovement()
-        universe.update(draw, clicked, user_input)
+        universe.update(draw, clicked, user_input, time)
 
         if draw:
 

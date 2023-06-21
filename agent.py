@@ -94,7 +94,7 @@ class Agent(CircleEntity):
 
         def loss_function(x):
 
-            return log(x+1)  # so it's never negative
+            return log(log(x+1)+1)  # so it's never negative
 
         Agent.add_to_energy(self, -loss_function(age))
 
@@ -111,8 +111,7 @@ class Agent(CircleEntity):
                 child.type_agent_int = 0
         else:
             child.type_agent_int = self.type_agent_int
-        child.x = self.x
-        child.y = self.y
+        child.pos = self.pos
         Agent.add_to_energy(self, -Agent.cost_of_reproduction)
         return child
 
@@ -124,7 +123,7 @@ class Agent(CircleEntity):
 
             if food.ressource > 0:
 
-                if (self.pos-food.pos).norme_eucli() < 5:  # close enough
+                if (self.pos-food.pos).norme_eucli() < 10:  # close enough
 
                     self.on_food = True #the agent is on a food
                     self.is_eating = True #the agent is no longer moving
@@ -156,6 +155,9 @@ class Agent(CircleEntity):
 
             self.age += 1
 
+            # decreases energy
+            Agent.aging(self)
+
             if self.energy > 0:
 
                 if draw:
@@ -164,16 +166,15 @@ class Agent(CircleEntity):
 
                 # if possible, reproduction
                 if self.energy >= Agent.required_energy_to_reproduce:
-                    return Agent.reproduce_alone(self)
-
-                # decreases energy
-                Agent.aging(self)
-
+                    bebe = Agent.reproduce_alone(self)
+                    return bebe 
+            
             else:
                 return "dead"  # dead
 
         else :
             self.new_born = False
+        return 
 
     def find_closest_pheromone(self, list_of_pheromones):
         # this class is for the the basic agents that don't sens pheormones
@@ -181,7 +182,25 @@ class Agent(CircleEntity):
 
     def draw(self):
 
-        CircleEntity.draw(self)
+        #CircleEntity.draw(self)
+
+        if self.vector == Arr.get_nul([2]):
+
+            vertical = Arr([1, 0])
+
+        else:
+
+            vertical = self.vector
+
+        vertical.normalize(self.radius)
+
+        horizontal = vertical.get_orth()
+
+        horizontal.normalize(self.radius/2)
+
+        pt_list = (self.pos-vertical-horizontal, self.pos-vertical+horizontal, self.pos+vertical)
+
+        pygame.draw.polygon(self.screen, self.color, pt_list)
 
         aff_txt(str(round(self.energy)), self.x, self.y, window=self.screen)
 
@@ -237,5 +256,10 @@ class Agent(CircleEntity):
           self.vector = vect2
 
           Agent.normalize_vect(self)
+
+
+
+
+
 
 
