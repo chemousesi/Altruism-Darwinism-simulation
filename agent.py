@@ -67,6 +67,7 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+
     def get_color():
         return self.color
 
