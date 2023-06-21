@@ -5,16 +5,22 @@ from utils import *
 from universe import Universe
 from button import Button
 from agent import Agent
+from food_spot import Food
+from agent_types import Basic, Profiteer, Altruist
 
 
 
 def main():
 
-    universe = Universe()
+    universe = Universe(screen)
 
-    universe.add_agent(Agent(screen))
+    for x in range(1):
+
+        universe.add_agent(Basic(screen))
 
     universe.add_button(Button, screen, "proba mutation")
+
+    universe.add_food_source(Food, screen, 20)
 
     temps = 0
 
@@ -25,12 +31,10 @@ def main():
     while run:
 
         temps += 1
-        print(temps)
 
         clicked = False
 
         user_input = None
-
 
         # user events
 
@@ -67,9 +71,6 @@ def main():
 
             clock.tick(60)
 
-        if temps == 50:
-            run = False
-
     return
 
 
@@ -77,13 +78,6 @@ if __name__ == "__main__":
 
     main()
 
-def initiate_food_spots(screen_width,screen_height,number_of_spots):
-    for i in range(number_of_spots):
-        colonne = int(random.random()*screen_width)
-        ligne = int(random.random()*screen_height)
-        food_spot = Food()
-        food_spot.x = colonne
-        food_spot.y = ligne
 
 
 
