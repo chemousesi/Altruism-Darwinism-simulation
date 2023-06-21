@@ -8,7 +8,7 @@ from entity import Entity, CircleEntity
 
 class Agent(CircleEntity):
 
-    dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
+    #dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
     cost_of_reproduction = json_data["cost_of_reproduction"]
 
@@ -18,7 +18,7 @@ class Agent(CircleEntity):
 
     prob_of_mutation = json_data["prob_of_mutation"]
 
-    def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None):
+    def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):
 
         # type_agent
         if type_agent != None:
@@ -37,7 +37,8 @@ class Agent(CircleEntity):
             self.type_agent_int =2
 
         #
-        CircleEntity.__init__(self, screen, pos, Agent.dico_color[self.type_agent], radius)
+        print("color : ", color)
+        CircleEntity.__init__(self, screen, pos, color, radius)
 
         #energy
         if energy != None:
@@ -201,7 +202,7 @@ class Agent(CircleEntity):
 
         pygame.draw.polygon(self.screen, self.color, pt_list)
 
-        aff_txt(str(self.energy), self.x, self.y, window=self.screen)
+        aff_txt(str(round(self.energy)), self.x, self.y, window=self.screen)
 
     def move(self):
 

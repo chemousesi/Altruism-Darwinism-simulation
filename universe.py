@@ -4,7 +4,8 @@ from pig_tv import wait
 import button
 import agent
 import pheromone
-
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 class Universe:
 
@@ -43,6 +44,12 @@ class Universe:
         self.selected_button = None
     def get_initial_basics(self):
         return
+
+        self.list_of_basics = []
+
+        self.list_of_altruists = []
+
+        self.list_of_cheaters = []
 
     def add_agent(self, agent):
 
@@ -128,7 +135,7 @@ class Universe:
 
                 self.pheromones.remove(pheromone)
 
-    def update(self, draw, mouse_clicked, user_input):
+    def update(self, draw, mouse_clicked, user_input,time):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
 
@@ -157,7 +164,34 @@ class Universe:
                 
 
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
-                Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
+                Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
+
+        Universe.make_graph(self, time)
+
+    def make_graph(self, time):
+        self.list_of_altruists.append(0)
+        self.list_of_basics.append(0)
+        self.list_of_cheaters.append(0)
+        for agent in self.agents:
+            if agent.type_agent_int == 0:
+                self.list_of_basics[-1] += 1
+            elif agent.type_agent_int == 1:
+                self.list_of_altruists[-1] +=1
+            elif agent.type_agent_int == 2:
+                self.list_of_cheaters[-1] += 1
+
+        X = [i for i in range(time)]
+        Ya = self.list_of_basics
+        Yb = self.list_of_altruists
+        Yc = self.list_of_cheaters
+        plt.plot(X, Ya)
+        plt.plot(X, Yb)
+        plt.plot(X, Yc)
+
+    def show_graph(self):
+        plt.show()
+        wait()
+        return
 
 
 

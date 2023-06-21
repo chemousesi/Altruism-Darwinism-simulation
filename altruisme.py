@@ -28,7 +28,7 @@ def main():
 
     universe.add_food_source(Food, screen, 10)
 
-    temps = 0
+    time = 0
 
     draw = True
 
@@ -36,7 +36,7 @@ def main():
 
     while run:
 
-        temps += 1
+        time += 1
 
         clicked = False
 
@@ -60,6 +60,11 @@ def main():
 
                 if string != "":
 
+
+                    if string == "g":
+
+                        universe.show_graph()
+
                     user_input = string
 
 
@@ -69,7 +74,7 @@ def main():
             screen.fill(GREY)
 
         #univers.updateMovement()
-        universe.update(draw, clicked, user_input)
+        universe.update(draw, clicked, user_input, time)
 
         if draw:
 
