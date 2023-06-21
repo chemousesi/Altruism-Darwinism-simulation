@@ -42,8 +42,6 @@ class Universe:
         self.buttons = []
 
         self.selected_button = None
-    def get_initial_basics(self):
-        return
 
         self.list_of_basics = []
 
