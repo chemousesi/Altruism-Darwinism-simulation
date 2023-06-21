@@ -16,8 +16,6 @@ class Agent(CircleEntity):
 
     cost_of_pheromone = json_data["cost_of_pheromone"]
 
-    prob_of_mutation = json_data["prob_of_mutation"]
-
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):
 
         # type_agent
@@ -98,22 +96,7 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-    def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-         #checks if the agent is able to reproduce
-        mutation = random.random()
-        child = Agent(self.screen)
-        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-            if self.type_agent_int == 1:
-                child.type_agent_int = 2
-            elif self.type_agent_int == 2:
-                child.type_agent_int = 1
-            else :
-                child.type_agent_int = 0
-        else:
-            child.type_agent_int = self.type_agent_int
-        child.pos = self.pos
-        Agent.add_to_energy(self, -Agent.cost_of_reproduction)
-        return child
+
 
 
     def eat(self, list_of_foods):
@@ -147,7 +130,7 @@ class Agent(CircleEntity):
         # eats
         Agent.eat(self, list_of_foods)  # returns in case a pheromone has been created
 
-        return [None, bebe]
+        return bebe
 
     def update_energy(self, draw):
 
@@ -163,11 +146,6 @@ class Agent(CircleEntity):
                 if draw:
 
                     Agent.draw(self)
-
-                # if possible, reproduction
-                if self.energy >= Agent.required_energy_to_reproduce:
-                    bebe = Agent.reproduce_alone(self)
-                    return bebe 
             
             else:
                 return "dead"  # dead
