@@ -16,6 +16,8 @@ class Agent(CircleEntity):
 
     cost_of_pheromone = json_data["cost_of_pheromone"]
 
+    prob_of_mutation = json_data["prob_of_mutation"]
+
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):
 
         # type_agent
@@ -63,6 +65,7 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+
     def get_color():
         return self.color
 
@@ -94,8 +97,10 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-
-
+    def reproduce_alone(self,type):
+        child = type(self.screen)
+        child.pos = self.pos
+        return child
 
     def eat(self, list_of_foods):
         agent_has_eaten = False
@@ -144,13 +149,13 @@ class Agent(CircleEntity):
                 if draw:
 
                     Agent.draw(self)
-            
+
             else:
                 return "dead"  # dead
 
         else :
             self.new_born = False
-        return 
+        return
 
     def find_closest_pheromone(self, list_of_pheromones):
         # this class is for the the basic agents that don't sens pheormones
