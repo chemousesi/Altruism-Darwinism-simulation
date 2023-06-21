@@ -34,8 +34,6 @@ class Agent(CircleEntity):
         elif self.type_agent == TypeAgent.PROFITEER:
             self.type_agent_int =2
 
-        #
-        print("color : ", color)
         CircleEntity.__init__(self, screen, pos, color, radius)
 
         #energy
@@ -121,7 +119,7 @@ class Agent(CircleEntity):
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
-        bebe = Agent.update_energy(self, draw)
+        agent_state = Agent.update_energy(self, draw)
 
         # updates vector then moves
         Agent.random_walk(self)
@@ -130,7 +128,7 @@ class Agent(CircleEntity):
         # eats
         Agent.eat(self, list_of_foods)  # returns in case a pheromone has been created
 
-        return bebe
+        return agent_state
 
     def update_energy(self, draw):
 

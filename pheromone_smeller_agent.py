@@ -34,7 +34,7 @@ class PheromoneSmellerAgent(Agent):
 
     def update(self, list_of_foods, list_of_pheromones, draw=True):
 
-        bebe = Agent.update_energy(self, draw)
+        agent_state = super().update_energy(draw)
 
         # updates vector then moves
         PheromoneSmellerAgent.update_vect(self, list_of_pheromones)
@@ -43,7 +43,7 @@ class PheromoneSmellerAgent(Agent):
         # eats
         Agent.eat(self, list_of_foods)
 
-        return [None, bebe]
+        return agent_state
 
 
     def update_vect(self, list_of_pheromones):
