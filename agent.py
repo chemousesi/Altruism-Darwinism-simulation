@@ -181,7 +181,25 @@ class Agent(CircleEntity):
 
     def draw(self):
 
-        CircleEntity.draw(self)
+        #CircleEntity.draw(self)
+
+        if self.vector == Arr.get_nul([2]):
+
+            vertical = Arr([1, 0])
+
+        else:
+
+            vertical = self.vector
+
+        vertical.normalize(self.radius)
+
+        horizontal = vertical.get_orth()
+
+        horizontal.normalize(self.radius/2)
+
+        pt_list = (self.pos-vertical-horizontal, self.pos-vertical+horizontal, self.pos+vertical)
+
+        pygame.draw.polygon(self.screen, self.color, pt_list)
 
         aff_txt(str(self.energy), self.x, self.y, window=self.screen)
 
@@ -237,5 +255,10 @@ class Agent(CircleEntity):
           self.vector = vect2
 
           Agent.normalize_vect(self)
+
+
+
+
+
 
 
