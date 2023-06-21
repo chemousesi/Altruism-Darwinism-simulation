@@ -2,8 +2,8 @@
 
     "food_width":20,
     "food_height":20,
-    "food_regeneration_time":100,
-    "food_value":50,
+    "food_regeneration_time":300,
+    "food_value":10,
     "food_number_in_storage":50,
     "initial_ressource":50,
 

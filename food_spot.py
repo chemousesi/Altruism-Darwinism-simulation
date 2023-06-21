@@ -26,7 +26,7 @@ class Food(Entity):
 
         self.regenerate = 0  # when exhausted, ticks until limit then refills
 
-        self.rect = pygame.Rect(x,y,self.width,self.height)
+        self.rect = pygame.Rect(x-self.width/2,y-self.height/2,self.width,self.height)
 
     def getting_eaten(self):
 
