@@ -145,7 +145,7 @@ class Universe:
                 self.agents.append(agent_return)
 
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
-                Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
+                Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
 
 
 

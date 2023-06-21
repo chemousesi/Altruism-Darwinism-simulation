@@ -14,9 +14,11 @@ def main():
 
     universe = Universe(screen)
 
+    
     for x in range(1):
 
         universe.add_agent(Basic(screen))
+        universe.add_agent(Altruist(screen))
 
     universe.add_button(Button, screen, "proba mutation")
 

@@ -5,9 +5,9 @@ from utils import *
 
 class PheromoneSmellerAgent(Agent):
 
-    def __init__(self, screen, pos=None, recognised_pheromones=[1], type_agent=None):
+    def __init__(self, screen, pos=None, recognised_pheromones=[1], type_agent=None, color=None):
 
-        Agent.__init__(self, screen, pos, type_agent)
+        Agent.__init__(self, screen, pos, type_agent, color=color)
 
         self.recognised_pheromones = recognised_pheromones
 
@@ -64,7 +64,7 @@ class PheromoneSmellerAgent(Agent):
 
                 Agent.normalize_vect(self)
 
-                print(self.vector , pheromone.pos , self.pos)
+                #print(self.vector , pheromone.pos , self.pos)
 
             else :
                 Agent.random_walk(self)

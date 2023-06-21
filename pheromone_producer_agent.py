@@ -5,9 +5,10 @@ from utils import *
 
 class PheromoneProducerAgent(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], type_agent=None):
+    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], produced_pheromones=[2],type_agent=None, color=None):
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent)
+        
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent, color)
 
         self.produced_pheromones = produced_pheromones
 
@@ -17,21 +18,21 @@ class PheromoneProducerAgent(PheromoneSmellerAgent):
 
     def update(self, list_of_foods, list_of_pheromones, draw=True):
 
-        bebe = Agent.update_energy(self, draw)
-
+        bebe = super().update_energy(draw)
+        #bebe = self.update_energy(draw)
         # updates vector then moves
-        PheromoneSmellerAgent.update_vect(self)
-        Agent.move(self)
+        PheromoneSmellerAgent.update_vect(self, list_of_pheromones=list_of_pheromones)
+        super().move()
+        #self.move()
 
         # eats
         return [PheromoneProducerAgent.eat(self, list_of_foods), bebe]  # returns in case a pheromone has been created
 
     def eat(self, list_of_foods):
 
-        Agent.eat(self, list_of_foods)
-
-        return Agent.produce_pheromones(self)
-
+        super().eat(list_of_foods)
+        return self.produce_pheromones()
+    
     def produce_pheromones(self):
 
         self.energy -= self.pheromone_energy_cost
