@@ -20,7 +20,7 @@ def main():
 
     universe.add_button(Button, screen, "proba mutation")
 
-    universe.add_food_source(Food, screen, 20)
+    universe.add_food_source(Food, screen, 10)
 
     temps = 0
 
