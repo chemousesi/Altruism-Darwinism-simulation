@@ -24,7 +24,7 @@ def main():
     for x in range(i3):
         universe.add_agent(Profiteer(screen))
 
-    universe.add_button(Button, screen, "proba mutation")
+    #universe.add_button(Button, screen, "proba mutation")
 
     universe.add_food_source(Food, screen, 10)
 
@@ -35,6 +35,8 @@ def main():
     run = True
 
     while run:
+
+        run == len(universe.agents) > 0
 
         time += 1
 
@@ -60,17 +62,14 @@ def main():
 
                 if string != "":
 
-
                     if string == "g":
 
                         universe.show_graph()
 
                     user_input = string
 
-
         # drawing and updating universe
         if draw:
-
             screen.fill(GREY)
 
         #univers.updateMovement()
@@ -79,6 +78,8 @@ def main():
         if draw:
 
             pygame.display.update()
+
+            wait()
 
             clock.tick(60)
 

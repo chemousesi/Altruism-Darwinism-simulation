@@ -15,15 +15,15 @@
 
     "#Agent parameters :":0,
 
-    "agent_initial_energy":100,
+    "agent_initial_energy":200,
     "agent_speed_norm":2,
     "agent_radius":10,
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":5,
+    "number_of_basic_agents":0,
     "number_of_altruist_agents":5,
-    "number_of_profiteer_agents":5,
+    "number_of_profiteer_agents":0,
 
 
     "#Button parametrs : ":0,
@@ -31,9 +31,9 @@
     "button_height":75,
     
     
-    "#Pheromone paramters :":0,
+    "#Pheromone parameters :":0,
 
-    "cost_of_pheromone":10,
+    "cost_of_pheromone_ratio":0.3,
     "type1_pheromone_radius":50,
     "type2_pheromone_radius":100,
     "pheromone_energy_cost":20,
