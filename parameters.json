@@ -6,12 +6,13 @@
     "food_value":10,
     "food_number_in_storage":50,
     "initial_ressource":10,
+    "number_of_spots":30,
 
     "#Reproduction parameters :" :0,
 
     "cost_of_reproduction":100,
     "required_energy_to_reproduce": 600,
-    "prob_of_mutation":0.15,
+    "prob_of_mutation":0.2,
 
     "#Agent parameters :":0,
 

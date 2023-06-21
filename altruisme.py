@@ -1,4 +1,5 @@
 from pig_tv import *
+from pig_tv_csts import *
 from utils import *
 
 
@@ -7,11 +8,13 @@ from button import Button
 from agent import Agent
 from food_spot import Food
 from agent_types import Basic, Profiteer, Altruist
+from entity import Entity, CircleEntity
 
 
 
 def main():
 
+    number_of_spots = json_data["number_of_spots"]
     universe = Universe(screen)
     i1 = universe.number_of_initial_basic_agents
     i2 = universe.number_of_initial_altruist_agents
@@ -26,7 +29,7 @@ def main():
 
     #universe.add_button(Button, screen, "proba mutation")
 
-    universe.add_food_source(Food, screen, 10)
+    universe.add_food_source(Food, screen, number_of_spots)
 
     time = 0
 
