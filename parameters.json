@@ -1,12 +1,12 @@
 {
     "food_width":20,
     "food_height":20,
-    "food_regeneration_time":100,
-    "food_value":50,
+    "food_regeneration_time":300,
+    "food_value":10,
     "food_number_in_storage":50,
 
-    "cost_of_reproduction":100,
-    "required_energy_to_reproduce": 501,
+    "cost_of_reproduction":300,
+    "required_energy_to_reproduce": 1500,
     "cost_of_pheromone":10,
     "agent_radius":10,
     "initial_energy":50,
