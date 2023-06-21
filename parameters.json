@@ -21,9 +21,9 @@
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":5,
-    "number_of_altruist_agents":0,
-    "number_of_profiteer_agents":5,
+    "number_of_basic_agents":0,
+    "number_of_altruist_agents":20,
+    "number_of_profiteer_agents":0,
 
 
     "#Button parametrs : ":0,

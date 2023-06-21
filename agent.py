@@ -8,7 +8,6 @@ from entity import Entity, CircleEntity
 
 class Agent(CircleEntity):
 
-    #dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
     cost_of_reproduction = json_data["cost_of_reproduction"]
 
@@ -34,8 +33,8 @@ class Agent(CircleEntity):
         elif self.type_agent == TypeAgent.PROFITEER:
             self.type_agent_int =2
 
-        #
-        print("color : ", color)
+        
+        
         CircleEntity.__init__(self, screen, pos, color, radius)
 
         #energy

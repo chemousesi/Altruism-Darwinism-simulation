@@ -114,9 +114,9 @@ class Altruist(PheromoneProducerAgent):
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
             bebe = Altruist.reproduce_alone(self)
-            return [agent_sate[0], bebe]
+            return [agent_state[0], bebe]
 
-        return [agent_sate[0], None]
+        return [agent_state[0], None]
 
     
     def update_number(self,number_list):
