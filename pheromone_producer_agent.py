@@ -36,5 +36,7 @@ class PheromoneProducerAgent(PheromoneSmellerAgent):
 
         self.energy -= self.pheromone_energy_cost
 
+        self.can_make_pheromone = False
+
         return ("pheromone", self.produced_pheromones, self.pheromone_life_span)  # universe will create the pheromone
-    
+

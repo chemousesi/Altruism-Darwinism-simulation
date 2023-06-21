@@ -119,6 +119,7 @@ class Agent(CircleEntity):
         agent_has_eaten = False
 
         for food in list_of_foods: #checks if the agent is on a food spot
+
             if food.ressource > 0:
 
                 if (self.pos-food.pos).norme_eucli() < 10:  # close enough
@@ -185,7 +186,7 @@ class Agent(CircleEntity):
         aff_txt(str(self.energy), self.x, self.y, window=self.screen)
 
     def move(self):
-        
+
         self.pos += self.vector
         Agent.update_pos(self)
 
@@ -205,13 +206,13 @@ class Agent(CircleEntity):
               vect = self.get_vector()
 
               #module = sqrt((vect[0]**2 + vect[1]**2))
-             
+
               if (self.get_y() <= 0) or (self.get_y() >= screen_height) or (self.get_x() <= 0) or (self.get_x() >= screen_width):  # out screen
-               
+
                 self.mode_transitoire = 10
-               
+
                 vect2 = Arr(screen_center)-self.pos  # Arr([-sin(pi*j*1/6),-cos(pi*j*1/6)])
-               
+
                 self.delta_t = random.random()
 
               else:
@@ -221,16 +222,16 @@ class Agent(CircleEntity):
                        vect2 = vect
                        self.mode_transitoire -= 1
 
-                  #randomized movement                 
+                  #randomized movement
                   else :
                       frequency = 10000
                       #t=0.01
                       amp = 5
-                     
+
                       perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)])
-                     
+
                       perturbation.normalize(self.speed_norm/10)
-                     
+
                       vect2 = perturbation+vect
 
           self.vector = vect2
