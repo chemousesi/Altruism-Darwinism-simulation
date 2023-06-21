@@ -64,7 +64,7 @@ class PheromoneSmellerAgent(Agent):
 
                 Agent.normalize_vect(self)
 
-                print(self.vector , pheromone.pos , self.pos)
+                #print(self.vector , pheromone.pos , self.pos)
 
             else :
                 Agent.random_walk(self)
