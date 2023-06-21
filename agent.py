@@ -99,6 +99,7 @@ class Agent(CircleEntity):
 
     def reproduce_alone(self,type):
         child = type(self.screen)
+        child.pos = self.pos
         return child
 
     def eat(self, list_of_foods):
