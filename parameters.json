@@ -21,6 +21,5 @@
     "type2_pheromone_radius":100,
     "pheromone_energy_cost":20,
     "pheromone_life_span":10
-    
 
 }

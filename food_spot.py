@@ -52,7 +52,7 @@ class Food(Entity):
 
         else:
             pygame.draw.rect(self.screen,BLACK, self.rect)
-    
+
 
     def update(self, draw=False):
 
@@ -61,7 +61,7 @@ class Food(Entity):
             self.regenerate += 1
             if (self.regenerate == 100):
                 self.regenerate = 0
-                self.ressource = json_data["food_storage"]
+                self.ressource = json_data["food_number_in_storage"]*self.food_value
                 self.available_food = True
 
         if draw:
