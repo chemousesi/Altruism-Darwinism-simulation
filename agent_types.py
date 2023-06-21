@@ -23,32 +23,37 @@ class Profiteer(PheromoneSmellerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            bebe = Profiteer.reproduce_alone(self)
+            type = self.type_agent_int
+            mutation = random.random()
+            if mutation < self.prob_of_mutation:
+                bebe = super().reproduce_alone(Altruist)
+            else:
+                bebe = super().reproduce_alone(Profiteer)
             return [None, bebe]
 
         return [None, None]
 
     def update_number(self,number_list):
         number_list[2] = number_list[2]+1
-        
-    def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-        #checks if the agent is able to reproduce
-        mutation = random.random()
-        child = Profiteer(self.screen)
-
-##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-##            if self.type_agent_int == 1:
-##                child.type_agent_int = 2
-##            elif self.type_agent_int == 2:
-##                child.type_agent_int = 1
-##            else :
-##                child.type_agent_int = 0
-##        else:
-##            child.type_agent_int = self.type_agent_int
-
-        child.pos = self.pos
-        super().add_to_energy(-super().cost_of_reproduction)
-        return child
+#
+#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
+#         #checks if the agent is able to reproduce
+#         mutation = random.random()
+#         child = Profiteer(self.screen)
+#
+# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
+# ##            if self.type_agent_int == 1:
+# ##                child.type_agent_int = 2
+# ##            elif self.type_agent_int == 2:
+# ##                child.type_agent_int = 1
+# ##            else :
+# ##                child.type_agent_int = 0
+# ##        else:
+# ##            child.type_agent_int = self.type_agent_int
+#
+#         child.pos = self.pos
+#         super().add_to_energy(-super().cost_of_reproduction)
+#         return child
 
 
 class Basic(PheromoneSmellerAgent):
@@ -67,7 +72,8 @@ class Basic(PheromoneSmellerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            bebe = Basic.reproduce_alone(self)
+            type = self.type_agent_int
+            bebe = super().reproduce_alone(Basic)
             return [None, bebe]
 
         return [None, None]
@@ -75,31 +81,31 @@ class Basic(PheromoneSmellerAgent):
     def update_number(self,number_list):
         number_list[0] = number_list[0]+1
 
-    def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-         #checks if the agent is able to reproduce
-        mutation = random.random()
-        child = Basic(self.screen)
-
-##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-##            if self.type_agent_int == 1:
-##                child.type_agent_int = 2
-##            elif self.type_agent_int == 2:
-##                child.type_agent_int = 1
-##            else :
-##                child.type_agent_int = 0
-##        else:
-##            child.type_agent_int = self.type_agent_int
-
-        child.pos = self.pos
-        super().add_to_energy(-super().cost_of_reproduction)
-        return child
+#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
+#          #checks if the agent is able to reproduce
+#         mutation = random.random()
+#         child = Basic(self.screen)
+#
+# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
+# ##            if self.type_agent_int == 1:
+# ##                child.type_agent_int = 2
+# ##            elif self.type_agent_int == 2:
+# ##                child.type_agent_int = 1
+# ##            else :
+# ##                child.type_agent_int = 0
+# ##        else:
+# ##            child.type_agent_int = self.type_agent_int
+#
+#         child.pos = self.pos
+#         super().add_to_energy(-super().cost_of_reproduction)
+#         return child
 
 
 class Altruist(PheromoneProducerAgent):
 
     def __init__(self, screen, pos=None):
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN)  # 
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN)  #
 
         prob_of_mutation = json_data["prob_of_mutation"]
 
@@ -113,31 +119,36 @@ class Altruist(PheromoneProducerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            bebe = Altruist.reproduce_alone(self)
-            return [agent_state[0], bebe]
+            type = self.type_agent_int
+            mutation = random.random()
+            if mutation < self.prob_of_mutation:
+                bebe = super().reproduce_alone(Profiteer)
+            else:
+                bebe = super().reproduce_alone(Altruist)
+            return [None, bebe]
 
-        return [agent_state[0], None]
+        return [None, None]
 
-    
+
     def update_number(self,number_list):
         number_list[1] = number_list[1]+1
 
-    def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-         #checks if the agent is able to reproduce
-        mutation = random.random()
-        child = Altruist(self.screen)
-
-##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-##            if self.type_agent_int == 1:
-##                child.type_agent_int = 2
-##            elif self.type_agent_int == 2:
-##                child.type_agent_int = 1
-##            else :
-##                child.type_agent_int = 0
-##        else:
-##            child.type_agent_int = self.type_agent_int
-
-        child.pos = self.pos
-        super().add_to_energy(-super().cost_of_reproduction)
-        return child
+#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
+#          #checks if the agent is able to reproduce
+#         mutation = random.random()
+#         child = Altruist(self.screen)
+#
+# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
+# ##            if self.type_agent_int == 1:
+# ##                child.type_agent_int = 2
+# ##            elif self.type_agent_int == 2:
+# ##                child.type_agent_int = 1
+# ##            else :
+# ##                child.type_agent_int = 0
+# ##        else:
+# ##            child.type_agent_int = self.type_agent_int
+#
+#         child.pos = self.pos
+#         super().add_to_energy(-super().cost_of_reproduction)
+#         return child
 

@@ -2,28 +2,28 @@
 
     "food_width":20,
     "food_height":20,
-    "food_regeneration_time":300,
+    "food_regeneration_time":200,
     "food_value":10,
     "food_number_in_storage":50,
-    "initial_ressource":50,
+    "initial_ressource":10,
 
     "#Reproduction parameters :" :0,
 
-    "cost_of_reproduction":100,
+    "cost_of_reproduction":200,
     "required_energy_to_reproduce": 501,
     "prob_of_mutation":0.15,
 
     "#Agent parameters :":0,
 
-    "agent_initial_energy":500,
-    "agent_speed_norm":3,
+    "agent_initial_energy":100,
+    "agent_speed_norm":2,
     "agent_radius":10,
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":0,
-    "number_of_altruist_agents":20,
-    "number_of_profiteer_agents":0,
+    "number_of_basic_agents":5,
+    "number_of_altruist_agents":5,
+    "number_of_profiteer_agents":5,
 
 
     "#Button parametrs : ":0,
