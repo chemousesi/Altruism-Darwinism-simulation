@@ -153,6 +153,14 @@ class Universe:
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
                 agents.remove(agent)
+
+                if agent.type_agent_int == 0:
+                    self.list_of_basics[-1] -= 1
+                elif agent.type_agent_int == 1:
+                    self.list_of_altruists[-1] -= 1
+                elif agent.type_agent_int == 2:
+                    self.list_of_cheaters[-1] -= 1
+
                 
 
             # baby

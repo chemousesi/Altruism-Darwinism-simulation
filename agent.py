@@ -13,8 +13,6 @@ class Agent(CircleEntity):
 
     required_energy_to_reproduce = json_data["required_energy_to_reproduce"]
 
-    cost_of_pheromone = json_data["cost_of_pheromone"]
-
     prob_of_mutation = json_data["prob_of_mutation"]
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):
@@ -35,8 +33,6 @@ class Agent(CircleEntity):
         elif self.type_agent == TypeAgent.PROFITEER:
             self.type_agent_int =2
 
-        
-        
         CircleEntity.__init__(self, screen, pos, color, radius)
 
         #energy
@@ -66,6 +62,7 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+
     def get_color():
         return self.color
 
@@ -93,7 +90,7 @@ class Agent(CircleEntity):
 
         def loss_function(x):
 
-            return log(log(x+1)+1)  # so it's never negative
+            return log(log(x+1)+1)/2  # so it's never negative
 
         Agent.add_to_energy(self, -loss_function(age))
 
