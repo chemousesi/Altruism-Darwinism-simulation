@@ -166,8 +166,6 @@ class Universe:
             # baby
             elif agent_return != None:
                 self.add_agent(agent_return)
-                
-                
 
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
                 Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
