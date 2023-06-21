@@ -14,8 +14,6 @@ class Agent(CircleEntity):
 
     required_energy_to_reproduce = json_data["required_energy_to_reproduce"]
 
-    cost_of_pheromone = json_data["cost_of_pheromone"]
-
     prob_of_mutation = json_data["prob_of_mutation"]
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):

@@ -36,7 +36,7 @@ class PheromoneProducerAgent(PheromoneSmellerAgent):
     
     def produce_pheromones(self):
 
-        self.energy -= self.pheromone_energy_cost*json_data["food_value"]
+        self.energy -= self.pheromone_energy_cost_ratio*json_data["food_value"]
 
         self.can_make_pheromone = False
 
