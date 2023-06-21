@@ -48,8 +48,7 @@ class Universe:
 
         self.agents.append(agent)
         agent.update_number(self.number_of_agents_list)
-        print(self.number_of_agents_list,"hi")
-        wait()
+        
 
     def add_button(self, object_, screen, string):
 
@@ -149,7 +148,7 @@ class Universe:
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
                 agents.remove(agent)
-                print("Agent killed")
+                
 
             # baby
             elif agent_return != None:
