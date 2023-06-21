@@ -1,33 +1,43 @@
 from pig_tv_csts import *
 from utils import *
 
-import json
-with open('parameters.json') as file:
-    json_data = json.load(file)
+from entity import Entity, CircleEntity
 
 
-class Food:
+
+class Food(Entity):
 
     width = json_data["food_width"]
-    height =json_data["food_height"]
+    height = json_data["food_height"]
 
-    def __init__(self,x,y,screen) -> None:
-        self.x = x                              # coordinate of the food spot
-        self.y = y
-        self.ressource = 50
-        self.screen = screen                         # quantity of available food
-        self.state = True                           # State of the food spot, False if it is exhausted
+    def __init__(self, pos, screen) -> None:
+
+        Entity.__init__(self, screen, pos)
+
+        x, y = self.pos
+
+        self.food_value = json_data["food_value"]
+
+        self.ressource = json_data["food_number_in_storage"]*self.food_value
+
+        self.available_food = True                           # State of the food spot, False if it is exhausted
+
         self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
-        self.regenerate = 0
+
+        self.regenerate = 0  # when exhausted, ticks until limit then refills
 
         self.rect = pygame.Rect(x,y,self.width,self.height)
 
-
     def getting_eaten(self):
-        self.ressource -= 1
-        if (self.ressource == 0):
-            self.state = False
 
+        gotten_food = min(self.food_value, self.ressource)
+
+        self.ressource -= gotten_food
+
+        if (self.ressource == 0):
+            self.available_food = False
+
+        return gotten_food
 
     def get_ressource(self):
         return self.ressource
@@ -36,17 +46,24 @@ class Food:
         return self.table
 
     def draw(self):
-        if (self.state == True):
+
+        if (self.available_food == True):
             pygame.draw.rect(self.screen,GREEN, self.rect)
+
         else:
             pygame.draw.rect(self.screen,BLACK, self.rect)
     
 
-    def update(self):
-        if (self.state == False):
+    def update(self, draw=False):
+
+        if (self.available_food == False):
+
             self.regenerate += 1
             if (self.regenerate == 100):
                 self.regenerate = 0
-                self.ressource = 50
-                self.state = True
-                self.draw()
+                self.ressource = json_data["food_storage"]
+                self.available_food = True
+
+        if draw:
+
+            Food.draw(self)

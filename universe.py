@@ -3,6 +3,7 @@ from utils import *
 
 import button
 import agent
+import pheromone
 
 
 class Universe:
@@ -15,7 +16,7 @@ class Universe:
 
     button_height = 100
 
-    def __init__(self):
+    def __init__(self, screen):
 
         # universe objects
 
@@ -26,6 +27,8 @@ class Universe:
         self.foods = []
 
         # graphic interface
+
+        self.screen = screen
 
         # buttons
 
@@ -42,6 +45,20 @@ class Universe:
         n_button = object_(screen, 0, Universe.button_height*len(self.buttons), string, "0")
 
         self.buttons.append(n_button)
+
+    def add_food_source(self, object_, screen, nb=1):
+
+        for i in range(nb):
+
+            n_food = object_(Arr(get_random_point_in_screen()), screen)
+
+            self.foods.append(n_food)
+
+    def add_pheromone(self, pos, type_pheromone, life_span):
+
+        n_pheromone = pheromone.Pheromone(pos, self.screen, type_pheromone, life_span)
+
+        self.pheromones.append(n_pheromone)
 
     def update_buttons(self, draw, mouse_clicked, user_input):
 
@@ -83,38 +100,52 @@ class Universe:
 
             self.selected_button = None
 
+    def update_foods(self, draw):
+
+        for food in self.foods:
+
+            food.update(draw)
+
+            if food.available_food:
+
+                Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1)
+
+    def update_pheromones(self, draw):
+
+        for pheromone in self.pheromones:
+
+            if pheromone.update(draw) == -1:
+
+                self.pheromones.remove(pheromone)
 
     def update(self, draw, mouse_clicked, user_input):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
 
+        Universe.update_pheromones(self, draw)
+
+        Universe.update_foods(self, draw)
+
         # agent update
-
-        Universe.update_movements(self)
-
         for agent in self.agents:
             #print(len(self.agents))
+
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
-            agent.update( pheromones, foods, agents, draw)
 
+            pheromone_return, agent_return = agent.update(foods, pheromones, draw)
 
-    def update_movements(self):
+            if agent_return == "dead" : # when the agent has no more energy we kill him
+                agents.remove(agent)
+                print("Agent killed")
 
-        for agent in self.agents:
+            # baby
+            elif agent_return != None:
+                self.agents.append(agent_return)
 
-            if agent.is_eating:
-                agent.set_vector(Arr([0, 0]))
+            if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
+                Universe.add_pheromone(self, agent.pos, agent_return[1], agent_return[2])
 
-            else :
-
-                phero = agent.find_closest_pheromone(self.pheromones)
-                if phero != None:
-                    # goes to pheromone
-                    agent.vector = Arr([ phero.x - agent.x  , phero.y - agent.y ])
-                else :
-                    # goto randomwalk
-                    agent.random_walk()
 
 
