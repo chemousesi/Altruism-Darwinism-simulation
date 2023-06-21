@@ -23,12 +23,12 @@ class Profiteer(PheromoneSmellerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            type = self.type_agent_int
             mutation = random.random()
             if mutation < self.prob_of_mutation:
                 bebe = super().reproduce_alone(Altruist)
             else:
                 bebe = super().reproduce_alone(Profiteer)
+            super().add_to_energy(-super().cost_of_reproduction)
             return [None, bebe]
 
         return [None, None]
@@ -72,8 +72,8 @@ class Basic(PheromoneSmellerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            type = self.type_agent_int
             bebe = super().reproduce_alone(Basic)
+            super().add_to_energy(-super().cost_of_reproduction)
             return [None, bebe]
 
         return [None, None]
@@ -119,12 +119,12 @@ class Altruist(PheromoneProducerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            type = self.type_agent_int
             mutation = random.random()
             if mutation < self.prob_of_mutation:
                 bebe = super().reproduce_alone(Profiteer)
             else:
                 bebe = super().reproduce_alone(Altruist)
+            super().add_to_energy(-super().cost_of_reproduction)
             return [None, bebe]
 
         return [None, None]
