@@ -49,6 +49,11 @@ class Universe:
 
         self.list_of_cheaters = []
 
+        self.list_of_average_altruist_genome = []
+
+        self.list_of_average_cheater_genome = []
+
+
     def add_agent(self, agent):
 
         self.agents.append(agent)
@@ -143,7 +148,7 @@ class Universe:
 
         liste_of_things = [len(self.agents), len(self.foods), len(self.pheromones)]
 
-        print(liste_of_things)
+        average_genome = 0
 
         # agent update
         for agent in self.agents:
@@ -152,6 +157,17 @@ class Universe:
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
+            genome = agent.gene_type
+            #     if len(self.list_of_altruists) !=0 and len(self.list_of_cheaters) ==0:
+            #         average_genome += part_of_altruist/self.list_of_altruists[-1]
+            #         print(average_genome/self.list_of_altruists[-1])
+            #     elif len(self.list_of_altruists) ==0 and len(self.list_of_cheaters)!=0:
+            #         average_genome += part_of_altruist/self.list_of_cheaters[-1]
+            #         print(average_genome/self.list_of_cheaters[-1])
+            #     elif len(self.list_of_altruists) !=0 and len(self.list_of_cheaters)!=0:
+            #         average_genome += part_of_altruist/(self.list_of_cheaters[-1]+self.list_of_altruists[-1])
+            #         print(average_genome/(self.list_of_altruists[-1]+self.list_of_cheaters[-1]))
+
 
             pheromone_return, agent_return = agent.update(foods, pheromones, draw)
 
@@ -171,32 +187,52 @@ class Universe:
             elif agent_return != None:
                 self.add_agent(agent_return)
 
-            if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
-                Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
-
         Universe.make_graph(self)
 
     def make_graph(self):
         self.list_of_altruists.append(0)
         self.list_of_basics.append(0)
         self.list_of_cheaters.append(0)
+        self.list_of_average_altruist_genome.append(0)
+        self.list_of_average_cheater_genome.append(0)
         for agent in self.agents:
             if agent.type_agent_int == 0:
                 self.list_of_basics[-1] += 1
             elif agent.type_agent_int == 1:
                 self.list_of_altruists[-1] +=1
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_altruist_genome[-1] += 1/(self.list_of_altruists[-1]*10)
             elif agent.type_agent_int == 2:
                 self.list_of_cheaters[-1] += 1
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_cheater_genome[-1] += 1/(self.list_of_cheaters[-1]*10)
+
+        for agent in self.agents:
+            if agent.type_agent_int == 1:
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_altruist_genome[-1] += 1/(self.list_of_altruists[-1]*10)
+            elif agent.type_agent_int == 2:
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_cheater_genome[-1] += 1/(self.list_of_cheaters[-1]*10)
+
 
 
     def show_graph(self,time):
-        Ya = self.list_of_basics
-        Yb = self.list_of_altruists
-        Yc = self.list_of_cheaters
-        X = [i for i in range(len(Ya))]
-        plt.plot(X, Ya)
-        plt.plot(X, Yb)
-        plt.plot(X, Yc)
+        #Ya = self.list_of_basics
+        #Yb = self.list_of_altruists
+        #Yc = self.list_of_cheaters
+        Yd = self.list_of_average_altruist_genome
+        Ye = self.list_of_average_cheater_genome
+        X = [i for i in range(len(Ye))]
+        #plt.plot(X, Ya)
+        #plt.plot(X, Yb)
+        #plt.plot(X, Yc)
+        plt.plot(X, Yd)
+        plt.plot(X, Ye)
         plt.show()
         wait()
         return

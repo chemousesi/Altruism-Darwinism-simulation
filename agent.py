@@ -63,6 +63,8 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+        self.proba_of_gene_proba_change_max = json_data["proba_of_gene_proba_change_max"]
+
 
     def get_color():
         return self.color
@@ -95,9 +97,17 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-    def reproduce_alone(self,type):
+    def reproduce_alone(self,type,genome,gene):
         child = type(self.screen)
         child.pos = self.pos
+        child.gene_type = genome
+        change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000
+        if change < 0:
+            child.gene_proba = 0
+        elif change > 1:
+            child.gene_proba = 1
+        else :
+            child.gene_proba = change
         return child
 
     def eat(self, list_of_foods):
