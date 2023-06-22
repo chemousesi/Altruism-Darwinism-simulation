@@ -50,25 +50,6 @@ class Profiteer(PheromoneSmellerAgent):
 
     def update_number(self,number_list):
         number_list[2] = number_list[2]+1
-#
-#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-#         #checks if the agent is able to reproduce
-#         mutation = random.random()
-#         child = Profiteer(self.screen)
-#
-# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-# ##            if self.type_agent_int == 1:
-# ##                child.type_agent_int = 2
-# ##            elif self.type_agent_int == 2:
-# ##                child.type_agent_int = 1
-# ##            else :
-# ##                child.type_agent_int = 0
-# ##        else:
-# ##            child.type_agent_int = self.type_agent_int
-#
-#         child.pos = self.pos
-#         super().add_to_energy(-super().cost_of_reproduction)
-#         return child
 
 
 class Basic(PheromoneSmellerAgent):
@@ -103,25 +84,6 @@ class Basic(PheromoneSmellerAgent):
     def update_number(self,number_list):
         number_list[0] = number_list[0]+1
 
-#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-#          #checks if the agent is able to reproduce
-#         mutation = random.random()
-#         child = Basic(self.screen)
-#
-# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-# ##            if self.type_agent_int == 1:
-# ##                child.type_agent_int = 2
-# ##            elif self.type_agent_int == 2:
-# ##                child.type_agent_int = 1
-# ##            else :
-# ##                child.type_agent_int = 0
-# ##        else:
-# ##            child.type_agent_int = self.type_agent_int
-#
-#         child.pos = self.pos
-#         super().add_to_energy(-super().cost_of_reproduction)
-#         return child
-
 
 class Altruist(PheromoneProducerAgent):
 
@@ -131,7 +93,7 @@ class Altruist(PheromoneProducerAgent):
         self.gene_type = [1 for i in range(json_data["number_type_gene"])]
 
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=True)
 
 
         self.gene_proba = json_data["initial_prob_of_mutation"]
@@ -170,22 +132,4 @@ class Altruist(PheromoneProducerAgent):
     def update_number(self,number_list):
         number_list[1] = number_list[1]+1
 
-#     def reproduce_alone(self): #returns the list of the agents after the reproduction cycle
-#          #checks if the agent is able to reproduce
-#         mutation = random.random()
-#         child = Altruist(self.screen)
-#
-# ##        if mutation < Agent.prob_of_mutation: #checks weither the child will be the type of its parent or not
-# ##            if self.type_agent_int == 1:
-# ##                child.type_agent_int = 2
-# ##            elif self.type_agent_int == 2:
-# ##                child.type_agent_int = 1
-# ##            else :
-# ##                child.type_agent_int = 0
-# ##        else:
-# ##            child.type_agent_int = self.type_agent_int
-#
-#         child.pos = self.pos
-#         super().add_to_energy(-super().cost_of_reproduction)
-#         return child
 

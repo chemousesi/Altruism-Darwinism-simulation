@@ -170,7 +170,7 @@ class Agent(CircleEntity):
         return
 
     def find_closest_pheromone(self, list_of_pheromones):
-        # this class is for the the basic agents that don't sens pheormones
+        # this class is for the the basic agents that don't sense pheormones
         return None
 
     def draw(self):

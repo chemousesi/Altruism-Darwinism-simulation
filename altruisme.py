@@ -1,5 +1,6 @@
 from pig_tv import *
 from utils import *
+from pig_tv_csts import *
 
 
 from universe import Universe
@@ -32,7 +33,7 @@ def main():
 
     universe.set_basic_panel(Basic, screen)
 
-    universe.add_food_source(Food, screen, 10)
+    universe.add_food_source(Food, screen, json_data["number_of_spots"])
 
     time = 0
 
