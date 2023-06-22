@@ -23,10 +23,11 @@ class Pheromone(CircleEntity):
             color = PURPLE
 
         self.life_span = life_span
-        
+
         CircleEntity.__init__(self, screen, pos, color, radius)
 
     def update(self, draw):
+
 
         if self.life_span == 0:
 

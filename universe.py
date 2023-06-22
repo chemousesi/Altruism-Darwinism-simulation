@@ -1,9 +1,13 @@
 from pig_tv_csts import *
 from utils import *
 from pig_tv import wait
+
 import button
 import agent
 import pheromone
+
+from panel import Panel
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
@@ -15,18 +19,16 @@ class Universe:
 
     '''
 
-    button_height = 100
-
     def __init__(self, screen):
 
         # universe objects
         self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
         self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
         self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
-        
+
         # respectively basic , altruist , profiteer agents
         self.number_of_agents_list = [0,0,0]
-        
+
         self.agents = []
 
         self.pheromones = []
@@ -43,17 +45,34 @@ class Universe:
 
         self.selected_button = None
 
+        # panns
+
+        self.altruist_panel = None
+
+        self.profiteer_panel = None
+
+        self.basic_panel = None
+
+        self.panels = []
+
+        ## lists
+
         self.list_of_basics = []
 
         self.list_of_altruists = []
 
         self.list_of_cheaters = []
 
+        self.list_of_average_altruist_genome = []
+
+        self.list_of_average_cheater_genome = []
+
+
     def add_agent(self, agent):
 
         self.agents.append(agent)
         agent.update_number(self.number_of_agents_list)
-        
+
 
     def add_button(self, object_, screen, string):
 
@@ -61,7 +80,30 @@ class Universe:
 
         self.buttons.append(n_button)
 
-    def add_food_source(self, object_, screen, nb=1):
+    def set_profiteer_panel(self, object_, screen):
+        self.profiteer_panel = self.add_panel(object_, screen)
+
+    def set_altruist_panel(self, object_, screen):
+        self.altruist_panel = self.add_panel(object_, screen)
+
+    def set_basic_panel(self, object_, screen):
+        self.basic_panel = self.add_panel(object_, screen)
+
+    def add_panel(self, object_, screen, string=""):
+
+        x, y = 0, Panel.height*len(self.panels)
+
+        draw_decal = 30
+
+        draw_function = object_(screen, Arr([x+draw_decal, y+draw_decal]), draw_energy=False).draw
+
+        n_pan = Panel(screen, x, y, string, draw_function)
+
+        self.panels.append(n_pan)
+
+        return n_pan
+
+    def add_food_source(self, object_, screen, nb):
 
         for i in range(nb):
 
@@ -126,12 +168,18 @@ class Universe:
                 Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1)
 
     def update_pheromones(self, draw):
-
         for pheromone in self.pheromones:
 
             if pheromone.update(draw) == -1:
 
                 self.pheromones.remove(pheromone)
+
+
+    def update_panels(self):
+
+        for pan in self.panels:
+
+            pan.draw()
 
     def update(self, draw, mouse_clicked, user_input,time):
 
@@ -141,6 +189,10 @@ class Universe:
 
         Universe.update_foods(self, draw)
 
+        liste_of_things = [len(self.agents), len(self.foods), len(self.pheromones)]
+
+        average_genome = 0
+
         # agent update
         for agent in self.agents:
             #print(len(self.agents))
@@ -148,51 +200,91 @@ class Universe:
             pheromones = self.pheromones
             foods  = self.foods
             agents = self.agents
+            genome = agent.gene_type
+
+
 
             pheromone_return, agent_return = agent.update(foods, pheromones, draw)
+            if pheromone_return != None:
+                self.add_pheromone(pheromone_return[3],pheromone_return[1],pheromone_return[2])
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
-                agents.remove(agent)
 
-                if agent.type_agent_int == 0:
-                    self.list_of_basics[-1] -= 1
-                elif agent.type_agent_int == 1:
-                    self.list_of_altruists[-1] -= 1
-                elif agent.type_agent_int == 2:
-                    self.list_of_cheaters[-1] -= 1
 
-                
+                self.agents.remove(agent)
+
 
             # baby
             elif agent_return != None:
                 self.add_agent(agent_return)
 
-            if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
-                Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
+        Universe.make_graph(self)
 
-        Universe.make_graph(self, time)
+        if draw:
 
-    def make_graph(self, time):
+            self.update_panels()
+
+    def update_list_basics(self, val):
+        self.list_of_basics[-1] += val
+        self.basic_panel.string = str(self.list_of_basics[-1])
+
+    def update_list_profiteers(self, val):
+        self.list_of_cheaters[-1] += val
+        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+
+    def update_list_altruists(self, val):
+        self.list_of_altruists[-1] += val
+        self.altruist_panel.string = str(self.list_of_altruists[-1])
+
+    def make_graph(self):
         self.list_of_altruists.append(0)
         self.list_of_basics.append(0)
         self.list_of_cheaters.append(0)
+        self.list_of_average_altruist_genome.append(0)
+        self.list_of_average_cheater_genome.append(0)
         for agent in self.agents:
             if agent.type_agent_int == 0:
-                self.list_of_basics[-1] += 1
+                self.update_list_basics(1)
             elif agent.type_agent_int == 1:
                 self.list_of_altruists[-1] +=1
             elif agent.type_agent_int == 2:
                 self.list_of_cheaters[-1] += 1
 
-        X = [i for i in range(time)]
+        for agent in self.agents:
+            if agent.type_agent_int == 1:
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_altruist_genome[-1] += 1
+            elif agent.type_agent_int == 2:
+                for elt in agent.gene_type:
+                    if elt ==1:
+                        self.list_of_average_cheater_genome[-1] += 1
+
+        if self.list_of_altruists[-1]>0:
+            self.list_of_average_altruist_genome[-1]=self.list_of_average_altruist_genome[-1]/self.list_of_altruists[-1]
+        if self.list_of_cheaters[-1] >0:
+            self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
+        if len(self.list_of_altruists)%1000 == 0:
+            print(self.list_of_average_altruist_genome[-1])
+            print(self.list_of_average_cheater_genome[-1])
+
+
+
+
+
+    def show_graph(self):
         Ya = self.list_of_basics
         Yb = self.list_of_altruists
         Yc = self.list_of_cheaters
-        plt.plot(X, Ya)
-        plt.plot(X, Yb)
-        plt.plot(X, Yc)
-
-    def show_graph(self):
+        Yd = self.list_of_average_altruist_genome
+        Ye = self.list_of_average_cheater_genome
+        X = [i for i in range(len(Ya))]
+        plt.plot(X, Ya, "b", label="basics")
+        plt.plot(X, Yb, "g", label="altruists")
+        plt.plot(X, Yc, "r", label="profiteers")
+        plt.plot(X, Yd, "y", label="prob_mutation_altruist")
+        plt.plot(X, Ye, "p", label="prob_mutation_profiteer")
+        plt.legend(loc='best')
         plt.show()
         wait()
         return

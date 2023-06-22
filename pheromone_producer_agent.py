@@ -5,9 +5,9 @@ from utils import *
 
 class PheromoneProducerAgent(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], produced_pheromones=[2],type_agent=None, color=None):
+    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], produced_pheromones=[2],type_agent=None, color=None, draw_energy=True):
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent, color)
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent, color, draw_energy=draw_energy)
 
         self.produced_pheromones = produced_pheromones
 
@@ -33,12 +33,12 @@ class PheromoneProducerAgent(PheromoneSmellerAgent):
 
         if self.is_eating:
             return self.produce_pheromones()
-    
+
     def produce_pheromones(self):
 
         self.energy -= self.pheromone_energy_cost_ratio*json_data["food_value"]
 
         self.can_make_pheromone = False
 
-        return ("pheromone", self.produced_pheromones, self.pheromone_life_span)  # universe will create the pheromone
+        return ("pheromone", self.produced_pheromones, self.pheromone_life_span,self.pos)  # universe will create the pheromone
 
