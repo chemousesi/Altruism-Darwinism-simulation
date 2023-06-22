@@ -5,9 +5,9 @@ from utils import *
 
 class PheromoneProducerAgent(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], produced_pheromones=[2],type_agent=None, color=None):
+    def __init__(self, screen, pos=None, recognised_pheromones=[1, 2], produced_pheromones=[2],type_agent=None, color=None, draw_energy=True):
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent, color)
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones, type_agent, color, draw_energy=draw_energy)
 
         self.produced_pheromones = produced_pheromones
 

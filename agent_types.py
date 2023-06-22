@@ -7,11 +7,13 @@ from pheromone_producer_agent import PheromoneProducerAgent
 
 class Profiteer(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
+
 
         self.gene_type = [0 for i in range(json_data["number_type_gene"])]
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED)
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED, draw_energy=draw_energy)
+
 
 
         self.gene_proba = json_data["initial_prob_of_mutation"]
@@ -71,11 +73,14 @@ class Profiteer(PheromoneSmellerAgent):
 
 class Basic(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
+
 
         self.gene_type = [0 for i in range(json_data["number_type_gene"])]
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE)
+
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE, draw_energy=draw_energy)
+
 
         self.gene_proba = 0
 
@@ -120,11 +125,14 @@ class Basic(PheromoneSmellerAgent):
 
 class Altruist(PheromoneProducerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
+
 
         self.gene_type = [1 for i in range(json_data["number_type_gene"])]
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN)  #
+
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
+
 
         self.gene_proba = json_data["initial_prob_of_mutation"]
 

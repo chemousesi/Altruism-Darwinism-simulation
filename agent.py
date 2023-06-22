@@ -16,7 +16,7 @@ class Agent(CircleEntity):
 
     prob_of_mutation = json_data["prob_of_mutation"]
 
-    def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None):
+    def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None, draw_energy=True):
 
         # type_agent
         if type_agent != None:
@@ -63,7 +63,11 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+
         self.proba_of_gene_proba_change_max = json_data["proba_of_gene_proba_change_max"]
+
+        self.draw_energy = draw_energy
+
 
 
     def get_color():
@@ -191,7 +195,9 @@ class Agent(CircleEntity):
 
         pygame.draw.polygon(self.screen, self.color, pt_list)
 
-        aff_txt(str(round(self.energy)), self.x, self.y, window=self.screen)
+        if self.draw_energy:
+
+            aff_txt(str(round(self.energy)), self.x, self.y, window=self.screen)
 
     def move(self):
 

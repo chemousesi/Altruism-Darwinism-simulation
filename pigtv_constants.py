@@ -1,1 +1,1 @@
-screen_width, screen_height = 1900, 950
+screen_width, screen_height = 800, 600
