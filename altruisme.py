@@ -67,7 +67,8 @@ def main():
 
                     if string == "g":
 
-                        universe.show_graph()
+                        Universe.make_graph(universe)
+                        universe.show_graph(time)
 
                     user_input = string
 

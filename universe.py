@@ -23,10 +23,10 @@ class Universe:
         self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
         self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
         self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
-        
+
         # respectively basic , altruist , profiteer agents
         self.number_of_agents_list = [0,0,0]
-        
+
         self.agents = []
 
         self.pheromones = []
@@ -53,7 +53,7 @@ class Universe:
 
         self.agents.append(agent)
         agent.update_number(self.number_of_agents_list)
-        
+
 
     def add_button(self, object_, screen, string):
 
@@ -141,6 +141,10 @@ class Universe:
 
         Universe.update_foods(self, draw)
 
+        liste_of_things = [len(self.agents), len(self.foods), len(self.pheromones)]
+
+        print(liste_of_things)
+
         # agent update
         for agent in self.agents:
             #print(len(self.agents))
@@ -152,7 +156,6 @@ class Universe:
             pheromone_return, agent_return = agent.update(foods, pheromones, draw)
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
-                agents.remove(agent)
 
                 if agent.type_agent_int == 0:
                     self.list_of_basics[-1] -= 1
@@ -161,7 +164,8 @@ class Universe:
                 elif agent.type_agent_int == 2:
                     self.list_of_cheaters[-1] -= 1
 
-                
+                self.agents.remove(agent)
+
 
             # baby
             elif agent_return != None:
@@ -170,9 +174,9 @@ class Universe:
             if (pheromone_return != None) and (pheromone_return[0] == "pheromone"):
                 Universe.add_pheromone(self, agent.pos, pheromone_return[1], pheromone_return[2])
 
-        Universe.make_graph(self, time)
+        Universe.make_graph(self)
 
-    def make_graph(self, time):
+    def make_graph(self):
         self.list_of_altruists.append(0)
         self.list_of_basics.append(0)
         self.list_of_cheaters.append(0)
@@ -184,15 +188,15 @@ class Universe:
             elif agent.type_agent_int == 2:
                 self.list_of_cheaters[-1] += 1
 
-        X = [i for i in range(time)]
+
+    def show_graph(self,time):
         Ya = self.list_of_basics
         Yb = self.list_of_altruists
         Yc = self.list_of_cheaters
+        X = [i for i in range(len(Ya))]
         plt.plot(X, Ya)
         plt.plot(X, Yb)
         plt.plot(X, Yc)
-
-    def show_graph(self):
         plt.show()
         wait()
         return

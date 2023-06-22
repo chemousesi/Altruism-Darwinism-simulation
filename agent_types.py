@@ -73,7 +73,7 @@ class Basic(PheromoneSmellerAgent):
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
             bebe = super().reproduce_alone(Basic)
-            super().add_to_energy(-super().cost_of_reproduction)
+            super().add_to_energy(-super().cost_of_reproduction*2)
             return [None, bebe]
 
         return [None, None]

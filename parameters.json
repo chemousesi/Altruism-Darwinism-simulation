@@ -4,7 +4,7 @@
     "food_height":20,
     "food_regeneration_time":200,
     "food_value":10,
-    "food_number_in_storage":100,
+    "food_number_in_storage":150,
     "initial_ressource":10,
     "number_of_spots":20,
 
@@ -22,8 +22,8 @@
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":25,
-    "number_of_altruist_agents":0,
+    "number_of_basic_agents":10,
+    "number_of_altruist_agents":25,
     "number_of_profiteer_agents":0,
 
 
@@ -34,8 +34,8 @@
     
     "#Pheromone parameters :":0,
 
-    "cost_of_pheromone_ratio":0.3,
-    "type1_pheromone_radius":15,
+    "cost_of_pheromone_ratio":0.1,
+    "type1_pheromone_radius":25,
     "type2_pheromone_radius":100,
     "pheromone_energy_cost":20,
     "pheromone_life_span":1
