@@ -20,6 +20,12 @@ def main():
     i2 = universe.number_of_initial_altruist_agents
     i3 = universe.number_of_initial_profiteer_agents
 
+
+    if number_of_spots > 0:
+        universe.add_food_source(Food, screen, number_of_spots)
+    else :
+        universe.initialize_food_with_mouse(screen)
+
     for x in range(i1):
         universe.add_agent(Basic(screen))
     for x in range(i2):
@@ -29,7 +35,7 @@ def main():
 
     #universe.add_button(Button, screen, "proba mutation")
 
-    universe.add_food_source(Food, screen, number_of_spots)
+   
 
     time = 0
 
@@ -58,10 +64,14 @@ def main():
             elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
                 clicked = True
+                # ici il faut gérer le food spawn
+                #universe.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
 
             elif event.type == pygame.KEYDOWN:
 
                 string = event.unicode
+                    
+
 
                 if string != "":
 
