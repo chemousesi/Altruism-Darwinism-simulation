@@ -1,9 +1,13 @@
 from pig_tv_csts import *
 from utils import *
 from pig_tv import wait
+
 import button
 import agent
 import pheromone
+
+from panel import Panel
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
@@ -14,8 +18,6 @@ class Universe:
     list_agents
 
     '''
-
-    button_height = 100
 
     def __init__(self, screen):
 
@@ -43,6 +45,18 @@ class Universe:
 
         self.selected_button = None
 
+        # panns
+
+        self.altruist_panel = None
+
+        self.profiteer_panel = None
+
+        self.basic_panel = None
+
+        self.panels = []
+
+        ## lists
+
         self.list_of_basics = []
 
         self.list_of_altruists = []
@@ -60,6 +74,29 @@ class Universe:
         n_button = object_(screen, 0, Universe.button_height*len(self.buttons), string, "0")
 
         self.buttons.append(n_button)
+
+    def set_profiteer_panel(self, object_, screen):
+        self.profiteer_panel = self.add_panel(object_, screen)
+
+    def set_altruist_panel(self, object_, screen):
+        self.altruist_panel = self.add_panel(object_, screen)
+
+    def set_basic_panel(self, object_, screen):
+        self.basic_panel = self.add_panel(object_, screen)
+
+    def add_panel(self, object_, screen, string=""):
+
+        x, y = 0, Panel.height*len(self.panels)
+
+        draw_decal = 30
+
+        draw_function = object_(screen, Arr([x+draw_decal, y+draw_decal]), draw_energy=False).draw
+
+        n_pan = Panel(screen, x, y, string, draw_function)
+
+        self.panels.append(n_pan)
+
+        return n_pan
 
     def add_food_source(self, object_, screen, nb=1):
 
@@ -133,6 +170,12 @@ class Universe:
 
                 self.pheromones.remove(pheromone)
 
+    def update_panels(self):
+
+        for pan in self.panels:
+
+            pan.draw()
+
     def update(self, draw, mouse_clicked, user_input,time):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
@@ -142,8 +185,6 @@ class Universe:
         Universe.update_foods(self, draw)
 
         liste_of_things = [len(self.agents), len(self.foods), len(self.pheromones)]
-
-        print(liste_of_things)
 
         # agent update
         for agent in self.agents:
@@ -157,12 +198,12 @@ class Universe:
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
 
-                if agent.type_agent_int == 0:
-                    self.list_of_basics[-1] -= 1
-                elif agent.type_agent_int == 1:
-                    self.list_of_altruists[-1] -= 1
-                elif agent.type_agent_int == 2:
-                    self.list_of_cheaters[-1] -= 1
+##                if agent.type_agent_int == 0:
+##                    self.update_list_basics(-1)
+##                elif agent.type_agent_int == 1:
+##                    self.update_list_altruists(-1)
+##                elif agent.type_agent_int == 2:
+##                    self.update_list_profiteers(-1)
 
                 self.agents.remove(agent)
 
@@ -176,27 +217,44 @@ class Universe:
 
         Universe.make_graph(self)
 
+        if draw:
+
+            self.update_panels()
+
+    def update_list_basics(self, val):
+        self.list_of_basics[-1] += val
+        self.basic_panel.string = str(self.list_of_basics[-1])
+
+    def update_list_profiteers(self, val):
+        self.list_of_cheaters[-1] += val
+        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+
+    def update_list_altruists(self, val):
+        self.list_of_altruists[-1] += val
+        self.altruist_panel.string = str(self.list_of_altruists[-1])
+
     def make_graph(self):
         self.list_of_altruists.append(0)
         self.list_of_basics.append(0)
         self.list_of_cheaters.append(0)
         for agent in self.agents:
             if agent.type_agent_int == 0:
-                self.list_of_basics[-1] += 1
+                self.update_list_basics(1)
             elif agent.type_agent_int == 1:
-                self.list_of_altruists[-1] +=1
+                self.update_list_altruists(1)
             elif agent.type_agent_int == 2:
-                self.list_of_cheaters[-1] += 1
+                self.update_list_profiteers(1)
 
 
-    def show_graph(self,time):
+    def show_graph(self):
         Ya = self.list_of_basics
         Yb = self.list_of_altruists
         Yc = self.list_of_cheaters
         X = [i for i in range(len(Ya))]
-        plt.plot(X, Ya)
-        plt.plot(X, Yb)
-        plt.plot(X, Yc)
+        plt.plot(X, Ya, "b", label="basics")
+        plt.plot(X, Yb, "g", label="altruists")
+        plt.plot(X, Yc, "r", label="profiteers")
+        plt.legend(loc='best')
         plt.show()
         wait()
         return
