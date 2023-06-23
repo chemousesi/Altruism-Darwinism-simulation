@@ -328,9 +328,6 @@ class Universe:
             print(self.list_of_average_cheater_genome[-1])
 
 
-
-
-
     def show_graph(self):
         Ya = self.list_of_basics
         Yb = self.list_of_altruists
@@ -347,6 +344,49 @@ class Universe:
         plt.show()
 
         return
+
+    def show_genes(self):
+
+
+
+
+        altruists_genes = []
+
+        profiteers_genes = []
+
+        indexs = []
+
+        for agent in self.agents:
+
+            genes = agent.gene_type
+
+            if genes[0] != -1:
+
+                altruists_genes.append(sum(genes))
+
+                profiteers_genes.append(len(genes)-sum(genes))
+
+                indexs.append(agent.type_agent_int-1)
+
+        x = range(len(altruists_genes)) # position en abscisse des barres
+
+        # tracing diagram
+        largeur_barre = 0.8
+
+        plt.bar(x, altruists_genes, width = largeur_barre, color = "#00FF00")
+
+        plt.bar(x, profiteers_genes, width = largeur_barre, bottom = altruists_genes, color = "#FF0000")
+
+        plt.xticks(range(len(altruists_genes)), [(["a", "p"])[indexs[i]] for i in range(len(indexs))])
+
+        plt.show()
+
+
+
+
+
+
+
 
 
 

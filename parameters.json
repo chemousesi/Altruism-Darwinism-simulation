@@ -6,7 +6,7 @@
     "food_value":10,
     "food_number_in_storage":250,
     "initial_ressource":12,
-    "number_of_spots":0,
+    "number_of_spots":10,
 
     "#Reproduction parameters :" :0,
 
@@ -26,8 +26,8 @@
     "Initial_parameters_for_agents" :0,
 
     "number_of_basic_agents":10,
-    "number_of_altruist_agents":30,
-    "number_of_profiteer_agents":10,
+    "number_of_altruist_agents":3,
+    "number_of_profiteer_agents":0,
 
 
     "#Button parametrs : ":0,

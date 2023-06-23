@@ -7,16 +7,25 @@ from pheromone_producer_agent import PheromoneProducerAgent
 
 class Profiteer(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None, draw_energy=True):
+    def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
 
+        if gene_type == None:
 
-        self.gene_type = [0 for i in range(json_data["number_type_gene"])]
+            self.gene_type = [0 for i in range(json_data["number_type_gene"])]
+
+        else:
+
+            self.gene_type = gene_type
+
+        if gene_proba == None:
+
+            self.gene_proba = json_data["initial_prob_of_mutation"]
+
+        else:
+
+            self.gene_proba = gene_proba
 
         PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED, draw_energy=draw_energy)
-
-
-
-        self.gene_proba = json_data["initial_prob_of_mutation"]
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
@@ -54,16 +63,25 @@ class Profiteer(PheromoneSmellerAgent):
 
 class Basic(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None, draw_energy=True):
-
-
-        self.gene_type = [0 for i in range(json_data["number_type_gene"])]
-
+    def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
 
         PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE, draw_energy=draw_energy)
 
+        if gene_type == None:
 
-        self.gene_proba = 0
+            self.gene_type = [-1 for i in range(json_data["number_type_gene"])]
+
+        else:
+
+            self.gene_type = gene_type
+
+        if gene_proba == None:
+
+            self.gene_proba = 0
+
+        else:
+
+            self.gene_proba = gene_proba
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
@@ -87,16 +105,25 @@ class Basic(PheromoneSmellerAgent):
 
 class Altruist(PheromoneProducerAgent):
 
-    def __init__(self, screen, pos=None, draw_energy=True):
-
-
-        self.gene_type = [1 for i in range(json_data["number_type_gene"])]
-
+    def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
 
         PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
 
+        if gene_type == None:
 
-        self.gene_proba = json_data["initial_prob_of_mutation"]
+            self.gene_type = [1 for i in range(json_data["number_type_gene"])]
+
+        else:
+
+            self.gene_type = gene_type
+
+        if gene_proba == None:
+
+            self.gene_proba = json_data["initial_prob_of_mutation"]
+
+        else:
+
+            self.gene_proba = gene_proba
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
@@ -108,22 +135,24 @@ class Altruist(PheromoneProducerAgent):
 
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
-            child_genome = [0 for i in range(len(self.gene_type))]
-            prob = 0
+
+            child_genome = [0 for i in range(len(self.gene_type))]  # adn will get filled according to parent genome and random mutations
+
             for i in range(len(child_genome)):
                 mutation = random.random()
                 if mutation < self.gene_proba:
                     child_genome[i] = (self.gene_type[i] + 1) % 2
                 else :
                     child_genome[i] = self.gene_type[i]
-                    prob +=1
-            prob = prob /len(child_genome)
-            mutation = random.random()
-            if mutation < prob:
+
+            determinist_gene = random.choice(child_genome)
+
+            if determinist_gene == 1:
                 bebe = super().reproduce_alone(Altruist,child_genome,self.gene_proba)
             else:
                 bebe = super().reproduce_alone(Profiteer,child_genome,self.gene_proba)
-            super().add_to_energy(-super().cost_of_reproduction)
+
+            super().add_to_energy(-super().cost_of_reproduction)  # cost of reproduction
             return [agent_states[0], bebe]
 
         return agent_states

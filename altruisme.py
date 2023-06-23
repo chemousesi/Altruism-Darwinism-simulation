@@ -38,7 +38,7 @@ def main():
     ## places initial agents
         
     for x in range(i1):
-        universe.add_agent(Basic(screen))   
+        universe.add_agent(Basic(screen))
     for x in range(i2):
         universe.add_agent(Altruist(screen))
     for x in range(i3):
@@ -90,6 +90,10 @@ def main():
 
                         draw = not(draw)
 
+                    elif string == "h":
+
+                        universe.show_genes()
+
                     user_input = string
 
         # drawing and updating universe
@@ -104,7 +108,7 @@ def main():
             pygame.display.update()
 
 
-            clock.tick(600)
+            clock.tick(60)
 
     return
 

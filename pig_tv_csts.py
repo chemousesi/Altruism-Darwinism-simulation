@@ -30,7 +30,7 @@ def wait():
 
                 click = 1
 
-            elif (event.type == KEYDOWN):
+            elif (event.type == pygame.KEYDOWN):
 
                 click = 1
 
