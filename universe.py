@@ -155,7 +155,7 @@ class Universe:
                 screen.fill(GREY)
 
             #univers.updateMovement()
-            self.update(draw, clicked, user_input, time)
+            self.update(draw, clicked, user_input, time, initialisation=True)
             if draw:
 
                 pygame.display.update()
@@ -234,7 +234,7 @@ class Universe:
 
             pan.draw()
 
-    def update(self, draw, mouse_clicked, user_input,time):
+    def update(self, draw, mouse_clicked, user_input,time, initialisation=False):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
 
@@ -248,7 +248,6 @@ class Universe:
 
         # agent update
         for agent in self.agents:
-            #print(len(self.agents))
 
             pheromones = self.pheromones
             foods  = self.foods
@@ -271,7 +270,9 @@ class Universe:
             elif agent_return != None:
                 self.add_agent(agent_return)
 
-        Universe.make_graph(self)
+        if not initialisation:
+
+            Universe.make_graph(self)
 
         if draw:
 
@@ -321,6 +322,7 @@ class Universe:
             self.list_of_average_altruist_genome[-1]=self.list_of_average_altruist_genome[-1]/self.list_of_altruists[-1]
         if self.list_of_cheaters[-1] >0:
             self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
+
         if len(self.list_of_altruists)%1000 == 0:
             print(self.list_of_average_altruist_genome[-1])
             print(self.list_of_average_cheater_genome[-1])
@@ -343,7 +345,7 @@ class Universe:
         plt.plot(X, Ye, "p", label="prob_mutation_profiteer")
         plt.legend(loc='best')
         plt.show()
-        wait()
+
         return
 
 

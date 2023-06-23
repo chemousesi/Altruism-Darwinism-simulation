@@ -19,26 +19,30 @@ def main():
     i3 = universe.number_of_initial_profiteer_agents
     number_of_spots = json_data["number_of_spots"]
 
+
+    #universe.add_button(Button, screen, "proba mutation")
+
+    # graphics
+    universe.set_profiteer_panel(Profiteer, screen)
+
+    universe.set_altruist_panel(Altruist, screen)
+
+    universe.set_basic_panel(Basic, screen)
+
+    # food initialisation
     if number_of_spots > 0:
         universe.add_food_source(Food, screen, number_of_spots)
     else :
         universe.initialize_food_with_mouse(screen)
 
-
+    ## places initial agents
+        
     for x in range(i1):
         universe.add_agent(Basic(screen))   
     for x in range(i2):
         universe.add_agent(Altruist(screen))
     for x in range(i3):
         universe.add_agent(Profiteer(screen))
-
-    #universe.add_button(Button, screen, "proba mutation")
-
-    universe.set_profiteer_panel(Profiteer, screen)
-
-    universe.set_altruist_panel(Altruist, screen)
-
-    universe.set_basic_panel(Basic, screen)
 
     #universe.add_food_source(Food, screen, number_of_spots)
 
@@ -75,14 +79,16 @@ def main():
             elif event.type == pygame.KEYDOWN:
 
                 string = event.unicode
-                    
-
 
                 if string != "":
 
                     if string == "g":
 
                         universe.show_graph()
+
+                    elif string == "d":
+
+                        draw = not(draw)
 
                     user_input = string
 

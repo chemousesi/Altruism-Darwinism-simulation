@@ -93,7 +93,7 @@ class Altruist(PheromoneProducerAgent):
         self.gene_type = [1 for i in range(json_data["number_type_gene"])]
 
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=True)
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
 
 
         self.gene_proba = json_data["initial_prob_of_mutation"]
