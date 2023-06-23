@@ -6,7 +6,7 @@
     "food_value":10,
     "food_number_in_storage":250,
     "initial_ressource":12,
-    "number_of_spots":10,
+    "number_of_spots":12,
 
     "#Reproduction parameters :" :0,
 

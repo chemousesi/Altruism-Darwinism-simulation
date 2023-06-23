@@ -35,6 +35,8 @@ class Universe:
 
         self.foods = []
 
+        self.tigres = []
+
         # graphic interface
 
         self.screen = screen
@@ -269,6 +271,23 @@ class Universe:
             # baby
             elif agent_return != None:
                 self.add_agent(agent_return)
+
+        # tigres
+        for tigre in self.tigres:
+
+            dead_agent, state = tigre.update(list_of_pheromones=self.pheromones, agents=self.agents, draw=draw)
+
+            if state == "dead":
+
+                self.tigres.remove(tigre)
+
+            if dead_agent in self.agents:
+
+                self.agents.remove(dead_agent)
+
+                
+
+        ##
 
         if not initialisation:
 

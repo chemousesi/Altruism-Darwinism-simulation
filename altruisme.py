@@ -8,6 +8,7 @@ from button import Button
 from agent import Agent
 from food_spot import Food
 from agent_types import Basic, Profiteer, Altruist
+from tigre import Tigre
 
 
 
@@ -73,6 +74,8 @@ def main():
             elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
                 clicked = True
+
+                universe.tigres.append(Tigre(screen, Arr(pygame.mouse.get_pos())))
                 # ici il faut gérer le food spawn
                 #universe.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
 
