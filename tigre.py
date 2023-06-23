@@ -71,6 +71,10 @@ class Tigre(PheromoneSmellerAgent):
 
         agent_state = agent_state = super().update_energy(draw)  # super().update(list_of_foods, list_of_pheromones, draw=True )
 
+        if draw:
+
+            self.draw()
+
         if agent_state == "dead":
 
             return [None, agent_state]
@@ -92,5 +96,7 @@ class Tigre(PheromoneSmellerAgent):
 
         return [dead_agent, None]
 
+    def draw(self):
 
+        pygame.draw.circle(self.screen, ORANGE, self.pos.with_fun_applied(int), self.max_distance, 2)
 
