@@ -101,17 +101,18 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-    def reproduce_alone(self,type,genome,gene):
+    def reproduce_alone(self,type,genome,gene_prob):
         child = type(self.screen)
         child.pos = self.pos
         child.gene_type = genome
-        change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000
-        if change < 0:
-            child.gene_proba = 0
-        elif change > 1:
-            child.gene_proba = 1
-        else :
-            child.gene_proba = change
+        child.gene_proba = gene_prob
+        # change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000
+        # if change < 0:
+        #     child.gene_proba = 0
+        # elif change > 1:
+        #     child.gene_proba = 1
+        # else :
+        #     child.gene_proba = change
         return child
 
     def eat(self, list_of_foods):
