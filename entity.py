@@ -56,7 +56,9 @@ class CircleEntity(Entity):
             self.radius = 10
 
     def draw(self):
-        
-        pygame.draw.circle(self.screen, self.color, self.pos.with_fun_applied(int), self.radius)
+
+        n_col = self.color.copy()
+        n_col.append(200)
+        pygame.draw.circle(self.screen, n_col, self.pos.with_fun_applied(int), self.radius)
 
     

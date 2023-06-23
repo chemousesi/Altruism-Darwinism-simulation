@@ -8,7 +8,6 @@ from entity import Entity, CircleEntity
 
 class Agent(CircleEntity):
 
-    #dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
     cost_of_reproduction = json_data["cost_of_reproduction"]
 

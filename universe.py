@@ -1,7 +1,6 @@
 from pig_tv_csts import *
 from utils import *
-from pig_tv import wait
-
+from pig_tv import wait, clock
 import button
 import agent
 import pheromone
@@ -10,6 +9,7 @@ from panel import Panel
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from food_spot import Food
 
 class Universe:
 
@@ -110,6 +110,59 @@ class Universe:
             n_food = object_(Arr(get_random_point_in_screen()), screen)
 
             self.foods.append(n_food)
+
+    def add_food_source_with_mouse(self, object_, mousepos, screen):
+
+        n_food = object_(Arr(mousepos), screen)
+        self.foods.append(n_food)
+
+
+    def initialize_food_with_mouse(self, screen):
+        
+        time = 0
+        draw = True
+        run = True
+        while run:
+
+            time += 1
+
+            clicked = False
+
+            user_input = None
+
+            # user events
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+
+                    run = False
+
+                elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
+
+                    clicked = True
+                    # ici il faut gérer le food spawn
+                    self.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
+
+                elif event.type == pygame.KEYDOWN:
+                        
+                    if event.key == pygame.K_RETURN:
+                        return 
+
+            # drawing and updating universe
+
+            if draw:
+                screen.fill(GREY)
+
+            #univers.updateMovement()
+            self.update(draw, clicked, user_input, time)
+            if draw:
+
+                pygame.display.update()
+                clock.tick(60)
+
+        return
+
 
     def add_pheromone(self, pos, type_pheromone, life_span):
 

@@ -1,3 +1,4 @@
 [] finir la fonction update
 [x] positionner les agents aléatoirement sur la carte 
-[] pheromone par altruiste 
+[x] pheromone par altruiste
+[] faire une fenêtre au lancement du jeu pour mettre les infos utils
