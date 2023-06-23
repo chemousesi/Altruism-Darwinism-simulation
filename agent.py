@@ -62,7 +62,11 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
+
+        self.proba_of_gene_proba_change_max = json_data["proba_of_gene_proba_change_max"]
+
         self.draw_energy = draw_energy
+
 
 
     def get_color():
@@ -96,9 +100,18 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-    def reproduce_alone(self,type):
+    def reproduce_alone(self,type,genome,gene_prob):
         child = type(self.screen)
         child.pos = self.pos
+        child.gene_type = genome
+        child.gene_proba = gene_prob
+        # change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000
+        # if change < 0:
+        #     child.gene_proba = 0
+        # elif change > 1:
+        #     child.gene_proba = 1
+        # else :
+        #     child.gene_proba = change
         return child
 
     def eat(self, list_of_foods):
@@ -157,7 +170,7 @@ class Agent(CircleEntity):
         return
 
     def find_closest_pheromone(self, list_of_pheromones):
-        # this class is for the the basic agents that don't sens pheormones
+        # this class is for the the basic agents that don't sense pheormones
         return None
 
     def draw(self):

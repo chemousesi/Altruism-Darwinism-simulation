@@ -2,29 +2,32 @@
 
     "food_width":20,
     "food_height":20,
-    "food_regeneration_time":200,
+    "food_regeneration_time":300,
     "food_value":10,
-    "food_number_in_storage":150,
-    "initial_ressource":10,
+    "food_number_in_storage":250,
+    "initial_ressource":12,
     "number_of_spots":0,
 
     "#Reproduction parameters :" :0,
 
-    "cost_of_reproduction":200,
-    "required_energy_to_reproduce": 501,
+    "cost_of_reproduction":250,
+    "required_energy_to_reproduce": 550,
     "prob_of_mutation":0.15,
+    "number_type_gene":10,
+    "initial_prob_of_mutation":0.15,
+    "proba_of_gene_proba_change_max":5,
 
     "#Agent parameters :":0,
 
-    "agent_initial_energy":200,
-    "agent_speed_norm":2,
+    "agent_initial_energy":400,
+    "agent_speed_norm":1,
     "agent_radius":10,
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":0,
-    "number_of_altruist_agents":10,
-    "number_of_profiteer_agents":0,
+    "number_of_basic_agents":10,
+    "number_of_altruist_agents":30,
+    "number_of_profiteer_agents":10,
 
 
     "#Button parametrs : ":0,
@@ -34,9 +37,9 @@
     
     "#Pheromone parameters :":0,
 
-    "cost_of_pheromone_ratio":0.3,
-    "type1_pheromone_radius":50,
-    "type2_pheromone_radius":100,
+    "cost_of_pheromone_ratio":0.1,
+    "type1_pheromone_radius":25,
+    "type2_pheromone_radius":120,
     "pheromone_energy_cost":20,
     "pheromone_life_span":1
 
