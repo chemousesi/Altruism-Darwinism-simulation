@@ -226,15 +226,15 @@ class Universe:
 
     def update_list_basics(self, val):
         self.list_of_basics[-1] += val
-        self.basic_panel.string = str(self.list_of_basics[-1])
+        
 
     def update_list_profiteers(self, val):
         self.list_of_cheaters[-1] += val
-        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+        
 
     def update_list_altruists(self, val):
         self.list_of_altruists[-1] += val
-        self.altruist_panel.string = str(self.list_of_altruists[-1])
+        
 
     def make_graph(self):
         self.list_of_altruists.append(0)
@@ -249,6 +249,10 @@ class Universe:
                 self.list_of_altruists[-1] +=1
             elif agent.type_agent_int == 2:
                 self.list_of_cheaters[-1] += 1
+
+        self.altruist_panel.string = str(self.list_of_altruists[-1])
+        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+        self.basic_panel.string = str(self.list_of_basics[-1])
 
         for agent in self.agents:
             if agent.type_agent_int == 1:
