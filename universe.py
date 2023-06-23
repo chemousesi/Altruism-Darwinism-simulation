@@ -347,9 +347,6 @@ class Universe:
 
     def show_genes(self):
 
-
-
-
         altruists_genes = []
 
         profiteers_genes = []
