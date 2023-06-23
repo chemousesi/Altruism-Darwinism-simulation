@@ -7,9 +7,9 @@ from pheromone_producer_agent import PheromoneProducerAgent
 
 class Profiteer(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED)
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED, draw_energy=draw_energy)
 
         prob_of_mutation = json_data["prob_of_mutation"]  # if under, is an altruist, else profiteer
 
@@ -58,9 +58,9 @@ class Profiteer(PheromoneSmellerAgent):
 
 class Basic(PheromoneSmellerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
 
-        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE)
+        PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE, draw_energy=draw_energy)
 
     def update(self, list_of_foods, list_of_pheromones, draw=True ):
 
@@ -103,9 +103,9 @@ class Basic(PheromoneSmellerAgent):
 
 class Altruist(PheromoneProducerAgent):
 
-    def __init__(self, screen, pos=None):
+    def __init__(self, screen, pos=None, draw_energy=True):
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN)  #
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)  #
 
         prob_of_mutation = json_data["prob_of_mutation"]
 
