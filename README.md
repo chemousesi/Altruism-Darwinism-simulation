@@ -1,5 +1,8 @@
+# Gr19-1
 # Altruism-Darwinism-simulation
 A simulation software of altruism and darwinism written in python with pygame library
+
+- For an updated software please check this github [link](https://github.com/chemousesi/Altruism-Darwinism-simulation)\
 
 
 - To run the simulation, you need to run the file : `altruisme.py`.
@@ -13,20 +16,8 @@ A simulation software of altruism and darwinism written in python with pygame li
 the parameters of the simulation can be changed in the file parameters.json
 
 it is possible to see the evolution of the different populations by pressing the key "g" during the simulation
-# Gr19-1
 
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
 
 ```
 cd existing_repo
@@ -37,76 +28,85 @@ git push -uf origin main
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.telecom-paris.fr/PAF/2223/gr19-1/-/settings/integrations)
+- [x] [Set up project integrations](https://gitlab.telecom-paris.fr/PAF/2223/gr19-1/-/settings/integrations)
 
-## Collaborate with your team
+## The team
+- Chems-eddine Benaziza
+- Romain David
+- Yanis Aît El Kadi
+- Joseph Maillard
+- Achraf Jarrar
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
 
 ## Test and Deploy
 
 Use the built-in continuous integration in GitLab.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- you need python installed to deploy this, using pygame library
+- a makefile will be available soon
 
 ***
 
-# Editing this README
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+
+This project aims to study whether altruistic behaviour is viable from a Darwinian evolution
+
+perspective. The modelled world features a number of food sources, placed randomly, with predefined quantities and sizes of occupied surfaces. When a food source is depleted (i.e. eaten) it reappears in a
+
+different location (randomly picked). A set of agents (organisms) can move through the world (e.g. random walks or levy walks). If food is on the patch they are on, they can eat it, thus increasing their energy. When an agent reaches a certain level of energy, it replicates. When its energy becomes too low, it dies-off.
+
+There are three species of agents: 1. Basic agents: search for food by walking around; 2. Altruistic agents: signal food presence upon finding it, via a chemical diffused in the environment; and, are able to walk up the gradient of the chemical produced by another agent to find food faster. The agents consume energy to produce the signalling chemical; 3. Profiteer agents: can walk up the gradient of the chemical produced by another agent to find food faster; but do not produce the chemical when finding food themselves, thus saving energy.
+
+An agent of either Altruistic or Profiteer type will produce an offspring of either the same type (with probability p) or of the opposite type (with probability 1-p). This probability p mutates slightly at each generation.
+
+Starting with different mixes of populations and various configuration settings, analyse whether the altruists can survive or are always wiped out by the profiteers.
+
 
 ## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+- UI made using pygame
+- picture of the final result here
+
+
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+nothing to install except python and pygame : 
+`pip install pygame`
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
+lanch `altruisme.py`
+- to put you parameters you have to edit the file `parameteres.json`
+- To display a graph type 'g'
+- To dislpay genoms type 'h'
+  Note : If the number of food spots in 'parameters.json' then you can use the mouse to put the food spots   
 ## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+[] This first release modelizes the movement of agents in a nature. 
+[] modelize three types of agents
+[] modelize the ag 
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+We a team of five at telecom paris !
+Thanks to all teachers who helped us work :
+
+- Chems-eddine Benaziza
+- Romain David
+- Yanis Aît El Kadi
+- Joseph Maillard
+- Achraf Jarrar
+
+Big thanks to the teachers who supervised us:
+- Ada Diaconescu
+- Jean-Louis Dessales
 
 ## License
-For open source projects, say how it is licensed.
-
+Open source code, but please cite us
 ## Project status
-<<<<<<< HEAD
 
-
-=======
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
->>>>>>> 1e31fabc915cb4397c5685feaa30e9857357cc33
+This is a [télécom paris](https://www.telecom-paris.fr/) end of the year school project, e are not sure of 
+but if you have any suggesting ideas you can contact us mainters or drop an email at : 
+chems.benaziza [at] gmail.com

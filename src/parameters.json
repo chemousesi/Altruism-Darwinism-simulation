@@ -26,7 +26,7 @@
     "Initial_parameters_for_agents" :0,
 
     "number_of_basic_agents":10,
-    "number_of_altruist_agents":3,
+    "number_of_altruist_agents":10,
     "number_of_profiteer_agents":0,
 
 
