@@ -44,6 +44,7 @@ class Tigre(PheromoneSmellerAgent):
             self.target_agent = agent
 
     def update_vect(self, list_of_pheromones):
+        #tiger movement function
 
         pheromone = self.find_closest_pheromone(list_of_pheromones)
 
@@ -64,12 +65,13 @@ class Tigre(PheromoneSmellerAgent):
             super().random_walk()
 
     def update(self, list_of_pheromones, agents, draw=True):
+        #function updates the global state of the tiger
 
         if self.target_agent != None:
 
             self.target_distance = distance(self, self.target_agent)
 
-        agent_state = agent_state = super().update_energy(draw)  # super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_state = super().update_energy(draw)  # super().update(list_of_foods, list_of_pheromones, draw=True )
 
         if draw:
 
