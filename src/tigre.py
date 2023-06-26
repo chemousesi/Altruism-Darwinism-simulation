@@ -46,6 +46,10 @@ class Tigre(PheromoneSmellerAgent):
     def update_vect(self, list_of_pheromones):
         #tiger movement function
 
+        if self.energy >= 1000:
+            # faire un mode sommeil :
+            return 
+
         pheromone = self.find_closest_pheromone(list_of_pheromones)
 
         if pheromone != None:
