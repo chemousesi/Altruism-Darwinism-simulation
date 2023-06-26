@@ -154,7 +154,7 @@ cython_debug/
 
 #our files
 pigtv_constants
-
+parameters.json
 
 
 # PyCharm
