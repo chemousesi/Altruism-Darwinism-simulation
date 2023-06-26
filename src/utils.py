@@ -11,3 +11,4 @@ class TypeAgent(Enum):
     BASIC = 0
     ALTRUIST = 1
     PROFITEER = 2
+    TIGRE = 3

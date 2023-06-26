@@ -8,7 +8,6 @@ from entity import Entity, CircleEntity
 
 class Agent(CircleEntity):
 
-    #dico_color = {TypeAgent.ALTRUIST:GREEN, TypeAgent.PROFITEER:RED, TypeAgent.BASIC:BLUE}
 
     cost_of_reproduction = json_data["cost_of_reproduction"]
 
@@ -63,12 +62,9 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
-
         self.proba_of_gene_proba_change_max = json_data["proba_of_gene_proba_change_max"]
 
         self.draw_energy = draw_energy
-
-
 
     def get_color():
         return self.color
@@ -101,11 +97,12 @@ class Agent(CircleEntity):
 
         Agent.add_to_energy(self, -loss_function(age))
 
-    def reproduce_alone(self,type,genome,gene_prob):
-        child = type(self.screen)
-        child.pos = self.pos
-        child.gene_type = genome
-        child.gene_proba = gene_prob
+    def reproduce_alone(self,object_type,genome,gene_prob):
+        child = object_type(self.screen, self.pos, gene_type=genome, gene_proba=gene_prob)
+
+        #child.gene_type = 
+        #child.gene_proba = gene_prob
+
         # change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000
         # if change < 0:
         #     child.gene_proba = 0
@@ -113,6 +110,7 @@ class Agent(CircleEntity):
         #     child.gene_proba = 1
         # else :
         #     child.gene_proba = change
+
         return child
 
     def eat(self, list_of_foods):

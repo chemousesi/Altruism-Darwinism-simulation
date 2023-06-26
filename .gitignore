@@ -153,8 +153,10 @@ dmypy.json
 cython_debug/
 
 #our files
-pigtv_constants
-parameters.json
+
+pigtv_constants.py
+
+
 
 
 # PyCharm

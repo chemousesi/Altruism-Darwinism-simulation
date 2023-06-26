@@ -1,7 +1,6 @@
 from pig_tv_csts import *
 from utils import *
-from pig_tv import wait
-
+from pig_tv import wait, clock
 import button
 import agent
 import pheromone
@@ -10,6 +9,7 @@ from panel import Panel
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from food_spot import Food
 
 class Universe:
 
@@ -34,6 +34,8 @@ class Universe:
         self.pheromones = []
 
         self.foods = []
+
+        self.tigres = []
 
         # graphic interface
 
@@ -111,6 +113,59 @@ class Universe:
 
             self.foods.append(n_food)
 
+    def add_food_source_with_mouse(self, object_, mousepos, screen):
+
+        n_food = object_(Arr(mousepos), screen)
+        self.foods.append(n_food)
+
+
+    def initialize_food_with_mouse(self, screen):
+        
+        time = 0
+        draw = True
+        run = True
+        while run:
+
+            time += 1
+
+            clicked = False
+
+            user_input = None
+
+            # user events
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+
+                    run = False
+
+                elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
+
+                    clicked = True
+                    # ici il faut gérer le food spawn
+                    self.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
+
+                elif event.type == pygame.KEYDOWN:
+                        
+                    if event.key == pygame.K_RETURN:
+                        return 
+
+            # drawing and updating universe
+
+            if draw:
+                screen.fill(GREY)
+
+            #univers.updateMovement()
+            self.update(draw, clicked, user_input, time, initialisation=True)
+            if draw:
+
+                pygame.display.update()
+                clock.tick(60)
+
+        return
+
+
     def add_pheromone(self, pos, type_pheromone, life_span):
 
         n_pheromone = pheromone.Pheromone(pos, self.screen, type_pheromone, life_span)
@@ -181,7 +236,7 @@ class Universe:
 
             pan.draw()
 
-    def update(self, draw, mouse_clicked, user_input,time):
+    def update(self, draw, mouse_clicked, user_input,time, initialisation=False):
 
         Universe.update_buttons(self, draw, mouse_clicked, user_input)
 
@@ -195,7 +250,6 @@ class Universe:
 
         # agent update
         for agent in self.agents:
-            #print(len(self.agents))
 
             pheromones = self.pheromones
             foods  = self.foods
@@ -218,7 +272,26 @@ class Universe:
             elif agent_return != None:
                 self.add_agent(agent_return)
 
-        Universe.make_graph(self)
+        # tigres
+        for tigre in self.tigres:
+
+            dead_agent, state = tigre.update(list_of_pheromones=self.pheromones, agents=self.agents, draw=draw)
+
+            if state == "dead":
+
+                self.tigres.remove(tigre)
+
+            if dead_agent in self.agents:
+
+                self.agents.remove(dead_agent)
+
+                
+
+        ##
+
+        if not initialisation:
+
+            Universe.make_graph(self)
 
         if draw:
 
@@ -226,15 +299,15 @@ class Universe:
 
     def update_list_basics(self, val):
         self.list_of_basics[-1] += val
-        self.basic_panel.string = str(self.list_of_basics[-1])
+        
 
     def update_list_profiteers(self, val):
         self.list_of_cheaters[-1] += val
-        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+        
 
     def update_list_altruists(self, val):
         self.list_of_altruists[-1] += val
-        self.altruist_panel.string = str(self.list_of_altruists[-1])
+        
 
     def make_graph(self):
         self.list_of_altruists.append(0)
@@ -250,6 +323,10 @@ class Universe:
             elif agent.type_agent_int == 2:
                 self.list_of_cheaters[-1] += 1
 
+        self.altruist_panel.string = str(self.list_of_altruists[-1])
+        self.profiteer_panel.string = str(self.list_of_cheaters[-1])
+        self.basic_panel.string = str(self.list_of_basics[-1])
+
         for agent in self.agents:
             if agent.type_agent_int == 1:
                 for elt in agent.gene_type:
@@ -264,12 +341,10 @@ class Universe:
             self.list_of_average_altruist_genome[-1]=self.list_of_average_altruist_genome[-1]/self.list_of_altruists[-1]
         if self.list_of_cheaters[-1] >0:
             self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
+
         if len(self.list_of_altruists)%1000 == 0:
             print(self.list_of_average_altruist_genome[-1])
             print(self.list_of_average_cheater_genome[-1])
-
-
-
 
 
     def show_graph(self):
@@ -286,8 +361,48 @@ class Universe:
         plt.plot(X, Ye, "p", label="prob_mutation_profiteer")
         plt.legend(loc='best')
         plt.show()
-        wait()
+
         return
+
+    def show_genes(self):
+
+        altruists_genes = []
+
+        profiteers_genes = []
+
+        indexs = []
+
+        for agent in self.agents:
+
+            genes = agent.gene_type
+
+            if genes[0] != -1:
+
+                altruists_genes.append(sum(genes))
+
+                profiteers_genes.append(len(genes)-sum(genes))
+
+                indexs.append(agent.type_agent_int-1)
+
+        x = range(len(altruists_genes)) # position en abscisse des barres
+
+        # tracing diagram
+        largeur_barre = 0.8
+
+        plt.bar(x, altruists_genes, width = largeur_barre, color = "#00FF00")
+
+        plt.bar(x, profiteers_genes, width = largeur_barre, bottom = altruists_genes, color = "#FF0000")
+
+        plt.xticks(range(len(altruists_genes)), [(["a", "p"])[indexs[i]] for i in range(len(indexs))])
+
+        plt.show()
+
+
+
+
+
+
+
 
 
 

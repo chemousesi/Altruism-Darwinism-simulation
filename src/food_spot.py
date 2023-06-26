@@ -59,7 +59,8 @@ class Food(Entity):
         if (self.available_food == False):
 
             self.regenerate += 1
-            if (self.regenerate == 100):
+            if (self.regenerate == 200):
+                # j'ai mis 200 cycles pour éviter l'effet de boucler sur la même nouriture
                 self.regenerate = 0
                 self.ressource = json_data["food_number_in_storage"]*self.food_value
                 self.available_food = True
