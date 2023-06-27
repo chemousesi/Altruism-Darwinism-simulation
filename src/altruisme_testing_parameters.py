@@ -150,15 +150,15 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
 
 
                 # drawing and updating universe
-                if draw:
-                    screen.fill(GREY)
+                #if draw:
+                 #   screen.fill(GREY)
 
                 #univers.updateMovement()
                 universe.update(draw, clicked, user_input, time)
 
                 if draw:
 
-                    pygame.display.update()
+                    #pygame.display.update()
 
 
                     clock.tick(60)
@@ -186,15 +186,15 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
         list_average_number_of_cheaters.append(avrg)
 
         value += step
-    plt.plot(list_value_parameter,list_average_number_of_altruists,"r",label="average number of altruists")
-    plt.plot(list_value_parameter,list_average_number_of_cheaters,"g",label="average number of cheaters")
+    plt.plot(list_value_parameter,list_average_number_of_altruists,"g",label="average number of altruists")
+    plt.plot(list_value_parameter,list_average_number_of_cheaters,"r",label="average number of cheaters")
     plt.plot(list_value_parameter,list_average_number_of_basics,"b",label="average number of basics")
-    plt.scatter(list_value_parameter,list_max_altruists,c="red")
+    plt.scatter(list_value_parameter,list_max_altruists,c="green")
     plt.scatter(list_value_parameter,list_max_basics,c="blue")
-    plt.scatter(list_value_parameter,list_max_cheaters,c="green")
-    plt.scatter(list_value_parameter,list_min_altruists,c="red")
+    plt.scatter(list_value_parameter,list_max_cheaters,c="red")
+    plt.scatter(list_value_parameter,list_min_altruists,c="green")
     plt.scatter(list_value_parameter,list_min_basics,c="blue")
-    plt.scatter(list_value_parameter,list_min_cheaters,c="green")
+    plt.scatter(list_value_parameter,list_min_cheaters,c="red")
     plt.legend(loc='best')
     plt.show()
     return
