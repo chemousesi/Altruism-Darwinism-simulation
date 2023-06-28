@@ -4,6 +4,9 @@ from pig_tv import wait, clock
 import button
 import agent
 import pheromone
+from importlib import reload
+import json_loader as json_loader
+
 
 from panel import Panel
 
@@ -20,11 +23,12 @@ class Universe:
     '''
 
     def __init__(self, screen):
+        reload(json_loader)
 
         # universe objects
-        self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
-        self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
-        self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
+        self.number_of_initial_basic_agents = json_loader.json_data["number_of_basic_agents"]
+        self.number_of_initial_altruist_agents =json_loader.json_data["number_of_altruist_agents"]
+        self.number_of_initial_profiteer_agents =json_loader.json_data["number_of_profiteer_agents"]
 
         # respectively basic , altruist , profiteer agents
         self.number_of_agents_list = [0,0,0]
@@ -113,7 +117,7 @@ class Universe:
 
     def add_food_source(self, object_, screen, nb):
 
-        for i in range(nb):
+        for i in range(int(nb)):
 
             n_food = object_(Arr(get_random_point_in_screen()), screen)
 
@@ -350,9 +354,7 @@ class Universe:
         if self.list_of_cheaters[-1] >0:
             self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
 
-        if len(self.list_of_altruists)%1000 == 0:
-            print(self.list_of_average_altruist_genome[-1])
-            print(self.list_of_average_cheater_genome[-1])
+
 
 
     def show_graph(self):

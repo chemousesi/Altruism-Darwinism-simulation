@@ -13,14 +13,11 @@ from agent import Agent
 from food_spot import Food
 from agent_types import Basic, Profiteer, Altruist
 from tigre import Tigre
+import json_loader as json_loader
+from importlib import reload
 
 
-
-def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step, number_of_times = 5): #parameter_to_test is a string which has the name of the parameter in the json file
-    path = os.getcwd()
-    original = path+"\\parameters.json"
-    target = path+"\\parameters_testing.json"
-    shutil.copyfile(original, target)
+def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step, number_of_times = 3): #parameter_to_test is a string which has the name of the parameter in the json file
 
     list_value_parameter = []
     list_average_number_of_altruists = []
@@ -53,14 +50,16 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
         liste_alt=[]
         liste_prof=[]
         liste_bas=[]
-        for i in range(number_of_times):
+        value += step
+        reload(json_loader)
+        for i in range(int(number_of_times)):
 
 
             universe = Universe(screen)
             i1 = universe.number_of_initial_basic_agents
             i2 = universe.number_of_initial_altruist_agents
             i3 = universe.number_of_initial_profiteer_agents
-            number_of_spots = json_data["number_of_spots"]
+            number_of_spots = json_loader.json_data["number_of_spots"]
 
             #universe.add_button(Button, screen, "proba mutation")
 
@@ -185,9 +184,14 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
             avrg += elt/len(liste_prof)
         list_average_number_of_cheaters.append(avrg)
 
+<<<<<<< HEAD
         value += step
     plt.plot(list_value_parameter,list_average_number_of_altruists,"g",label="average number of altruists")
     plt.plot(list_value_parameter,list_average_number_of_cheaters,"r",label="average number of cheaters")
+=======
+    plt.plot(list_value_parameter,list_average_number_of_altruists,"r",label="average number of altruists")
+    plt.plot(list_value_parameter,list_average_number_of_cheaters,"g",label="average number of cheaters")
+>>>>>>> a0238b0be209156fdd158e2eb88bf0f49e27658f
     plt.plot(list_value_parameter,list_average_number_of_basics,"b",label="average number of basics")
     plt.scatter(list_value_parameter,list_max_altruists,c="green")
     plt.scatter(list_value_parameter,list_max_basics,c="blue")
