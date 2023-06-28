@@ -1,19 +1,21 @@
 from pig_tv_csts import *
 from utils import *
-from json_loader import *
+import json_loader as json_loader
 import universe
 import button
+from importlib import reload
 from entity import Entity, CircleEntity
 
 
 class Agent(CircleEntity):
 
+    reload(json_loader)
 
-    cost_of_reproduction = json_data["cost_of_reproduction"]
+    cost_of_reproduction = json_loader.json_data["cost_of_reproduction"]
 
-    required_energy_to_reproduce = json_data["required_energy_to_reproduce"]
+    required_energy_to_reproduce = json_loader.json_data["required_energy_to_reproduce"]
 
-    prob_of_mutation = json_data["prob_of_mutation"]
+    prob_of_mutation = json_loader.json_data["prob_of_mutation"]
 
     def __init__(self, screen, pos=None, type_agent : TypeAgent =None, radius=None, energy=None, color=None, draw_energy=True):
 
@@ -39,12 +41,12 @@ class Agent(CircleEntity):
         if energy != None:
             self.energy = energy
         else:
-            self.energy = json_data["agent_initial_energy"]
+            self.energy = json_loader.json_data["agent_initial_energy"]
         ##
 
         self.vector = Arr([10, 0])  # Arr.get_nul([2])
 
-        self.speed_norm = json_data["agent_speed_norm"]
+        self.speed_norm = json_loader.json_data["agent_speed_norm"]
 
         self.delta_t = random.random()
 
@@ -62,7 +64,7 @@ class Agent(CircleEntity):
 
         self.new_born = True
 
-        self.proba_of_gene_proba_change_max = json_data["proba_of_gene_proba_change_max"]
+        self.proba_of_gene_proba_change_max = json_loader.json_data["proba_of_gene_proba_change_max"]
 
         self.draw_energy = draw_energy
 

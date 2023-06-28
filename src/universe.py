@@ -4,7 +4,9 @@ from pig_tv import wait, clock
 import button
 import agent
 import pheromone
-from json_loader import *
+from importlib import reload
+import json_loader as json_loader
+
 
 from panel import Panel
 
@@ -21,11 +23,12 @@ class Universe:
     '''
 
     def __init__(self, screen):
+        reload(json_loader)
 
         # universe objects
-        self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
-        self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
-        self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
+        self.number_of_initial_basic_agents = json_loader.json_data["number_of_basic_agents"]
+        self.number_of_initial_altruist_agents =json_loader.json_data["number_of_altruist_agents"]
+        self.number_of_initial_profiteer_agents =json_loader.json_data["number_of_profiteer_agents"]
 
         # respectively basic , altruist , profiteer agents
         self.number_of_agents_list = [0,0,0]
