@@ -6,7 +6,7 @@ from entity import Entity, CircleEntity
 
 class Pheromone(CircleEntity):
 
-    def __init__(self, pos, screen, type_pheromone, life_span):
+    def __init__(self, pos, screen, type_pheromone, life_span, producer_ID):
 
         self.type_pheromone = type_pheromone
 
@@ -21,8 +21,16 @@ class Pheromone(CircleEntity):
             radius = json_data["type2_pheromone_radius"]
 
             color = PURPLE
+        
+        elif self.type_pheromone == 3:
+
+            radius = json_data["type3_pheromone_radius"]
+
+            color = BLUE
 
         self.life_span = life_span
+
+        self.producer_ID = producer_ID
 
         CircleEntity.__init__(self, screen, pos, color, radius)
 
@@ -38,4 +46,7 @@ class Pheromone(CircleEntity):
         if draw:
 
             Pheromone.draw(self)
+
+    def get_producer_ID(self):
+        return self.producer_ID
 

@@ -25,8 +25,9 @@ class PheromoneSmellerAgent(Agent):
 
                     dist = distance(ph,self)
                     if dist <= ph.radius and dist <= min_dist:
-                        min_dist = dist
-                        min_ph = ph
+                        if (self.type_agent == TypeAgent.ALTRUIST) and (self.ID != ph.get_producer_ID()):
+                            min_dist = dist
+                            min_ph = ph
 
             if min_ph != None and min_ph.radius > min_dist:
 

@@ -66,7 +66,7 @@ class Agent(CircleEntity):
 
         self.draw_energy = draw_energy
 
-    def get_color():
+    def get_color(self):
         return self.color
 
     def get_energy(self):
@@ -76,6 +76,10 @@ class Agent(CircleEntity):
     def get_vector(self):
 
         return self.vector
+    
+    def get_TypeAgent(self):
+
+        return TypeAgent
 
     def get_y(self):
 

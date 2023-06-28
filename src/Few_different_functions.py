@@ -73,7 +73,7 @@ class Pheromone:
     def __init__(self,x,y):
 
         self.age = 0
-        sel.pos = (self.x,self.y)
+        self.pos = (self.x,self.y)
         self.x = x
         self.y = y
 

@@ -107,7 +107,7 @@ class Altruist(PheromoneProducerAgent):
 
     def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
 
-        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
+        PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2, 3], type_agent=TypeAgent.ALTRUIST, produced_pheromones=[2,3], color=GREEN, draw_energy=draw_energy)
 
         if gene_type == None:
 

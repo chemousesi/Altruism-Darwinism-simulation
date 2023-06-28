@@ -31,6 +31,8 @@ class Universe:
 
         self.agents = []
 
+        #self.altruist_number = self.number_of_initial_altruist_agents       #Count every altruist in the simulation (dead or alive) to associate them a unique ID
+
         self.pheromones = []
 
         self.foods = []
@@ -80,6 +82,11 @@ class Universe:
 
         self.agents.append(agent)
         agent.update_number(self.number_of_agents_list)
+        if (agent.get_TypeAgent() == TypeAgent.ALTRUIST):
+            self.altruist_number += 1
+    
+    #def get_altruist_number(self):
+    #    return self.altruist_number
 
 
     def add_button(self, object_, screen, string):
@@ -172,9 +179,9 @@ class Universe:
         return
 
 
-    def add_pheromone(self, pos, type_pheromone, life_span):
+    def add_pheromone(self, pos, type_pheromone, life_span, producer_ID):
 
-        n_pheromone = pheromone.Pheromone(pos, self.screen, type_pheromone, life_span)
+        n_pheromone = pheromone.Pheromone(pos, self.screen, type_pheromone, life_span, producer_ID)
 
         self.pheromones.append(n_pheromone)
 
@@ -226,7 +233,7 @@ class Universe:
 
             if food.available_food:
 
-                Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1)
+                Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1, producer_ID = None)
 
     def update_pheromones(self, draw):
         for pheromone in self.pheromones:
@@ -266,7 +273,7 @@ class Universe:
 
             pheromone_return, agent_return = agent.update(foods, pheromones, draw)
             if pheromone_return != None:
-                self.add_pheromone(pheromone_return[3],pheromone_return[1],pheromone_return[2])
+                self.add_pheromone(pheromone_return[3],pheromone_return[1],pheromone_return[2], producer_ID = pheromone_return[4])
 
             if agent_return == "dead" : # when the agent has no more energy we kill him
 
