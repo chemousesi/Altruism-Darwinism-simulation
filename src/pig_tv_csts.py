@@ -3,10 +3,6 @@ from pigtv_constants import *
 import pygame
 from math import *
 
-import json
-with open('parameters.json') as file:               # A json file with all the parameters
-    json_data = json.load(file)
-
 
 pygame.init()
 
@@ -111,7 +107,7 @@ def collide_segment_to_circle(circ_pos, circ_rad, segment):
     """
     segment is two points
 
-    first checking if circle colliding line have solutions, if yes, checks that point of line is on segment 
+    first checking if circle colliding line have solutions, if yes, checks that point of line is on segment
 
     circle_equation : (x-a)**2 + (y-b)**2 = r**2
 
@@ -819,7 +815,7 @@ def get_trigo_sole_angle(angle):
 
     return angle % (2*pi)
 
-    
+
 def polar_to_cartesian_coors(angle, radius):
 
     return [radius*cos(angle), radius*sin(angle)]
@@ -856,7 +852,7 @@ def product_sum(liste):
 
     return sum_
 
-    
+
 def get_sign(nbr):
 
     if nbr < 0:
@@ -1420,7 +1416,7 @@ class Arr:
 
             n_liste = [[self.liste[i]] for i in range(len(self.liste))]
 
-            return Arr(n_liste) 
+            return Arr(n_liste)
 
         else:
 

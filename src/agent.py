@@ -1,6 +1,6 @@
 from pig_tv_csts import *
 from utils import *
-
+from json_loader import *
 import universe
 import button
 from entity import Entity, CircleEntity
@@ -100,7 +100,7 @@ class Agent(CircleEntity):
     def reproduce_alone(self,object_type,genome,gene_prob):
         child = object_type(self.screen, self.pos, gene_type=genome, gene_proba=gene_prob)
 
-        #child.gene_type = 
+        #child.gene_type =
         #child.gene_proba = gene_prob
 
         # change = gene + random.randrange(-self.proba_of_gene_proba_change_max*100,self.proba_of_gene_proba_change_max*100,1)/10000

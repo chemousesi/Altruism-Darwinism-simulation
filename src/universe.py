@@ -4,6 +4,7 @@ from pig_tv import wait, clock
 import button
 import agent
 import pheromone
+from json_loader import *
 
 from panel import Panel
 
@@ -69,6 +70,12 @@ class Universe:
 
         self.list_of_average_cheater_genome = []
 
+        self.average_basics= 0
+
+        self.average_altruists = 0
+
+        self.average_cheaters = 0
+
 
     def add_agent(self, agent):
 
@@ -107,7 +114,7 @@ class Universe:
 
     def add_food_source(self, object_, screen, nb):
 
-        for i in range(nb):
+        for i in range(int(nb)):
 
             n_food = object_(Arr(get_random_point_in_screen()), screen)
 
@@ -120,7 +127,7 @@ class Universe:
 
 
     def initialize_food_with_mouse(self, screen):
-        
+
         time = 0
         draw = True
         run = True
@@ -147,9 +154,9 @@ class Universe:
                     self.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
 
                 elif event.type == pygame.KEYDOWN:
-                        
+
                     if event.key == pygame.K_RETURN:
-                        return 
+                        return
 
             # drawing and updating universe
 
@@ -285,7 +292,7 @@ class Universe:
 
                 self.agents.remove(dead_agent)
 
-                
+
 
         ##
 
@@ -297,17 +304,19 @@ class Universe:
 
             self.update_panels()
 
+        Universe.update_average(self)
+
     def update_list_basics(self, val):
         self.list_of_basics[-1] += val
-        
+
 
     def update_list_profiteers(self, val):
         self.list_of_cheaters[-1] += val
-        
+
 
     def update_list_altruists(self, val):
         self.list_of_altruists[-1] += val
-        
+
 
     def make_graph(self):
         self.list_of_altruists.append(0)
@@ -342,9 +351,7 @@ class Universe:
         if self.list_of_cheaters[-1] >0:
             self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
 
-        if len(self.list_of_altruists)%1000 == 0:
-            print(self.list_of_average_altruist_genome[-1])
-            print(self.list_of_average_cheater_genome[-1])
+
 
 
     def show_graph(self):
@@ -397,8 +404,19 @@ class Universe:
 
         plt.show()
 
-
-
+    def update_average(self):
+        avg = 0
+        for elt in self.list_of_basics:
+            avg += elt/len(self.list_of_basics)
+        self.average_basics = avg
+        avg = 0
+        for elt in self.list_of_altruists:
+            avg += elt/len(self.list_of_altruists)
+        self.average_altruists = avg
+        avg = 0
+        for elt in self.list_of_cheaters:
+            avg += elt/len(self.list_of_cheaters)
+        self.average_cheaters = avg
 
 
 

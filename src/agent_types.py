@@ -1,6 +1,6 @@
 from pig_tv_csts import *
 from utils import *
-
+from json_loader import *
 from pheromone_smeller_agent import PheromoneSmellerAgent
 from pheromone_producer_agent import PheromoneProducerAgent
 
