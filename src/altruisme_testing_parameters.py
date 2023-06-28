@@ -150,7 +150,7 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
 
                 # drawing and updating universe
                 #if draw:
-                 #   screen.fill(GREY)
+                 #   screen.fill(GREY)co
 
                 #univers.updateMovement()
                 universe.update(draw, clicked, user_input, time)
@@ -184,15 +184,12 @@ def main(parameter_to_test, nb_iter_to_test_for, initial_value, end_value, step,
             avrg += elt/len(liste_prof)
         list_average_number_of_cheaters.append(avrg)
 
-<<<<<<< HEAD
-        value += step
+    # plot the graphs
     plt.plot(list_value_parameter,list_average_number_of_altruists,"g",label="average number of altruists")
     plt.plot(list_value_parameter,list_average_number_of_cheaters,"r",label="average number of cheaters")
-=======
-    plt.plot(list_value_parameter,list_average_number_of_altruists,"r",label="average number of altruists")
-    plt.plot(list_value_parameter,list_average_number_of_cheaters,"g",label="average number of cheaters")
->>>>>>> a0238b0be209156fdd158e2eb88bf0f49e27658f
     plt.plot(list_value_parameter,list_average_number_of_basics,"b",label="average number of basics")
+    
+    # plot the max
     plt.scatter(list_value_parameter,list_max_altruists,c="green")
     plt.scatter(list_value_parameter,list_max_basics,c="blue")
     plt.scatter(list_value_parameter,list_max_cheaters,c="red")
