@@ -5,6 +5,9 @@ from pig_tv import wait, clock
 import button
 import agent
 import pheromone
+from importlib import reload
+import json_loader as json_loader
+
 
 from panel import Panel
 
@@ -22,11 +25,12 @@ class Universe:
     '''
 
     def __init__(self, screen):
+        reload(json_loader)
 
         # universe objects
-        self.number_of_initial_basic_agents = json_data["number_of_basic_agents"]
-        self.number_of_initial_altruist_agents =json_data["number_of_altruist_agents"]
-        self.number_of_initial_profiteer_agents =json_data["number_of_profiteer_agents"]
+        self.number_of_initial_basic_agents = json_loader.json_data["number_of_basic_agents"]
+        self.number_of_initial_altruist_agents =json_loader.json_data["number_of_altruist_agents"]
+        self.number_of_initial_profiteer_agents =json_loader.json_data["number_of_profiteer_agents"]
 
         # respectively basic , altruist , profiteer agents
         self.number_of_agents_list = [0,0,0]
@@ -73,9 +77,16 @@ class Universe:
 
         # grid
 
-        self.square_size = json_data["grid_square_size"]
+        self.square_size = json_loader.json_data["grid_square_size"]
 
         self.grid = [[Square(i, j, screen) for j in range(screen_width//self.square_size)] for i in range(screen_height//self.square_size)]
+
+        ##
+        self.average_basics= 0
+
+        self.average_altruists = 0
+
+        self.average_cheaters = 0
 
     def add_agent(self, agent):
 
@@ -130,7 +141,6 @@ class Universe:
 
         n_food = object_(Arr(mousepos), screen)
         self.foods.append(n_food)
-
 
     def initialize_food_with_mouse(self, screen, number_of_spots):
 
@@ -333,6 +343,8 @@ class Universe:
 
             self.update_panels()
 
+        Universe.update_average(self)
+
     def draw(self):
 
         for line in self.grid:
@@ -415,15 +427,15 @@ class Universe:
 
     def update_list_basics(self, val):
         self.list_of_basics[-1] += val
-        
+
 
     def update_list_profiteers(self, val):
         self.list_of_cheaters[-1] += val
-        
+
 
     def update_list_altruists(self, val):
         self.list_of_altruists[-1] += val
-        
+
 
     def make_graph(self):
         self.list_of_altruists.append(0)
@@ -458,9 +470,7 @@ class Universe:
         if self.list_of_cheaters[-1] >0:
             self.list_of_average_cheater_genome[-1]=self.list_of_average_cheater_genome[-1]/self.list_of_cheaters[-1]
 
-        if len(self.list_of_altruists)%1000 == 0:
-            print(self.list_of_average_altruist_genome[-1])
-            print(self.list_of_average_cheater_genome[-1])
+
 
 
     def show_graph(self):
@@ -513,8 +523,19 @@ class Universe:
 
         plt.show()
 
-
-
+    def update_average(self):
+        avg = 0
+        for elt in self.list_of_basics:
+            avg += elt/len(self.list_of_basics)
+        self.average_basics = avg
+        avg = 0
+        for elt in self.list_of_altruists:
+            avg += elt/len(self.list_of_altruists)
+        self.average_altruists = avg
+        avg = 0
+        for elt in self.list_of_cheaters:
+            avg += elt/len(self.list_of_cheaters)
+        self.average_cheaters = avg
 
 
 

@@ -1,5 +1,6 @@
 from pig_tv_csts import *
 from utils import *
+import json_loader as json_loader
 
 class Square:
 
@@ -9,7 +10,7 @@ class Square:
 
         self.j = j
 
-        self.size = json_data["grid_square_size"]
+        self.size = json_loader.json_data["grid_square_size"]
 
         self.x = j*self.size#(j+0.5)*self.size
 

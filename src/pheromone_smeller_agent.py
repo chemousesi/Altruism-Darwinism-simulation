@@ -1,5 +1,6 @@
 from pig_tv_csts import *
 from agent import Agent
+from json_loader import *
 from utils import *
 
 
@@ -56,7 +57,7 @@ class PheromoneSmellerAgent(Agent):
 
         else:
 
-            #smelling pheromones 
+            #smelling pheromones
 
             pheromone = self.find_closest_pheromone()  # list_of_pheromones)
 
@@ -68,4 +69,4 @@ class PheromoneSmellerAgent(Agent):
 
             else :
                 Agent.random_walk(self)
-        
+

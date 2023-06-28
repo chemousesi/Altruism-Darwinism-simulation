@@ -33,7 +33,7 @@ git push -uf origin main
 ## The team
 - Chems-eddine Benaziza
 - Romain David
-- Yanis Aît El Kadi
+- Yanis Aït El Cadi
 - Joseph Maillard
 - Achraf Jarrar
 
@@ -95,7 +95,7 @@ Thanks to all teachers who helped us work :
 
 - Chems-eddine Benaziza
 - Romain David
-- Yanis Aît El Kadi
+- Yanis Aït El Cadi
 - Joseph Maillard
 - Achraf Jarrar
 

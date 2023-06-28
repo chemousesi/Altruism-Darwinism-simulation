@@ -9,6 +9,7 @@ from agent import Agent
 from food_spot import Food
 from agent_types import Basic, Profiteer, Altruist
 from tigre import Tigre
+from json_loader import *
 
 
 
@@ -34,7 +35,7 @@ def main():
     universe.initialize_food_with_mouse(screen, number_of_spots)
 
     ## places initial agents
-        
+
     for x in range(i1):
         universe.add_agent(Basic(screen))
     for x in range(i2):

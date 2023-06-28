@@ -3,6 +3,10 @@ from pigtv_constants import *
 import pygame
 from math import *
 
+import json
+with open('parameters.json') as file:               # A json file with all the parameters
+    json_data = json.load(file)
+
 
 pygame.init()
 
@@ -26,7 +30,7 @@ def wait():
 
                 click = 1
 
-            elif (event.type == pygame.KEYDOWN):
+            elif (event.type == KEYDOWN):
 
                 click = 1
 
