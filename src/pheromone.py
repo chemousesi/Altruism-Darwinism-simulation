@@ -24,6 +24,8 @@ class Pheromone(CircleEntity):
 
         self.life_span = life_span
 
+        self.squares = []
+
         CircleEntity.__init__(self, screen, pos, color, radius)
 
     def update(self, draw):

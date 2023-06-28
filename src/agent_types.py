@@ -27,9 +27,9 @@ class Profiteer(PheromoneSmellerAgent):
 
         PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED, draw_energy=draw_energy)
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_state = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_state = super().update(draw=True )  # list_of_foods, list_of_pheromones, 
 
         if agent_state == "dead":
 
@@ -83,9 +83,9 @@ class Basic(PheromoneSmellerAgent):
 
             self.gene_proba = gene_proba
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_state = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_state = super().update(draw=True )  # list_of_foods, list_of_pheromones, 
 
         if agent_state == "dead":
 
@@ -94,7 +94,7 @@ class Basic(PheromoneSmellerAgent):
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
             bebe = super().reproduce_alone(Basic,self.gene_type,0)
-            super().add_to_energy(-super().cost_of_reproduction*2)
+            super().add_to_energy(-super().cost_of_reproduction)
             return [None, bebe]
 
         return [None, None]
@@ -125,9 +125,9 @@ class Altruist(PheromoneProducerAgent):
 
             self.gene_proba = gene_proba
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_states = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_states = super().update(draw=True )  # list_of_foods, list_of_pheromones,
 
         if agent_states[1] == "dead":
 

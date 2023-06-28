@@ -15,21 +15,21 @@ class PheromoneProducerAgent(PheromoneSmellerAgent):
 
         self.pheromone_life_span = json_data["pheromone_life_span"]
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True):
+    def update(self, draw=True):
 
         agent_state = super().update_energy(draw)
         #bebe = self.update_energy(draw)
         # updates vector then moves
-        PheromoneSmellerAgent.update_vect(self, list_of_pheromones=list_of_pheromones)
+        PheromoneSmellerAgent.update_vect(self)  # , list_of_pheromones=list_of_pheromones)
         super().move()
         #self.move()
 
         # eats
-        return [PheromoneProducerAgent.eat(self, list_of_foods), agent_state]  # returns in case a pheromone has been created
+        return [PheromoneProducerAgent.eat(self), agent_state]  # , list_of_foods), agent_state]  # returns in case a pheromone has been created
 
-    def eat(self, list_of_foods):
+    def eat(self):#, list_of_foods):
 
-        super().eat(list_of_foods)
+        super().eat()#list_of_foods)
 
         if self.is_eating:
             return self.produce_pheromones()

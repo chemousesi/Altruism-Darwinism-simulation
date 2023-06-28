@@ -22,8 +22,6 @@ class Food(Entity):
 
         self.available_food = True                           # State of the food spot, False if it is exhausted
 
-        self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
-
         self.regenerate = 0  # when exhausted, ticks until limit then refills
 
         self.rect = pygame.Rect(x-self.width/2,y-self.height/2,self.width,self.height)
