@@ -5,12 +5,12 @@
     "food_regeneration_time":300,
     "food_value":10,
     "food_number_in_storage":250,
-    "initial_ressource":12,
-    "number_of_spots":12,
+    "initial_ressource":15,
+    "number_of_spots":20,
 
     "#Reproduction parameters :" :0,
 
-    "cost_of_reproduction":250,
+    "cost_of_reproduction":550,
     "required_energy_to_reproduce": 550,
     "prob_of_mutation":0.15,
     "number_type_gene":10,
@@ -19,14 +19,14 @@
 
     "#Agent parameters :":0,
 
-    "agent_initial_energy":400,
+    "agent_initial_energy":500,
     "agent_speed_norm":1,
-    "agent_radius":10,
+    "agent_radius":20,
 
     "Initial_parameters_for_agents" :0,
 
-    "number_of_basic_agents":10,
-    "number_of_altruist_agents":10,
+    "number_of_basic_agents":5,
+    "number_of_altruist_agents":50,
     "number_of_profiteer_agents":0,
 
 
