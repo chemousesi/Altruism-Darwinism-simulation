@@ -68,6 +68,8 @@ class Agent(CircleEntity):
 
         self.draw_energy = draw_energy
 
+        self.square = None
+
     def get_color():
         return self.color
 
@@ -115,7 +117,10 @@ class Agent(CircleEntity):
 
         return child
 
-    def eat(self, list_of_foods):
+    def eat(self):
+
+        list_of_foods = self.square.foods
+
         agent_has_eaten = False
 
         for food in list_of_foods: #checks if the agent is on a food spot
@@ -135,7 +140,7 @@ class Agent(CircleEntity):
             self.is_eating = False
             self.can_make_pheromone = True
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # , list_of_foods, list_of_pheromones
 
         agent_state = Agent.update_energy(self, draw)
 
@@ -144,7 +149,7 @@ class Agent(CircleEntity):
         Agent.move(self)
 
         # eats
-        Agent.eat(self, list_of_foods)  # returns in case a pheromone has been created
+        Agent.eat(self)  # returns in case a pheromone has been created
 
         return agent_state
 
@@ -170,7 +175,7 @@ class Agent(CircleEntity):
             self.new_born = False
         return
 
-    def find_closest_pheromone(self, list_of_pheromones):
+    def find_closest_pheromone(self):
         # this class is for the the basic agents that don't sense pheormones
         return None
 

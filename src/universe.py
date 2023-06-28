@@ -1,5 +1,6 @@
 from pig_tv_csts import *
 from utils import *
+
 from pig_tv import wait, clock
 import button
 import agent
@@ -13,6 +14,7 @@ from panel import Panel
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from food_spot import Food
+from square import Square
 
 class Universe:
 
@@ -73,12 +75,18 @@ class Universe:
 
         self.list_of_average_cheater_genome = []
 
+        # grid
+
+        self.square_size = json_loader.json_data["grid_square_size"]
+
+        self.grid = [[Square(i, j, screen) for j in range(screen_width//self.square_size)] for i in range(screen_height//self.square_size)]
+
+        ##
         self.average_basics= 0
 
         self.average_altruists = 0
 
         self.average_cheaters = 0
-
 
     def add_agent(self, agent):
 
@@ -117,64 +125,72 @@ class Universe:
 
     def add_food_source(self, object_, screen, nb):
 
-        for i in range(int(nb)):
+        for n in range(nb):
 
-            n_food = object_(Arr(get_random_point_in_screen()), screen)
+            j, i = random.randint(0, screen_width//self.square_size-1), random.randint(0, screen_height//self.square_size-1)
+
+            x, y = int((j+0.5)*self.square_size), int((i+0.5)*self.square_size)
+
+            n_food = object_(Arr([x, y]), screen)
 
             self.foods.append(n_food)
+
+            self.add_food_grid(n_food)
 
     def add_food_source_with_mouse(self, object_, mousepos, screen):
 
         n_food = object_(Arr(mousepos), screen)
         self.foods.append(n_food)
 
+    def initialize_food_with_mouse(self, screen, number_of_spots):
 
-    def initialize_food_with_mouse(self, screen):
+        if number_of_spots > 0:
 
-        time = 0
-        draw = True
-        run = True
-        while run:
+            self.add_food_source(Food, screen, number_of_spots)
 
-            time += 1
+        else :
+        
+            time = 0
+            draw = True
+            run = True
+            while run:
 
-            clicked = False
+                time += 1
 
-            user_input = None
+                clicked = False
 
-            # user events
+                user_input = None
 
-            for event in pygame.event.get():
+                # user events
 
-                if event.type == pygame.QUIT:
+                for event in pygame.event.get():
 
-                    run = False
+                    if event.type == pygame.QUIT:
 
-                elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
+                        run = False
 
-                    clicked = True
-                    # ici il faut gérer le food spawn
-                    self.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
+                    elif (event.type == pygame.MOUSEBUTTONDOWN) and (event.button == 1):
 
-                elif event.type == pygame.KEYDOWN:
+                        clicked = True
+                        # ici il faut gérer le food spawn
+                        self.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
 
-                    if event.key == pygame.K_RETURN:
-                        return
+                    elif event.type == pygame.KEYDOWN:
+                            
+                        if event.key == pygame.K_RETURN:
+                            return 
 
-            # drawing and updating universe
+                # drawing and updating universe
 
-            if draw:
-                screen.fill(GREY)
+                if draw:
+                    screen.fill(GREY)
 
-            #univers.updateMovement()
-            self.update(draw, clicked, user_input, time, initialisation=True)
-            if draw:
+                #univers.updateMovement()
+                self.update(draw, clicked, user_input, time, initialisation=True)
+                if draw:
 
-                pygame.display.update()
-                clock.tick(60)
-
-        return
-
+                    pygame.display.update()
+                    clock.tick(60)
 
     def add_pheromone(self, pos, type_pheromone, life_span):
 
@@ -232,13 +248,25 @@ class Universe:
 
                 Universe.add_pheromone(self, food.pos, type_pheromone=1, life_span=1)
 
+                self.add_phero_grid(self.pheromones[-1])
+
     def update_pheromones(self, draw):
+
+##        for line in self.grid:
+##
+##            for square in line:
+##
+##                square.empty_pheromones()   
+
         for pheromone in self.pheromones:
 
             if pheromone.update(draw) == -1:
 
                 self.pheromones.remove(pheromone)
 
+                for sq in pheromone.squares:
+
+                    sq.del_pheromone(pheromone)
 
     def update_panels(self):
 
@@ -248,56 +276,64 @@ class Universe:
 
     def update(self, draw, mouse_clicked, user_input,time, initialisation=False):
 
-        Universe.update_buttons(self, draw, mouse_clicked, user_input)
+        #print(self.grid)
 
-        Universe.update_pheromones(self, draw)
+        #Universe.update_buttons(self, draw, mouse_clicked, user_input)
+
+        if draw:
+
+            self.draw()
+
+        Universe.update_pheromones(self, False)  # draw
 
         Universe.update_foods(self, draw)
-
-        liste_of_things = [len(self.agents), len(self.foods), len(self.pheromones)]
 
         average_genome = 0
 
         # agent update
         for agent in self.agents:
 
-            pheromones = self.pheromones
-            foods  = self.foods
-            agents = self.agents
+            self.add_to_grid(agent)
+
             genome = agent.gene_type
 
+            res = agent.update(draw)
 
+            pheromone_return, agent_return = res
 
-            pheromone_return, agent_return = agent.update(foods, pheromones, draw)
+            #pheromone_return, agent_return = agent.update(draw)  # foods, pheromones, draw)
             if pheromone_return != None:
+
                 self.add_pheromone(pheromone_return[3],pheromone_return[1],pheromone_return[2])
 
-            if agent_return == "dead" : # when the agent has no more energy we kill him
+                self.add_phero_grid(self.pheromones[-1])
 
+            if agent_return == "dead" : # when the agent has no more energy we kill him
 
                 self.agents.remove(agent)
 
 
             # baby
             elif agent_return != None:
+
                 self.add_agent(agent_return)
 
-        # tigres
-        for tigre in self.tigres:
-
-            dead_agent, state = tigre.update(list_of_pheromones=self.pheromones, agents=self.agents, draw=draw)
-
-            if state == "dead":
-
-                self.tigres.remove(tigre)
-
-            if dead_agent in self.agents:
-
-                self.agents.remove(dead_agent)
-
-
-
-        ##
+##        # tigres
+##        for tigre in self.tigres:
+##
+##            dead_agent, state = tigre.update(list_of_pheromones=self.pheromones, agents=self.agents, draw=draw)
+##
+##            if state == "dead":
+##
+##                self.tigres.remove(tigre)
+##
+##            if dead_agent in self.agents:
+##
+##                self.agents.remove(dead_agent)
+##
+##                
+##
+##        ##
 
         if not initialisation:
 
@@ -308,6 +344,86 @@ class Universe:
             self.update_panels()
 
         Universe.update_average(self)
+
+    def draw(self):
+
+        for line in self.grid:
+
+            for square in line:
+
+                square.draw()
+
+    def add_phero_grid(self, phero):
+
+        range_ = phero.type_pheromone
+
+        range_ = range_*2-1  # maps to (1;3)
+
+        #print(phero.pos)
+
+        i, j = round((phero.y-self.square_size//2)/self.square_size), round((phero.x-self.square_size//2)/self.square_size)
+
+        for k in range(-range_+1, range_):  # if big pheromone, reaches more squares
+
+            for l in range(-range_+1, range_):
+
+                u, v = i+k, j+l
+
+                #print((k, l), u, v)
+
+                if (0<=u<len(self.grid)) and (0<=v<len(self.grid[0])):
+
+                    square = self.grid[u][v]
+
+                    square.add_pheromone(phero)
+
+                    #print(k, l)
+
+                    phero.squares.append(square)
+
+    def add_food_grid(self, food):
+
+        i, j = round((food.y-self.square_size//2)/self.square_size), round((food.x-self.square_size//2)/self.square_size)
+
+        square = self.grid[i][j]
+
+        square.add_food(food)
+
+    def add_to_grid(self, agent):
+
+        last_square = agent.square
+
+        i, j = round((agent.y-self.square_size//2)/self.square_size), round((agent.x-self.square_size//2)/self.square_size)
+
+        if i < 0:
+
+            i = 0
+
+        if i > screen_height//self.square_size-1:
+
+            i = screen_height//self.square_size-1
+
+        if j < 0:
+
+            j = 0
+
+        if j > screen_height//self.square_size-1:
+
+            j = screen_height//self.square_size-1
+
+        square = self.grid[i][j]
+
+        if square != last_square:
+
+            square.add_entity(agent)
+
+            if last_square:
+
+                last_square.del_entity(agent)
+
+        #self.grid[i][j].append_entity(entity)
+
+            agent.square = self.grid[i][j]
 
     def update_list_basics(self, val):
         self.list_of_basics[-1] += val
@@ -420,8 +536,6 @@ class Universe:
         for elt in self.list_of_cheaters:
             avg += elt/len(self.list_of_cheaters)
         self.average_cheaters = avg
-
-
 
 
 
