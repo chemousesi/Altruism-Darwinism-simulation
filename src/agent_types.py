@@ -1,6 +1,7 @@
 from pig_tv_csts import *
 from utils import *
-from json_loader import *
+from importlib import reload
+import json_loader as json_loader
 from pheromone_smeller_agent import PheromoneSmellerAgent
 from pheromone_producer_agent import PheromoneProducerAgent
 
@@ -8,10 +9,11 @@ from pheromone_producer_agent import PheromoneProducerAgent
 class Profiteer(PheromoneSmellerAgent):
 
     def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
+        reload(json_loader)
 
         if gene_type == None:
 
-            self.gene_type = [0 for i in range(json_data["number_type_gene"])]
+            self.gene_type = [0 for i in range(json_loader.json_data["number_type_gene"])]
 
         else:
 
@@ -19,7 +21,7 @@ class Profiteer(PheromoneSmellerAgent):
 
         if gene_proba == None:
 
-            self.gene_proba = json_data["initial_prob_of_mutation"]
+            self.gene_proba = json_loader.json_data["initial_prob_of_mutation"]
 
         else:
 
@@ -27,9 +29,9 @@ class Profiteer(PheromoneSmellerAgent):
 
         PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.PROFITEER, color=RED, draw_energy=draw_energy)
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_state = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_state = super().update(draw=True )  # list_of_foods, list_of_pheromones, 
 
         if agent_state == "dead":
 
@@ -65,11 +67,13 @@ class Basic(PheromoneSmellerAgent):
 
     def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
 
+        reload(json_loader)
+
         PheromoneSmellerAgent.__init__(self, screen, pos, recognised_pheromones=[1], type_agent=TypeAgent.BASIC, color=BLUE, draw_energy=draw_energy)
 
         if gene_type == None:
 
-            self.gene_type = [-1 for i in range(json_data["number_type_gene"])]
+            self.gene_type = [-1 for i in range(json_loader.json_data["number_type_gene"])]
 
         else:
 
@@ -83,9 +87,9 @@ class Basic(PheromoneSmellerAgent):
 
             self.gene_proba = gene_proba
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_state = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_state = super().update(draw=True )  # list_of_foods, list_of_pheromones, 
 
         if agent_state == "dead":
 
@@ -94,7 +98,7 @@ class Basic(PheromoneSmellerAgent):
         # if possible, reproduction
         if self.energy >= super().required_energy_to_reproduce:
             bebe = super().reproduce_alone(Basic,self.gene_type,0)
-            super().add_to_energy(-super().cost_of_reproduction*2)
+            super().add_to_energy(-super().cost_of_reproduction)
             return [None, bebe]
 
         return [None, None]
@@ -106,12 +110,13 @@ class Basic(PheromoneSmellerAgent):
 class Altruist(PheromoneProducerAgent):
 
     def __init__(self, screen, pos=None, gene_type=None, gene_proba=None, draw_energy=True):
+        reload(json_loader)
 
         PheromoneProducerAgent.__init__(self, screen, pos, recognised_pheromones=[1, 2], type_agent=TypeAgent.ALTRUIST, produced_pheromones=2, color=GREEN, draw_energy=draw_energy)
 
         if gene_type == None:
 
-            self.gene_type = [1 for i in range(json_data["number_type_gene"])]
+            self.gene_type = [1 for i in range(json_loader.json_data["number_type_gene"])]
 
         else:
 
@@ -119,15 +124,15 @@ class Altruist(PheromoneProducerAgent):
 
         if gene_proba == None:
 
-            self.gene_proba = json_data["initial_prob_of_mutation"]
+            self.gene_proba = json_loader.json_data["initial_prob_of_mutation"]
 
         else:
 
             self.gene_proba = gene_proba
 
-    def update(self, list_of_foods, list_of_pheromones, draw=True ):
+    def update(self, draw=True ):  # list_of_foods, list_of_pheromones, 
 
-        agent_states = super().update(list_of_foods, list_of_pheromones, draw=True )
+        agent_states = super().update(draw=True )  # list_of_foods, list_of_pheromones,
 
         if agent_states[1] == "dead":
 

@@ -21,7 +21,6 @@ def main():
     i3 = universe.number_of_initial_profiteer_agents
     number_of_spots = json_data["number_of_spots"]
 
-
     #universe.add_button(Button, screen, "proba mutation")
 
     # graphics
@@ -32,10 +31,8 @@ def main():
     universe.set_basic_panel(Basic, screen)
 
     # food initialisation
-    if number_of_spots > 0:
-        universe.add_food_source(Food, screen, number_of_spots)
-    else :
-        universe.initialize_food_with_mouse(screen)
+
+    universe.initialize_food_with_mouse(screen, number_of_spots)
 
     ## places initial agents
 
