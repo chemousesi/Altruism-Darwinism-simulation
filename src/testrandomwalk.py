@@ -31,7 +31,7 @@ class Device:
 
 pygame.init()  # initialize pygame
 
-# Colours
+# Colours RGB
 BACKGROUND = (255, 255, 255)
 
 # Game Setup
@@ -57,7 +57,6 @@ def main(d):
                 pygame.quit()
                 sys.exit()
 
-        # Processing
         # processing code inside to rendering loop to save cpu
 
         # Render elements

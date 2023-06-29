@@ -74,7 +74,7 @@ def main():
                 clicked = True
 
                 universe.tigres.append(Tigre(screen, Arr(pygame.mouse.get_pos())))
-                # ici il faut gérer le food spawn
+                # Here we must generate the food spawn
                 #universe.add_food_source_with_mouse(Food, pygame.mouse.get_pos(),screen)
 
             elif event.type == pygame.KEYDOWN:
