@@ -6,7 +6,7 @@ import button
 from importlib import reload
 from entity import Entity, CircleEntity
 
-
+# Classe d'agent racine 
 class Agent(CircleEntity):
 
     reload(json_loader)
@@ -97,7 +97,7 @@ class Agent(CircleEntity):
 
         def loss_function(x):
 
-            return log(log(x+1)+1)/2  # so it's never negative
+            return log(log(x+1)+1)/2  # the "+1" value is due to the fact that log must always be positive
 
         Agent.add_to_energy(self, -loss_function(age))
 
@@ -117,7 +117,7 @@ class Agent(CircleEntity):
 
         return child
 
-    def eat(self):
+    def eat(self): # Simulate eating on the food spot
 
         list_of_foods = self.square.foods
 
@@ -153,7 +153,7 @@ class Agent(CircleEntity):
 
         return agent_state
 
-    def update_energy(self, draw):
+    def update_energy(self, draw): #Changing energy (decreasing when aging and increasing when eating)
 
         if self.new_born == False:
 
@@ -169,7 +169,7 @@ class Agent(CircleEntity):
                     Agent.draw(self)
 
             else:
-                return "dead"  # dead
+                return "dead"  # If it has no more energy then it's dead
 
         else :
             self.new_born = False
@@ -248,7 +248,7 @@ class Agent(CircleEntity):
                       #t=0.01
                       amp = 5
 
-                      perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)])
+                      perturbation = Arr([sin(2*pi*self.delta_t*frequency),cos(2*pi*self.delta_t*frequency)]) # The movement is sinusoidal and it's random
 
                       perturbation.normalize(self.speed_norm/10)
 
