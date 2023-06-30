@@ -18,16 +18,39 @@ class PheromoneSmellerAgent(Agent):
             # chercher le phéromone le plus proche
             min_ph = None
             min_dist = screen_width+screen_height
+            min_type = 0
+            p = 0
 
             for ph in list_of_pheromones:
 
                 if ph.type_pheromone in self.recognised_pheromones:  # PheromoneSmellerAgent only sensible to some pheromones
 
                     dist = distance(ph,self)
-                    if dist <= ph.radius and dist <= min_dist:
-                        if (self.type_agent == TypeAgent.ALTRUIST) and (self.ID != ph.get_producer_ID()):
+                    if (self.type_agent == TypeAgent.ALTRUIST):
+                        if dist <= ph.radius and dist <= min_dist:
+                            if ph.type_pheromone == 3:
+                                if (self.ID != ph.get_producer_ID()) and (p ==0):
+                                    min_dist = dist
+                                    min_ph = ph
+                                    min_type = ph.type_pheromone
+                            else:
+                                p +=1
+                                min_dist = dist
+                                min_ph = ph
+                                min_type = ph.type_pheromone
+                        elif (min_type == 3) and (ph.type_pheromone != 3):
                             min_dist = dist
                             min_ph = ph
+                            min_type = ph.type_pheromone
+
+                    
+
+                    else:
+                        if ph.type_pheromone != 3:
+                            if dist <= ph.radius and dist <= min_dist:
+                                min_dist = dist
+                                min_ph = ph
+                                min_type = ph.type_pheromone
 
             if min_ph != None and min_ph.radius > min_dist:
 
@@ -61,9 +84,20 @@ class PheromoneSmellerAgent(Agent):
 
             if pheromone != None:
 
-                self.vector = pheromone.pos - self.pos
+                if (pheromone.type_pheromone == 3) and dist(pheromone.pos, self.pos) < 80:
 
-                Agent.normalize_vect(self)
+                    self.vector = pheromone.pos - self.pos
+
+                    Agent.normalize_vect(self)
+                
+                elif (pheromone.type_pheromone != 3):
+
+                    self.vector = pheromone.pos - self.pos
+
+                    Agent.normalize_vect(self)
+                
+                else:
+                    Agent.random_walk(self)
 
                 #print(self.vector , pheromone.pos , self.pos)
 

@@ -24,9 +24,11 @@ class Food(Entity):
 
         self.table = [(i,j) for i in range(x,x+self.width) for j in range(y,y+self.height)]
 
-        self.regenerate = json_data["food_regeneration_time"]  # when exhausted, ticks until limit then refills
+        self.food_regeneration_time = json_data["food_regeneration_time"]  # when exhausted, ticks until limit then refills
 
         self.rect = pygame.Rect(x-self.width/2,y-self.height/2,self.width,self.height)
+
+        self.regenerate = 0
 
     def getting_eaten(self):
 
@@ -59,7 +61,7 @@ class Food(Entity):
         if (self.available_food == False):
 
             self.regenerate += 1
-            if (self.regenerate == self.regenerate):
+            if (self.regenerate == self.food_regeneration_time):
                 # j'ai mis 200 cycles pour éviter l'effet de boucler sur la même nouriture
                 self.regenerate = 0
                 self.ressource = json_data["food_number_in_storage"]*self.food_value

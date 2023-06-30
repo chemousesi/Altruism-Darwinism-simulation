@@ -44,8 +44,8 @@ class Pheromone(CircleEntity):
         self.life_span -= 1
 
         if draw:
-
-            Pheromone.draw(self)
+            if (self.type_pheromone !=3):
+                Pheromone.draw(self)
 
     def get_producer_ID(self):
         return self.producer_ID
