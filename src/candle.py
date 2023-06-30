@@ -22,7 +22,7 @@ for i in range(10):
 
 #profiteers = np.random.randint(10, 20, 10)
 
-# Calculate the mean
+# Calculate the mean    
 mean_values_alt = np.mean(altruists, axis=1)
 mean_values_prof = np.mean(profiteers, axis=1)
 
